@@ -10,6 +10,10 @@ GO
 CREATE SCHEMA [C_R] AUTHORIZATION [gd]
 GO
 
+if exists(select * from sys.objects where name ='Inconsistencias_Operaciones' and type = 'u')
+	drop table [C_R].[Inconsistencias_Operaciones]
+go
+
 if exists (select * from sys.objects where name = 'Factura_Items' and type = 'u')
     drop table [C_R].[Factura_Items]
 go
@@ -80,10 +84,6 @@ go
 
 if exists(select * from sys.objects where name='Roles' and type ='u')
 	drop table [C_R].[Roles]
-go
-
-if exists(select * from sys.objects where name ='Inconsistencias_Operaciones' and type = 'u')
-	drop table [C_R].[Inconsistencias_Operaciones]
 go
 
 CREATE TABLE [C_R].[Clientes]
@@ -740,3 +740,25 @@ insert into C_R.Factura_Items(Item_Monto, Item_Cantidad, Factura_Nro, Item_Desc)
 select Item_Factura_Monto, Item_Factura_Cantidad, Factura_Nro, 'ITEM-MIG'
 from gd_esquema.Maestra M
 where M.Factura_Nro is not null
+GO
+
+if exists(select * from sys.objects where name ='LOGIN' and type = 'FN')
+	drop function [C_R].[LOGIN]
+go
+
+CREATE FUNCTION [C_R].[LOGIN]
+(@nombre varchar(255), @password varchar(255))
+RETURNS varchar(5)
+AS
+BEGIN
+  DECLARE @hash varchar(255)
+  DECLARE @result varchar(5)
+  set @hash = (select Cli_Password from C_R.Clientes where Cli_UserName = @nombre);
+  
+  IF (@hash = @password)
+	set @result = 'True';
+  ELSE
+	set @result = 'False';
+  RETURN @result;
+END;
+GO

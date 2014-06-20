@@ -21,5 +21,10 @@ namespace FrbaCommerce.Login
         {
             MessageBox.Show(BD.Instance.InvocarSP());
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            
+        }
     }
 }

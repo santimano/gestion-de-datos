@@ -18,7 +18,9 @@ namespace FrbaCommerce
 
         private void button1_Click(object sender, EventArgs e)
         {
-            new Login.Login().Show();
+            this.Hide();
+            new Login.Login().ShowDialog();
+            this.Show();
         }
     }
 }

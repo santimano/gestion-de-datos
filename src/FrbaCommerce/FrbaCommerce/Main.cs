@@ -7,18 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FrbaCommerce.Login
+namespace FrbaCommerce
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
-        public Form1()
+        public Main()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            
+            new Login.Login().Show();
         }
     }
 }

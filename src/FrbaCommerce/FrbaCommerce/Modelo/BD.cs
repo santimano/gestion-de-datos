@@ -26,19 +26,17 @@ namespace FrbaCommerce.Modelo
                 return instance;
             }
         }
-        public String InvocarSP()
+        public String InvocarSP(String usuario, String pass)
         {
-            using (var command = new SqlCommand("SELECT C_R.LOGIN('DMedina1930','P4SSM1GR4D0')", Conexion)
+            using (var command = new SqlCommand("SELECT C_R.LOGIN('"+usuario+"','"+pass+"')", Conexion)
             {
                 CommandType = CommandType.Text
             })
             {
                 Conexion.Open();
-                bool result;
-                String s = command.ExecuteScalar().ToString();
-                bool correcto = Boolean.TryParse(s, out result);
+                bool result = Boolean.Parse(command.ExecuteScalar().ToString());
                 Conexion.Close();
-                return correcto.ToString();
+                return result.ToString();
             }
         }
     }

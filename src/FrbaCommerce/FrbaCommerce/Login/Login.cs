@@ -19,7 +19,7 @@ namespace FrbaCommerce.Login
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(BD.Instance.InvocarSP());
+            MessageBox.Show(BD.Instance.InvocarSP(this.textBoxUsuario.Text, this.textBoxPassword.Text));
         }
 
         private void button2_Click(object sender, EventArgs e)

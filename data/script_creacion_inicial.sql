@@ -86,6 +86,7 @@ if exists(select * from sys.objects where name='Roles' and type ='u')
 	drop table [C_R].[Roles]
 go
 
+
 CREATE TABLE [C_R].[Clientes]
 ( 
 	[Cli_Id]             int  NOT NULL  IDENTITY ( 1,1 ) ,
@@ -742,23 +743,39 @@ from gd_esquema.Maestra M
 where M.Factura_Nro is not null
 GO
 
-if exists(select * from sys.objects where name ='LOGIN' and type = 'FN')
-	drop function [C_R].[LOGIN]
+if exists(select * from sys.objects where name ='SP_LOGIN' and type = 'P')
+	drop procedure [C_R].[SP_LOGIN]
 go
 
-CREATE FUNCTION [C_R].[LOGIN]
-(@nombre varchar(255), @password varchar(255))
-RETURNS varchar(5)
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE C_R.SP_LOGIN
+@nombre varchar(255),
+@password varchar(255),
+@resultado tinyint OUTPUT
 AS
 BEGIN
-  DECLARE @hash varchar(255)
-  DECLARE @result varchar(5)
-  set @hash = (select Cli_Password from C_R.Clientes where Cli_UserName = @nombre);
-  
-  IF (@hash = @password)
-	set @result = 'True';
-  ELSE
-	set @result = 'False';
-  RETURN @result;
-END;
+	SET NOCOUNT ON;
+	
+	DECLARE @hash varchar(255)
+	set @hash = (select Cli_Password from C_R.Clientes where Cli_UserName = @nombre)
+	
+	IF (@hash = @password)
+	BEGIN
+		set @resultado = 0
+		update C_R.Clientes set Cli_Log_Error = '0'
+	END
+	ELSE
+	BEGIN
+		set @resultado = 8
+		update C_R.Clientes set Cli_Log_Error = (select Cli_Log_Error + 1
+												 from C_R.Clientes 
+												 where Cli_UserName = @nombre)
+		where Cli_UserName = @nombre
+	END										 
+
+END
 GO

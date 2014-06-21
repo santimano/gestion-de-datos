@@ -11,6 +11,8 @@ namespace FrbaCommerce.Modelo
     {
         private static BD instance;
         public SqlConnection Conexion { get; private set; }
+        // la fecha no me parece que tenga que ser parte de la BD
+        public DateTime FechaSistema { get; private set; }
         private BD() { }
 
         public static BD Instance
@@ -20,24 +22,71 @@ namespace FrbaCommerce.Modelo
                 if (instance == null)
                 {
                     instance = new BD();
-                    String connectionString = FrbaCommerce.Properties.Settings.Default.ConnectionString;
+                    String connectionString;
+                    DateTime fecha;
+                    instance.LeerConfig(out connectionString, out fecha);
+                    instance.FechaSistema = fecha;
                     instance.Conexion = new System.Data.SqlClient.SqlConnection(connectionString);
                 }
                 return instance;
             }
         }
-        public String InvocarSP(String usuario, String pass)
+        public byte Login(String usuario, String pass)
         {
-            using (var command = new SqlCommand("SELECT C_R.LOGIN('"+usuario+"','"+pass+"')", Conexion)
+            byte resultado = 4;
+
+            if (pass == "")
+                return resultado;
+
+            Conexion.Open();
+
+            SqlCommand command = new SqlCommand("C_R.SP_LOGIN", Conexion);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.Add("@nombre", SqlDbType.VarChar, 255);
+            command.Parameters.Add("@password", SqlDbType.VarChar, 255);
+            command.Parameters.Add("@resultado", SqlDbType.TinyInt).Direction = ParameterDirection.Output;
+            command.Parameters["@nombre"].Value = usuario;
+            command.Parameters["@password"].Value = pass;
+            command.ExecuteNonQuery();
+
+            resultado = (byte)command.Parameters["@resultado"].Value;
+                     
+            Conexion.Close();
+            return resultado;
+            
+        }
+        private void LeerConfig(out String connection, out DateTime fecha)
+        {
+            string linea="";
+            string user="";
+            string pass="";
+            string db="";
+            string server="";
+
+            connection = "";
+            fecha = new DateTime();
+
+            System.IO.StreamReader file = new System.IO.StreamReader(@"..\..\Config\config.cfg");
+
+            while ((linea = file.ReadLine()) != null)
             {
-                CommandType = CommandType.Text
-            })
-            {
-                Conexion.Open();
-                bool result = Boolean.Parse(command.ExecuteScalar().ToString());
-                Conexion.Close();
-                return result.ToString();
+                if (linea.StartsWith("user", true, null))
+                    user = linea.Split('=')[1];
+                else if (linea.StartsWith("password", true, null))
+                    pass = linea.Split('=')[1];
+                else if (linea.StartsWith("db", true, null))
+                    db = linea.Split('=')[1];
+                else if (linea.StartsWith("server", true, null))
+                    server = linea.Split('=')[1];
+                else if (linea.StartsWith("fecha", true, null))
+                    fecha = new DateTime(Convert.ToInt32(linea.Split('=')[1].Split('-')[2])
+                                         , Convert.ToInt32(linea.Split('=')[1].Split('-')[1])
+                                         , Convert.ToInt32(linea.Split('=')[1].Split('-')[0]));
             }
+            connection = "Data Source=" + server + ";"
+                + "Initial Catalog=" + db + ";"
+                + "User ID=" + user + ";" 
+                + "Password=" + pass;
         }
     }
 }

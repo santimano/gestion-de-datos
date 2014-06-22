@@ -7,8 +7,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
---CREATE SCHEMA [C_R] AUTHORIZATION [gd]
---GO
+if exists(select * from sys.objects where name ='SP_LOGIN' and type = 'P')
+	drop procedure [C_R].[SP_LOGIN]
+go
 
 if exists(select * from sys.objects where name ='Inconsistencias_Operaciones' and type = 'u')
 	drop table [C_R].[Inconsistencias_Operaciones]
@@ -86,6 +87,12 @@ if exists(select * from sys.objects where name='Roles' and type ='u')
 	drop table [C_R].[Roles]
 go
 
+if exists(select * from sys.schemas where name ='C_R')
+	drop schema [C_R]
+go
+
+CREATE SCHEMA [C_R] AUTHORIZATION [gd]
+GO
 
 CREATE TABLE [C_R].[Clientes]
 ( 
@@ -272,7 +279,7 @@ go
 CREATE TABLE [C_R].[Roles]
 ( 
 	[Rol_Id]             int  NOT NULL ,
-	[Rol_Descrupcion]    nvarchar(50)   NULL ,
+	[Rol_Descripcion]    nvarchar(50)   NULL ,
 	[Rol_Estado]         varchar(50)  NULL 
 )
 go
@@ -499,13 +506,13 @@ GO
 
 --Insercion de Roles
 INSERT INTO C_R.Roles
-VALUES(1,'Empresa','ACT')
+VALUES(1,'Empresa','ACTIVO')
 
 INSERT INTO C_R.Roles
-VALUES(2,'Administrativo','ACT')
+VALUES(2,'Administrativo','ACTIVO')
 
 INSERT INTO C_R.Roles
-VALUES(3,'Cliente','ACT')
+VALUES(3,'Cliente','ACTIVO')
 Go
 
 INSERT INTO C_R.Tipo_Docs
@@ -743,15 +750,6 @@ insert into C_R.Factura_Items(Item_Monto, Item_Cantidad, Factura_Nro, Item_Desc)
 select Item_Factura_Monto, Item_Factura_Cantidad, Factura_Nro, 'ITEM-MIG'
 from gd_esquema.Maestra M
 where M.Factura_Nro is not null
-GO
-
-if exists(select * from sys.objects where name ='SP_LOGIN' and type = 'P')
-	drop procedure [C_R].[SP_LOGIN]
-go
-
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE PROCEDURE C_R.SP_LOGIN

@@ -11,6 +11,9 @@ namespace FrbaCommerce
 {
     public partial class Main : Form
     {
+        public static String Rol { get; set; }
+        public static DateTime FechaSistema { get; set; }
+
         public Main()
         {
             InitializeComponent();

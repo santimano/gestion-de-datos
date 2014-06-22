@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Data;
+using System.Windows.Forms;
 using FrbaCommerce.Login;
 
 namespace FrbaCommerce.Modelo
@@ -11,9 +12,8 @@ namespace FrbaCommerce.Modelo
     class BD
     {
         private static BD instance;
-        public SqlConnection Conexion { get; private set; }         
-        // la fecha no me parece que tenga que ser parte de la BD
-        public DateTime FechaSistema { get; private set; }
+        public SqlConnection Conexion { get; private set; }
+
         private BD() { }
 
         public static BD Instance
@@ -26,7 +26,7 @@ namespace FrbaCommerce.Modelo
                     String connectionString;
                     DateTime fecha;
                     instance.LeerConfig(out connectionString, out fecha);
-                    instance.FechaSistema = fecha;
+                    Main.FechaSistema = fecha;
                     instance.Conexion = new System.Data.SqlClient.SqlConnection(connectionString);
                 }
                 return instance;
@@ -34,9 +34,7 @@ namespace FrbaCommerce.Modelo
         }
         public byte Login(String usuario, String pass, String nuevopass)
         {
-            byte resultado = 1;
-
-            Conexion.Open();
+            byte resultado = 255;
 
             SqlCommand command = new SqlCommand("C_R.SP_LOGIN", Conexion);
             command.CommandType = CommandType.StoredProcedure;
@@ -49,21 +47,76 @@ namespace FrbaCommerce.Modelo
             command.Parameters["@password"].Value = Encripcion.CalcularHash(pass);
             command.Parameters["@nuevo_password"].Value = (nuevopass == null) ? (object)DBNull.Value : Encripcion.CalcularHash(nuevopass);
 
-            command.ExecuteNonQuery();
+            try
+            {
+                Conexion.Open();
+                command.ExecuteNonQuery();
+                resultado = (byte)command.Parameters["@resultado"].Value;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
 
-            resultado = (byte)command.Parameters["@resultado"].Value;
-                     
-            Conexion.Close();
             return resultado;
-            
+
         }
-        private void LeerConfig(out String connection, out DateTime fecha)
+
+        public List<String> Roles(String usuario)
         {
-            string linea="";
-            string user="";
-            string pass="";
-            string db="";
-            string server="";
+            List<String> roles = new List<String>();
+
+            String query = "SELECT R.Rol_Descripcion "
+             + "FROM C_R.Roles R "
+             + "INNER JOIN C_R.RL_Clientes_Roles RC ON R.Rol_Id = RC.Rol_Id "
+             + "INNER JOIN C_R.Clientes C ON RC.Cli_Id = C.Cli_Id "
+             + "WHERE C.Cli_UserName = @usuario";
+
+            SqlCommand command = new SqlCommand(query, Conexion);
+            command.CommandType = CommandType.Text;
+            command.Parameters.Add("@usuario", SqlDbType.VarChar, 255);
+            command.Parameters["@usuario"].Value = usuario;
+
+            SqlDataReader datareader;
+
+            try
+            {
+                Conexion.Open();
+                datareader = command.ExecuteReader();
+
+                if (datareader.HasRows)
+                {
+                    while (datareader.Read())
+                    {
+                        roles.Add(datareader.GetString(0));
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+
+            return roles;
+
+        }
+
+         private void LeerConfig(out String connection, out DateTime fecha)
+        {
+            string linea = "";
+            string user = "";
+            string pass = "";
+            string db = "";
+            string server = "";
 
             connection = "";
             fecha = new DateTime();
@@ -87,7 +140,7 @@ namespace FrbaCommerce.Modelo
             }
             connection = "Data Source=" + server + ";"
                 + "Initial Catalog=" + db + ";"
-                + "User ID=" + user + ";" 
+                + "User ID=" + user + ";"
                 + "Password=" + pass;
         }
     }

@@ -19,20 +19,7 @@ namespace FrbaCommerce.Login
 
         private void button1_Click(object sender, EventArgs e)
         {
-            byte login;
-
-            try
-            {
-                login = BD.Instance.Login(this.textBoxUsuario.Text, this.textBoxPassword.Text, null);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(null, ex.Message, "Error");
-                BD.Instance.Conexion.Close();
-                return;
-            }
-
-            switch (login)
+            switch (BD.Instance.Login(this.textBoxUsuario.Text, this.textBoxPassword.Text, null))
             {
                 case 2:
                     MessageBox.Show(null, "Usuario inexsistente.", "Login");
@@ -47,10 +34,28 @@ namespace FrbaCommerce.Login
                     MessageBox.Show(null, "El usuario ha sido bloqueado. Contactese con su administrador.", "Login");
                     return;
                 case 10:
+                    // hay que cambiar el password
                     new LoginNuevoPass(this.textBoxUsuario.Text).ShowDialog();
                     break;
+                case 255:
+                    // excepcion
+                    return;
             }
 
+            List<String> roles = BD.Instance.Roles(this.textBoxUsuario.Text);
+
+            if (roles.Count > 1)
+            {
+                this.Hide();
+                new Roles(roles).ShowDialog();
+            }
+            else if (roles.Count == 1)
+                Main.Rol = roles[0];
+            else
+                // no se encontraron roles
+                Main.Rol = "N/A";
+
+            this.Close();
 
         }
 

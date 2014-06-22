@@ -9,6 +9,9 @@ namespace FrbaCommerce.ABM_Rol
     {
         private string descripcion;
         private string estado;
+        private long id;
+
+        public enum ESTADO { ACTIVO, INACTIVO }
 
         public Rol(string descripcion, string estado) 
         {
@@ -39,6 +42,18 @@ namespace FrbaCommerce.ABM_Rol
             set
             {
                 estado = value;
+            }
+        }
+        public long Id
+        {
+            get
+            {
+                return id;
+            }
+
+            set
+            {
+                id = value;
             }
         }
 

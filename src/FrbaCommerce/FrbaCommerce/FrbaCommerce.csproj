@@ -60,11 +60,11 @@
     <Compile Include="Abm Empresa\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Rol\AgregarRol.cs">
+    <Compile Include="ABM Rol\EditarRol.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Rol\AgregarRol.Designer.cs">
-      <DependentUpon>AgregarRol.cs</DependentUpon>
+    <Compile Include="ABM Rol\EditarRol.Designer.cs">
+      <DependentUpon>EditarRol.cs</DependentUpon>
     </Compile>
     <Compile Include="ABM Rol\ListadoRol.cs">
       <SubType>Form</SubType>
@@ -162,8 +162,8 @@
     <Compile Include="Modelo\BD.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ABM Rol\AgregarRol.resx">
-      <DependentUpon>AgregarRol.cs</DependentUpon>
+    <EmbeddedResource Include="ABM Rol\EditarRol.resx">
+      <DependentUpon>EditarRol.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Rol\ListadoRol.resx">
       <DependentUpon>ListadoRol.cs</DependentUpon>

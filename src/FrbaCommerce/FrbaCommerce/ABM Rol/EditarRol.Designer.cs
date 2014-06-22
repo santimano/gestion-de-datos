@@ -1,6 +1,6 @@
 ﻿namespace FrbaCommerce.ABM_Rol
 {
-    partial class AgregarRol
+    partial class EditarRol
     {
         /// <summary>
         /// Required designer variable.
@@ -32,7 +32,9 @@
             this.textBoxDescripcion = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.comboBoxEstado = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonAceptar = new System.Windows.Forms.Button();
+            this.buttonBorrar = new System.Windows.Forms.Button();
+            this.buttonActualizar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -68,28 +70,53 @@
             this.comboBoxEstado.Size = new System.Drawing.Size(121, 21);
             this.comboBoxEstado.TabIndex = 3;
             // 
-            // button1
+            // buttonAceptar
             // 
-            this.button1.Location = new System.Drawing.Point(101, 181);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Agregar";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buttonAceptar.Location = new System.Drawing.Point(24, 188);
+            this.buttonAceptar.Name = "buttonAceptar";
+            this.buttonAceptar.Size = new System.Drawing.Size(75, 23);
+            this.buttonAceptar.TabIndex = 4;
+            this.buttonAceptar.Text = "Aceptar";
+            this.buttonAceptar.UseVisualStyleBackColor = true;
+            this.buttonAceptar.Visible = false;
+            this.buttonAceptar.Click += new System.EventHandler(this.button1_Click);
             // 
-            // AgregarRol
+            // buttonBorrar
+            // 
+            this.buttonBorrar.Location = new System.Drawing.Point(186, 188);
+            this.buttonBorrar.Name = "buttonBorrar";
+            this.buttonBorrar.Size = new System.Drawing.Size(75, 23);
+            this.buttonBorrar.TabIndex = 5;
+            this.buttonBorrar.Text = "Borrar";
+            this.buttonBorrar.UseVisualStyleBackColor = true;
+            this.buttonBorrar.Visible = false;
+            this.buttonBorrar.Click += new System.EventHandler(this.buttonBorrar_Click);
+            // 
+            // buttonActualizar
+            // 
+            this.buttonActualizar.Location = new System.Drawing.Point(105, 188);
+            this.buttonActualizar.Name = "buttonActualizar";
+            this.buttonActualizar.Size = new System.Drawing.Size(75, 23);
+            this.buttonActualizar.TabIndex = 6;
+            this.buttonActualizar.Text = "Actualizar";
+            this.buttonActualizar.UseVisualStyleBackColor = true;
+            this.buttonActualizar.Visible = false;
+            this.buttonActualizar.Click += new System.EventHandler(this.buttonActualizar_Click);
+            // 
+            // EditarRol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonActualizar);
+            this.Controls.Add(this.buttonBorrar);
+            this.Controls.Add(this.buttonAceptar);
             this.Controls.Add(this.comboBoxEstado);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBoxDescripcion);
             this.Controls.Add(this.label1);
-            this.Name = "AgregarRol";
-            this.Text = "AgregarRol";
+            this.Name = "EditarRol";
+            this.Text = "Editar Rol";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -101,6 +128,8 @@
         private System.Windows.Forms.TextBox textBoxDescripcion;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox comboBoxEstado;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonAceptar;
+        private System.Windows.Forms.Button buttonBorrar;
+        private System.Windows.Forms.Button buttonActualizar;
     }
 }

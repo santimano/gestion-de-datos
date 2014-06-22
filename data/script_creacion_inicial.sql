@@ -541,7 +541,8 @@ Publ_Cli_Apeliido Cli_Apellido,
 Publ_Cli_Fecha_Nac Cli_Fecha_Nac,
 Publ_Cli_Mail Cli_Mail,
 SUBSTRING(Publ_Cli_Nombre,1,1)+Publ_Cli_Apeliido +Convert(varchar,(YEAR(Publ_Cli_Fecha_Nac))) Cli_UserName,
-'P4SSM1GR4D0' Cli_Password,
+-- hash para password P4SSM1GR4D0
+'48654867b34905e313300729dbd4dba96d88a51587c8e9cbab60191b480d9be3' Cli_Password,
 null Emp_RazonSocial,
 null Emp_Cuit,
  1 Cli_CambioPass,'ACTIVO' Cli_Estado ,0 Cli_Log_Error,GETDATE()Cli_Ultimo_Ingreso
@@ -557,7 +558,8 @@ select DISTINCT
 Publ_Empresa_Fecha_Creacion,
 Publ_Empresa_Mail,
 REPLACE(Publ_Empresa_Cuit,'-','') Usuario,
- 'P4SSM1GR4D0' Pass,
+-- hash para password P4SSM1GR4D0
+ '48654867b34905e313300729dbd4dba96d88a51587c8e9cbab60191b480d9be3' Pass,
 Publ_Empresa_Razon_Social,
 Publ_Empresa_Cuit,1,'ACTIVO',0,GETDATE()
  from gd_esquema.Maestra

@@ -102,6 +102,7 @@
     <Compile Include="Facturar Publicaciones\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Login\Encripcion.cs" />
     <Compile Include="Login\LoginNuevoPass.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
 using System.Data;
+using FrbaCommerce.Login;
 
 namespace FrbaCommerce.Modelo
 {
@@ -45,8 +46,8 @@ namespace FrbaCommerce.Modelo
             command.Parameters.Add("@nuevo_password", SqlDbType.VarChar, 255);
             command.Parameters.Add("@resultado", SqlDbType.TinyInt).Direction = ParameterDirection.Output;
             command.Parameters["@nombre"].Value = usuario;
-            command.Parameters["@password"].Value = pass;
-            command.Parameters["@nuevo_password"].Value = (nuevopass == null) ? (object)DBNull.Value : nuevopass;
+            command.Parameters["@password"].Value = Encripcion.CalcularHash(pass);
+            command.Parameters["@nuevo_password"].Value = (nuevopass == null) ? (object)DBNull.Value : Encripcion.CalcularHash(nuevopass);
 
             command.ExecuteNonQuery();
 

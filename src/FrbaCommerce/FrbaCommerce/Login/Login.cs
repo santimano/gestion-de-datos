@@ -20,6 +20,7 @@ namespace FrbaCommerce.Login
         private void button1_Click(object sender, EventArgs e)
         {
             byte login;
+
             try
             {
                 login = BD.Instance.Login(this.textBoxUsuario.Text, this.textBoxPassword.Text, null);
@@ -45,11 +46,9 @@ namespace FrbaCommerce.Login
                 case 5:
                     MessageBox.Show(null, "El usuario ha sido bloqueado. Contactese con su administrador.", "Login");
                     return;
-            }
-
-            if (login == 10)
-            {
-                new LoginNuevoPass(this.textBoxUsuario.Text).ShowDialog();
+                case 10:
+                    new LoginNuevoPass(this.textBoxUsuario.Text).ShowDialog();
+                    break;
             }
 
 

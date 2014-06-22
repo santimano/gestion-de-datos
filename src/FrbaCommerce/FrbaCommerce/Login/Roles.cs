@@ -24,8 +24,13 @@ namespace FrbaCommerce.Login
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Main.Rol = (String)comboBoxRoles.SelectedItem;
-            this.Close();
+            if (comboBoxRoles.SelectedItem == null)
+                MessageBox.Show(null, "No se ha seleccionado opcion. Por favor elija una opcion de las disponibles.", "Error");
+            else
+            {
+                Main.Rol = comboBoxRoles.SelectedItem.ToString();
+                this.Close();
+            }
         }
 
     }

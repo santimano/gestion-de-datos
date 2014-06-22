@@ -19,10 +19,36 @@ namespace FrbaCommerce
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void accederToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Hide();
-            new Login.Login().ShowDialog();
+            Login.Login loginForm = new Login.Login();
+            loginForm.ShowDialog();
+            actualizarMenu();
+            this.Show();
+        }
+
+        private void salirToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Rol = null;
+            actualizarMenu();
+            MessageBox.Show("Logout exitoso");
+        }
+
+        private void actualizarMenu()
+        {
+            this.accederToolStripMenuItem.Visible = Rol == null;
+            this.salirToolStripMenuItem.Visible = Rol != null;
+            this.aBMToolStripMenuItem.Visible = Rol != null && Rol.Equals("Administrativo");
+            this.clienteToolStripMenuItem.Visible = Rol != null && Rol.Equals("Cliente");
+            this.empresaToolStripMenuItem.Visible = Rol != null && Rol.Equals("Empresa");
+        }
+
+        private void rolesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            ABM_Rol.ListadoRol abmRolForm = new ABM_Rol.ListadoRol();
+            abmRolForm.ShowDialog();
             this.Show();
         }
     }

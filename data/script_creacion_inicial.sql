@@ -278,7 +278,7 @@ go
 
 CREATE TABLE [C_R].[Roles]
 ( 
-	[Rol_Id]             int  NOT NULL ,
+	[Rol_Id]             int  NOT NULL IDENTITY,
 	[Rol_Descripcion]    nvarchar(50)   NULL ,
 	[Rol_Estado]         varchar(50)  NULL 
 )
@@ -505,14 +505,16 @@ GO
 
 
 --Insercion de Roles
-INSERT INTO C_R.Roles
+SET IDENTITY_INSERT C_R.Roles on;
+INSERT INTO C_R.Roles(Rol_Id, Rol_Descripcion, Rol_Estado)
 VALUES(1,'Empresa','ACTIVO')
 
-INSERT INTO C_R.Roles
+INSERT INTO C_R.Roles(Rol_Id, Rol_Descripcion, Rol_Estado)
 VALUES(2,'Administrativo','ACTIVO')
 
-INSERT INTO C_R.Roles
+INSERT INTO C_R.Roles(Rol_Id, Rol_Descripcion, Rol_Estado)
 VALUES(3,'Cliente','ACTIVO')
+SET IDENTITY_INSERT C_R.Roles off;
 Go
 
 INSERT INTO C_R.Tipo_Docs
@@ -606,7 +608,7 @@ GO
 
 INSERT INTO C_R.RL_Clientes_Roles 
 SELECT  CASE (C_R.Clientes.Cli_TipoDoc ) 			
-				WHEN 1 THEN  3 
+				WHEN 1 THEN 3 
 				WHEN 7 THEN 1 END ,
 		 C_R.Clientes.Cli_Id	
 FROM C_R.Clientes

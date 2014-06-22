@@ -102,8 +102,8 @@ CREATE TABLE [C_R].[Clientes]
 	[Emp_RazonSocial]    varchar(255)	NULL ,
 	[Emp_Cuit]           varchar(50)	NULL ,
 	[Cli_CambioPass]     bit			NULL ,
-	[Cli_Estado]         varchar(10)  NULL  default 'ACT',
-	[Cli_Log_Error]		int  default 0,
+	[Cli_Estado]         varchar(10)  NULL  default 'ACTIVO',
+	[Cli_Log_Error]		int  default 0 NOT NULL,
 	[Cli_Ultimo_Ingreso]datetime		NULL
 )
 go
@@ -544,7 +544,7 @@ SUBSTRING(Publ_Cli_Nombre,1,1)+Publ_Cli_Apeliido +Convert(varchar,(YEAR(Publ_Cli
 'P4SSM1GR4D0' Cli_Password,
 null Emp_RazonSocial,
 null Emp_Cuit,
- 1 Cli_CambioPass,'ACT'Cli_Estado ,0 Cli_Log_Error,GETDATE()Cli_Ultimo_Ingreso
+ 1 Cli_CambioPass,'ACTIVO' Cli_Estado ,0 Cli_Log_Error,GETDATE()Cli_Ultimo_Ingreso
  from gd_esquema.Maestra
 where  Publ_Cli_Dni is not null or Publ_Cli_Apeliido is not null or Publ_Cli_Nombre is not null
 order by 1
@@ -559,7 +559,7 @@ Publ_Empresa_Mail,
 REPLACE(Publ_Empresa_Cuit,'-','') Usuario,
  'P4SSM1GR4D0' Pass,
 Publ_Empresa_Razon_Social,
-Publ_Empresa_Cuit,1,'ACT',0,GETDATE()
+Publ_Empresa_Cuit,1,'ACTIVO',0,GETDATE()
  from gd_esquema.Maestra
 where  Publ_Empresa_Cuit is not null or Publ_Empresa_Razon_Social is not null 
 order by 1,2,3
@@ -755,27 +755,72 @@ GO
 CREATE PROCEDURE C_R.SP_LOGIN
 @nombre varchar(255),
 @password varchar(255),
+@nuevo_password varchar(255),
 @resultado tinyint OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
 	DECLARE @hash varchar(255)
-	set @hash = (select Cli_Password from C_R.Clientes where Cli_UserName = @nombre)
+	DECLARE @estado varchar(10)
+	DECLARE @cambio_pass bit
 	
-	IF (@hash = @password)
+	select @hash = Cli_Password, @estado = Cli_Estado, @cambio_pass = Cli_CambioPass
+	from C_R.Clientes 
+	where Cli_UserName = @nombre
+	
+	IF ( @estado IS NULL )
 	BEGIN
-		set @resultado = 0
-		update C_R.Clientes set Cli_Log_Error = '0'
+		SET @resultado = 2
+		RETURN
 	END
-	ELSE
+	
+	IF ( @estado = 'INACTIVO' )
 	BEGIN
-		set @resultado = 8
-		update C_R.Clientes set Cli_Log_Error = (select Cli_Log_Error + 1
-												 from C_R.Clientes 
-												 where Cli_UserName = @nombre)
+		SET @resultado = 5
+		RETURN
+	END
+	
+	IF ( @hash = @password COLLATE Latin1_General_CS_AS )
+	BEGIN
+	
+		update C_R.Clientes set Cli_Log_Error = '0' 
 		where Cli_UserName = @nombre
-	END										 
-
+		
+		IF ( @cambio_pass =	1 )
+		BEGIN
+			IF ( @nuevo_password IS NULL )
+			BEGIN
+				SET @resultado = 10
+				RETURN
+			END
+			
+			update C_R.Clientes 
+			set Cli_Password = @nuevo_password, Cli_CambioPass = 0
+			where Cli_UserName = @nombre
+			
+		END
+		
+		SET @resultado = 0
+		
+		RETURN
+	END
+	
+	SET @resultado = 3
+	DECLARE @logins_fallidos int
+	
+	select @logins_fallidos = (Cli_Log_Error + 1) 
+	from C_R.Clientes 
+	where Cli_UserName = @nombre
+	
+	update C_R.Clientes set Cli_Log_Error = @logins_fallidos
+	where Cli_UserName = @nombre
+	
+	IF ( @logins_fallidos > 2 )
+	BEGIN
+		SET @resultado = 4
+		update C_R.Clientes set Cli_Estado = 'INACTIVO'
+		where Cli_UserName = @nombre
+	END
 END
 GO

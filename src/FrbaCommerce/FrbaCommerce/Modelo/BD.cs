@@ -10,7 +10,7 @@ namespace FrbaCommerce.Modelo
     class BD
     {
         private static BD instance;
-        public SqlConnection Conexion { get; private set; }
+        public SqlConnection Conexion { get; private set; }         
         // la fecha no me parece que tenga que ser parte de la BD
         public DateTime FechaSistema { get; private set; }
         private BD() { }
@@ -31,22 +31,23 @@ namespace FrbaCommerce.Modelo
                 return instance;
             }
         }
-        public byte Login(String usuario, String pass)
+        public byte Login(String usuario, String pass, String nuevopass)
         {
-            byte resultado = 4;
-
-            if (pass == "")
-                return resultado;
+            byte resultado = 1;
 
             Conexion.Open();
 
             SqlCommand command = new SqlCommand("C_R.SP_LOGIN", Conexion);
             command.CommandType = CommandType.StoredProcedure;
+
             command.Parameters.Add("@nombre", SqlDbType.VarChar, 255);
             command.Parameters.Add("@password", SqlDbType.VarChar, 255);
+            command.Parameters.Add("@nuevo_password", SqlDbType.VarChar, 255);
             command.Parameters.Add("@resultado", SqlDbType.TinyInt).Direction = ParameterDirection.Output;
             command.Parameters["@nombre"].Value = usuario;
             command.Parameters["@password"].Value = pass;
+            command.Parameters["@nuevo_password"].Value = (nuevopass == null) ? (object)DBNull.Value : nuevopass;
+
             command.ExecuteNonQuery();
 
             resultado = (byte)command.Parameters["@resultado"].Value;

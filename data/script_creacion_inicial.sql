@@ -23,8 +23,8 @@ if exists(select * from sys.objects where name ='SP_ALTA_EMPRESA' and type = 'P'
 	drop procedure [C_R].[SP_ALTA_EMPRESA]
 go
 
-if exists(select * from sys.objects where name ='Inconsistencias_Operaciones' and type = 'u')
-	drop table [C_R].[Inconsistencias_Operaciones]
+if exists(select * from sys.objects where name ='Inconsistencias_Calificaciones' and type = 'u')
+	drop table [C_R].[Inconsistencias_Calificaciones]
 go
 
 if exists (select * from sys.objects where name = 'Factura_Items' and type = 'u')
@@ -39,12 +39,16 @@ if exists (select * from sys.objects where name = 'Factura_FormaPago' and type =
     drop table [C_R].[Factura_FormaPago]
 go
 
-if exists(select * from sys.objects where name ='Operaciones_Calificadas' and type='u')
-	drop table [C_R].[Operaciones_Calificadas]
+if exists(select * from sys.objects where name ='Calificaciones' and type='u')
+	drop table [C_R].[Calificaciones]
 go
 
-if exists (select * from sys.objects where name = 'Operaciones' and type = 'u')
-    drop table  [C_R].[Operaciones]
+if exists (select * from sys.objects where name = 'Ventas' and type = 'u')
+    drop table  [C_R].[Ventas]
+go
+
+if exists (select * from sys.objects where name = 'Ofertas' and type = 'u')
+    drop table  [C_R].[Ofertas]
 go
 
 if exists (select * from sys.objects where name = 'Publicaciones' and type = 'u')
@@ -179,6 +183,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
+	-- hash para password "changeme"
 	INSERT INTO C_R.Usuarios(User_Name, User_Password) values
 	(SUBSTRING(@Cli_Nombre,1,1)+@Cli_Apellido +Convert(varchar,(YEAR(@Cli_Fecha_Nac))),'057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86')
 	
@@ -203,6 +208,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
+	-- hash para password "changeme"
 	INSERT INTO C_R.Usuarios(User_Name, User_Password) values
 	(REPLACE(@Emp_Cuit,'-',''),'057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86')
 	
@@ -211,6 +217,7 @@ BEGIN
 	
 END
 GO
+
 
 CREATE TABLE [C_R].[Factura]
 ( 
@@ -259,16 +266,26 @@ CREATE TABLE [C_R].[Publicaciones]
 )
 go
 
-CREATE TABLE [C_R].[Operaciones]
+CREATE TABLE [C_R].[Ofertas]
 ( 
-	[Ope_Codigo]         numeric(18) IDENTITY(1,1) NOT NULL ,
+	[Ofe_Codigo]         numeric(18) IDENTITY(1,1) NOT NULL ,
 	[Pub_Codigo]         numeric(18)  NULL ,
-	[Ope_User_Id]            int  NULL ,
-	[Ope_Fecha]          datetime  NULL ,
-	[Ope_Tipo]           varchar(10) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL ,
-	[Ope_Monto]          numeric(18,2)  NULL ,
-	[Ope_Cantidad]       numeric(18)  NULL 
-	CONSTRAINT [PK_Operaciones] PRIMARY KEY  CLUSTERED ([Ope_Codigo] ASC)
+	[Ofe_User_Id]        int  NULL ,
+	[Ofe_Fecha]          datetime  NULL ,
+	[Ope_Monto]          numeric(18,2)  NULL
+	CONSTRAINT [PK_Ofertas] PRIMARY KEY  CLUSTERED ([Ofe_Codigo] ASC)
+)
+go
+
+CREATE TABLE [C_R].[Ventas]
+( 
+	[Ven_Codigo]         numeric(18) IDENTITY(1,1) NOT NULL ,
+	[Pub_Codigo]         numeric(18) NOT NULL ,
+	[Ven_User_Id]        int NOT NULL ,
+	[Ven_Fecha]          datetime NOT NULL ,
+	[Ven_Monto]          numeric(18,2) NOT NULL ,
+	[Ven_Cantidad]       numeric(18) NOT NULL 
+	CONSTRAINT [PK_Ventas] PRIMARY KEY  CLUSTERED ([Ven_Codigo] ASC)
 )
 go
 
@@ -349,17 +366,20 @@ CREATE TABLE [C_R].[Tipo_Docs]
 )
 go
 
-CREATE TABLE [C_R].[Inconsistencias_Operaciones]
+CREATE TABLE [C_R].[Inconsistencias_Calificaciones]
 ( 
 	[Inc_Id]                          int  NOT NULL  IDENTITY ( 1,1 ) ,
 	[Inc_Publicacion_Cod]             numeric(18) NOT NULL ,
-	[Inc_Cli_Dni]                     numeric(18) NOT NULL ,
+	[Inc_User_Id]                     int NOT NULL ,
 	[Inc_Compra_Fecha]                datetime NOT NULL ,
 	[Inc_Compra_Cantidad]             numeric(18) NOT NULL ,
 	[Inc_Calificacion_Codigo]         numeric(18) NULL ,
 	[Inc_Calificacion_Cant_Estrellas] numeric(18) NULL,
-	PRIMARY KEY CLUSTERED ([Inc_Id] ASC),
-	FOREIGN KEY ([Inc_Publicacion_Cod]) REFERENCES [C_R].[Publicaciones]([Pub_Codigo])
+	CONSTRAINT [PK_Inconsistencias_Calificaciones] PRIMARY KEY CLUSTERED ([Inc_Id] ASC),
+	CONSTRAINT [FK_Inconsistencias_Calificaciones_Publicaciones] FOREIGN KEY ([Inc_Publicacion_Cod]) REFERENCES [C_R].[Publicaciones]([Pub_Codigo])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION,
+	CONSTRAINT [FK_Inconsistencias_Calificaciones_Usuarios] FOREIGN KEY ([Inc_User_Id]) REFERENCES [C_R].[Usuarios]([User_Id])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 )
@@ -382,7 +402,6 @@ ALTER TABLE [C_R].[Empresas]
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 go
-
 
 ALTER TABLE [C_R].[Factura] WITH CHECK 
 	ADD CONSTRAINT [FK_Factura_Factura_FormaPago] FOREIGN KEY ([Factura_FP_ID]) REFERENCES [C_R].[Factura_FormaPago]([Factura_FP_ID])
@@ -458,15 +477,26 @@ ALTER TABLE [C_R].[Publicaciones]
 		ON UPDATE NO ACTION
 go
 
-
-ALTER TABLE [C_R].[Operaciones]
-	ADD CONSTRAINT [FK_Operaciones_Usuarios] FOREIGN KEY ([Ope_User_Id]) REFERENCES [C_R].[Usuarios]([User_Id])
+ALTER TABLE [C_R].[Ofertas]
+	ADD CONSTRAINT [FK_Ofertas_Usuarios] FOREIGN KEY ([Ofe_User_Id]) REFERENCES [C_R].[Usuarios]([User_Id])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 go
 
-ALTER TABLE [C_R].[Operaciones]
-	ADD CONSTRAINT [FK_Operaciones_Peblicaciones] FOREIGN KEY ([Pub_Codigo]) REFERENCES [C_R].[Publicaciones]([Pub_Codigo])
+ALTER TABLE [C_R].[Ofertas]
+	ADD CONSTRAINT [FK_Ofertas_Publicaciones] FOREIGN KEY ([Pub_Codigo]) REFERENCES [C_R].[Publicaciones]([Pub_Codigo])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+ALTER TABLE [C_R].[Ventas]
+	ADD CONSTRAINT [FK_Ventas_Usuarios] FOREIGN KEY ([Ven_User_Id]) REFERENCES [C_R].[Usuarios]([User_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+ALTER TABLE [C_R].[Ventas]
+	ADD CONSTRAINT [FK_Ventas_Publicaciones] FOREIGN KEY ([Pub_Codigo]) REFERENCES [C_R].[Publicaciones]([Pub_Codigo])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 go
@@ -496,19 +526,18 @@ ALTER TABLE [C_R].[RL_Roles_Funciones]
 		ON UPDATE NO ACTION
 go
 
-CREATE TABLE [C_R].[Operaciones_Calificadas]
+CREATE TABLE [C_R].[Calificaciones]
 (
-	[Ope_Cal_Codigo] numeric(18) NOT NULL,
-	[Ope_Cal_CantEstrellas] numeric(18)  NULL ,
-	[Ope_Cal_Descripcion] varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL ,
-	[Ope_Codigo] numeric(18) NOT NULL
-	CONSTRAINT [PK_Operaciones_Calificadas] PRIMARY KEY CLUSTERED ([Ope_Cal_Codigo]) 
-	CONSTRAINT [FK_Operaciones_Califiacion] FOREIGN KEY ([Ope_Codigo])  REFERENCES [C_R].[Operaciones]([Ope_Codigo])
+	[Cal_Codigo] numeric(18) NOT NULL,
+	[Cal_CantEstrellas] numeric(18)  NULL ,
+	[Cal_Descripcion] varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[Ven_Codigo] numeric(18) NOT NULL
+	CONSTRAINT [PK_Calificaciones] PRIMARY KEY CLUSTERED ([Cal_Codigo]) 
+	CONSTRAINT [FK_Calificaciones_Ventas] FOREIGN KEY ([Ven_Codigo])  REFERENCES [C_R].[Ventas]([Ven_Codigo])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 )
 GO
-
 
 --Insercion de Roles
 SET IDENTITY_INSERT C_R.Roles on;
@@ -724,28 +753,35 @@ SELECT  Publicacion_Cod,
  FROM gd_esquema.Maestra
 WHERE Compra_Fecha is null and Oferta_Fecha is null  and Publ_Empresa_Cuit  is not null and Factura_Nro is null 
 GO
-
-
-INSERT INTO C_R.Operaciones ( Pub_Codigo, Ope_User_Id, Ope_Fecha, Ope_Tipo, Ope_Monto, Ope_Cantidad) 
+ 
+INSERT INTO C_R.Ofertas ( Pub_Codigo, Ofe_User_Id, Ofe_Fecha, Ope_Monto ) 
 select Publicacion_Cod, 
-(SELECT C.Cli_User_Id from C_R.Clientes C where C.Cli_Doc = gd_esquema.Maestra.Cli_Dni),
-isnull(Compra_Fecha,oferta_fecha),
-case 
-when oferta_fecha is null then 'VENTA'
-when Compra_Fecha is null then 'OFERTA'
-end,
+(SELECT C.Cli_User_Id from C_R.Clientes C where C.Cli_Doc = gd_esquema.Maestra.Cli_Dni ),
+oferta_fecha,
+Oferta_Monto
+from gd_esquema.Maestra
+where publicacion_tipo = 'subasta' and Oferta_Fecha is not null
+GO
+
+-- esto esta tirando un warning 
+INSERT INTO C_R.Ventas ( Pub_Codigo, Ven_User_Id, Ven_Fecha, Ven_Monto, Ven_Cantidad ) 
+select Publicacion_Cod, 
+(SELECT C.Cli_User_Id from C_R.Clientes C where C.Cli_Doc = gd_esquema.Maestra.Cli_Dni ),
+Compra_Fecha,
 case 
 	when publicacion_tipo = 'compra inmediata' then Publicacion_Precio
-	when publicacion_tipo = 'subasta' and Compra_Fecha is not null then (SELECT MAX(M1.Oferta_Monto) FROM gd_esquema.Maestra M1 WHERE  M1.Publicacion_Cod = gd_esquema.Maestra.Publicacion_Cod )
-	when publicacion_tipo = 'subasta' and Oferta_Fecha is not null then Oferta_Monto
-	end,
+	when publicacion_tipo = 'subasta' then ( SELECT MAX(M1.Oferta_Monto) FROM gd_esquema.Maestra M1 WHERE  M1.Publicacion_Cod = gd_esquema.Maestra.Publicacion_Cod )
+end,
 Compra_Cantidad 
- from gd_esquema.Maestra
- where (Compra_Fecha is not null or Oferta_Fecha is not null) and Calificacion_Codigo is null
- GO
- 
-insert into C_R.Inconsistencias_Operaciones ( Inc_Publicacion_Cod, Inc_Cli_Dni, Inc_Compra_Fecha, Inc_Compra_Cantidad, Inc_Calificacion_Codigo, Inc_Calificacion_Cant_Estrellas )
-select M.Publicacion_Cod,M.Cli_Dni,M.Compra_Fecha,M.Compra_Cantidad, M.Calificacion_Codigo, M.Calificacion_Cant_Estrellas
+from gd_esquema.Maestra
+where Compra_Fecha is not null and Calificacion_Codigo is null
+GO
+
+-- distinta calificacion del mismo producto, por el mismo cliente, en la misma fecha y misma cantidad
+insert into C_R.Inconsistencias_Calificaciones ( Inc_Publicacion_Cod, Inc_User_Id, Inc_Compra_Fecha, Inc_Compra_Cantidad, Inc_Calificacion_Codigo, Inc_Calificacion_Cant_Estrellas )
+select M.Publicacion_Cod,
+(select C.Cli_User_Id from C_R.Clientes C where C.Cli_Doc = M.Cli_Dni),
+M.Compra_Fecha,M.Compra_Cantidad, M.Calificacion_Codigo, M.Calificacion_Cant_Estrellas
 from gd_esquema.Maestra M inner join
 (select Publicacion_Cod,Cli_Dni,Compra_Fecha,Compra_Cantidad 
  from gd_esquema.Maestra
@@ -755,14 +791,14 @@ from gd_esquema.Maestra M inner join
 on M.Publicacion_Cod = INC.Publicacion_Cod and M.Cli_Dni = INC.Cli_Dni and M.Compra_Fecha = INC.Compra_Fecha and M.Compra_Cantidad = INC.Compra_Cantidad
 GO
  
-insert into C_R.Operaciones_Calificadas
-select m.Calificacion_Codigo,m.Calificacion_Cant_Estrellas,m.Calificacion_Descripcion,o.Ope_Codigo 
-from gd_esquema.Maestra m inner join C_R.Operaciones o
-on m.Publicacion_Cod = o.Pub_Codigo and m.Compra_Fecha = o.Ope_Fecha and m.Compra_Cantidad = o.Ope_Cantidad
+-- CALIFICACIONES
+insert into C_R.Calificaciones
+select m.Calificacion_Codigo,m.Calificacion_Cant_Estrellas,m.Calificacion_Descripcion,v.Ven_Codigo 
+from gd_esquema.Maestra m inner join C_R.Ventas v
+on m.Publicacion_Cod = v.Pub_Codigo and m.Compra_Fecha = v.Ven_Fecha and m.Compra_Cantidad = v.Ven_Cantidad
 where m.Calificacion_Codigo is not null
-and m.Calificacion_Codigo not in ( select Inc_Calificacion_Codigo from C_R.Inconsistencias_Operaciones where Inc_Calificacion_Codigo is not null )
-and o.Ope_Tipo = 'VENTA'
-and o.Ope_User_Id = ( select c.Cli_User_Id from C_R.Clientes c where c.Cli_Doc = m.Cli_Dni )
+and m.Calificacion_Codigo not in ( select Inc_Calificacion_Codigo from C_R.Inconsistencias_Calificaciones where Inc_Calificacion_Codigo is not null )
+and v.Ven_User_Id = ( select c.Cli_User_Id from C_R.Clientes c where c.Cli_Doc = m.Cli_Dni )
 
 -- FORMAS DE PAGO
 insert into C_R.Factura_FormaPago(Factura_FP_Desc) values ('Efectivo')
@@ -882,3 +918,5 @@ BEGIN
 	end
 
 END
+GO
+

@@ -72,9 +72,9 @@ namespace FrbaCommerce.Modelo
 
             String query = "SELECT R.Rol_Descripcion "
              + "FROM C_R.Roles R "
-             + "INNER JOIN C_R.RL_Clientes_Roles RC ON R.Rol_Id = RC.Rol_Id "
-             + "INNER JOIN C_R.Clientes C ON RC.Cli_Id = C.Cli_Id "
-             + "WHERE C.Cli_UserName = @usuario";
+             + "INNER JOIN C_R.RL_Usuarios_Roles UR ON R.Rol_Id = UR.Rol_Id "
+             + "INNER JOIN C_R.Usuarios U ON UR.User_Id = U.User_Id "
+             + "WHERE LOWER(U.User_Name) = LOWER(@usuario)";
 
             SqlCommand command = new SqlCommand(query, Conexion);
             command.CommandType = CommandType.Text;

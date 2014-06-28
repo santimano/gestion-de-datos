@@ -11,6 +11,18 @@ if exists(select * from sys.objects where name ='SP_LOGIN' and type = 'P')
 	drop procedure [C_R].[SP_LOGIN]
 go
 
+if exists(select * from sys.objects where name ='SP_Visibilidad_SAVE' and type = 'P')
+	drop procedure [C_R].[SP_Visibilidad_SAVE]
+go
+
+if exists(select * from sys.objects where name ='SP_ALTA_CLIENTE' and type = 'P')
+	drop procedure [C_R].[SP_ALTA_CLIENTE]
+go
+
+if exists(select * from sys.objects where name ='SP_ALTA_EMPRESA' and type = 'P')
+	drop procedure [C_R].[SP_ALTA_EMPRESA]
+go
+
 if exists(select * from sys.objects where name ='Inconsistencias_Operaciones' and type = 'u')
 	drop table [C_R].[Inconsistencias_Operaciones]
 go
@@ -63,20 +75,20 @@ if exists( select * from sys.objects where name = 'Sis_Funciones' and type ='u')
 	drop table [C_R].[Sis_Funciones]
 go
 
-if exists (select * from sys.objects where name = 'RL_Clientes_Direccion' and type ='u')
-	drop Table [C_R].[RL_Clientes_Direccion]
-go
-
-If exists( select * from Sys.objects where name='Direcciones' and type ='u')
-	drop table [C_R].[Direcciones]
-go
-
-if exists (select * from sys.objects  where name='RL_Clientes_Roles' and type ='u')
-	drop table [C_R].[RL_Clientes_Roles]
+if exists (select * from sys.objects  where name='RL_Usuarios_Roles' and type ='u')
+	drop table [C_R].[RL_Usuarios_Roles]
 go
 
 IF exists ( select * from sys.objects where name='Clientes' and type ='u')
 	drop table [C_R].[Clientes]
+go
+
+IF exists ( select * from sys.objects where name='Empresas' and type ='u')
+	drop table [C_R].[Empresas]
+go
+
+IF exists ( select * from sys.objects where name='Usuarios' and type ='u')
+	drop table [C_R].[Usuarios]
 go
 
 if exists (select * from sys.objects where name= 'Tipo_Docs' and type ='u')
@@ -94,6 +106,20 @@ go
 CREATE SCHEMA [C_R] AUTHORIZATION [gd]
 GO
 
+CREATE TABLE [C_R].[Usuarios]
+( 
+	[User_Id]             int		   NOT NULL  IDENTITY ( 1,1 ) ,
+	[User_Name]           varchar(255) NOT NULL ,
+	[User_Password]       varchar(255) NOT NULL ,
+	[User_CambioPass]     bit		   NULL default 1,
+	[User_Estado]         varchar(10)  NULL  default 'ACTIVO',
+	[User_Log_Error]	  int          NOT NULL default 0,
+	[User_Ultimo_Ingreso] datetime 	   NULL default NULL
+	CONSTRAINT [PK_Ususarios] PRIMARY KEY  CLUSTERED ([User_Id] ASC),
+	CONSTRAINT [UQ_Usuario_Name] UNIQUE ([User_Name]  ASC)
+)
+go
+
 CREATE TABLE [C_R].[Clientes]
 ( 
 	[Cli_Id]             int  NOT NULL  IDENTITY ( 1,1 ) ,
@@ -103,44 +129,88 @@ CREATE TABLE [C_R].[Clientes]
 	[Cli_Apellido]       varchar(255)   NULL ,
 	[Cli_Fecha_Nac]      datetime		NULL ,
 	[Cli_Mail]           varchar(255)   NULL ,
-	[Cli_UserName]       varchar(255)   NOT NULL ,
-	[Cli_Password]       varchar(255)   NULL ,
-	[Cli_Telefono]		 varchar(50)	NULL default 'MIG-' +substring(convert(varchar(50), newID()),1,20),
-	[Emp_RazonSocial]    varchar(255)	NULL ,
-	[Emp_Cuit]           varchar(50)	NULL ,
-	[Cli_CambioPass]     bit			NULL ,
-	[Cli_Estado]         varchar(10)  NULL  default 'ACTIVO',
-	[Cli_Log_Error]		int  default 0 NOT NULL,
-	[Cli_Ultimo_Ingreso]datetime		NULL
+	[Cli_User_Id]        int			NULL ,
+	[Cli_Dir_Calle]      varchar(255)   NULL ,
+	[Cli_Dir_Nro]        numeric(18)    NULL ,
+	[Cli_Dir_Piso]       numeric(18)    NULL ,
+	[Cli_Dir_CodPostal]  varchar(50)    NULL ,
+	[Cli_Dir_Depto]      varchar(50)    NULL ,
+	[Cli_Dir_Localidad]	 varchar(50)    NULL ,
+	[Cli_Telefono]		 varchar(50)	NULL default 'MIG-' +substring(convert(varchar(50), newID()),1,20)
+	CONSTRAINT [PK_Clientes] PRIMARY KEY  CLUSTERED ([Cli_Id] ASC),
+	CONSTRAINT [UQ_Cliente_Tel] UNIQUE ([Cli_Telefono] ASC)
 )
 go
 
-ALTER TABLE [C_R].[Clientes]
-	ADD CONSTRAINT [PK_Clientes] PRIMARY KEY  CLUSTERED ([Cli_Id] ASC)
-go
-
-ALTER TABLE [C_R].[Clientes]
-	ADD CONSTRAINT [UQ_Clientes_Usuario] UNIQUE ([Cli_UserName]  ASC)
-go
-
-ALTER TABLE [C_R].[Clientes]
-	ADD CONSTRAINT [UQ_Cliente_Tel] UNIQUE ([Cli_Telefono] ASC)
-
-CREATE TABLE [C_R].[Direcciones]
+CREATE TABLE [C_R].[Empresas]
 ( 
-	[Dir_Id]             int  NOT NULL  IDENTITY ( 1,1 ) ,
-	[Dir_Calle]          varchar(255)  NULL ,
-	[Dir_Nro]            numeric(18)   NULL ,
-	[Dir_Piso]           numeric(18)   NULL ,
-	[Dir_CodPostal]      varchar(50)   NULL ,
-	[Dir_Depto]          varchar(50)   NULL ,
-	[Dir_Localidad]		 varchar(50)   NULL
+	[Emp_Id]             int  NOT NULL  IDENTITY ( 1,1 ) ,
+	[Emp_Fecha_Creacion] datetime		NULL ,
+	[Emp_Mail]           varchar(255)   NULL ,
+	[Emp_Telefono]		 varchar(50)	NULL default 'MIG-' +substring(convert(varchar(50), newID()),1,20),
+	[Emp_RazonSocial]    varchar(255)	NULL ,
+	[Emp_User_Id]        int			NULL ,
+	[Emp_Dir_Calle]      varchar(255)   NULL ,
+	[Emp_Dir_Nro]        numeric(18)    NULL ,
+	[Emp_Dir_Piso]       numeric(18)    NULL ,
+	[Emp_Dir_CodPostal]  varchar(50)    NULL ,
+	[Emp_Dir_Depto]      varchar(50)    NULL ,
+	[Emp_Dir_Localidad]	 varchar(50)    NULL ,
+	[Emp_Cuit]           varchar(50)	NULL
+	CONSTRAINT [PK_Empresas] PRIMARY KEY  CLUSTERED ([Emp_Id] ASC),
+	CONSTRAINT [UQ_Empresa_Tel] UNIQUE ([Emp_Telefono] ASC)
 )
 go
 
-ALTER TABLE [C_R].[Direcciones]
-	ADD CONSTRAINT [PK_Direcciones] PRIMARY KEY  CLUSTERED ([Dir_Id] ASC)
-go
+CREATE PROCEDURE C_R.SP_ALTA_CLIENTE
+@Cli_TipoDoc int,
+@Cli_Doc numeric(18),
+@Cli_Nombre varchar(255),
+@Cli_Apellido varchar(255),
+@Cli_Fecha_Nac datetime,
+@Cli_Mail varchar(255),
+@Cli_Dir_Calle varchar(255),
+@Cli_Dir_Nro numeric(18),
+@Cli_Dir_Piso numeric(18),
+@Cli_Dir_CodPostal varchar(50),
+@Cli_Dir_Depto varchar(50),
+@Cli_Dir_Localidad varchar(50)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+	INSERT INTO C_R.Usuarios(User_Name, User_Password) values
+	(SUBSTRING(@Cli_Nombre,1,1)+@Cli_Apellido +Convert(varchar,(YEAR(@Cli_Fecha_Nac))),'057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86')
+	
+	INSERT INTO C_R.Clientes ( Cli_TipoDoc, Cli_Doc, Cli_Nombre, Cli_Apellido, Cli_Fecha_Nac, Cli_Mail, Cli_User_Id, Cli_Dir_Calle, Cli_Dir_Nro, Cli_Dir_Piso, Cli_Dir_CodPostal, Cli_Dir_Depto, Cli_Dir_Localidad) values
+	(@Cli_TipoDoc, @Cli_Doc, @Cli_Nombre, @Cli_Apellido, @Cli_Fecha_Nac, @Cli_Mail, SCOPE_IDENTITY(), @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad)
+	
+END
+GO
+
+CREATE PROCEDURE C_R.SP_ALTA_EMPRESA
+@Emp_Cuit varchar(50),
+@Emp_RazonSocial varchar(255),
+@Emp_Fecha_Creacion datetime,
+@Emp_Mail varchar(255),
+@Emp_Dir_Calle varchar(255),
+@Emp_Dir_Nro numeric(18),
+@Emp_Dir_Piso numeric(18),
+@Emp_Dir_CodPostal varchar(50),
+@Emp_Dir_Depto varchar(50),
+@Emp_Dir_Localidad varchar(50)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+	INSERT INTO C_R.Usuarios(User_Name, User_Password) values
+	(REPLACE(@Emp_Cuit,'-',''),'057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86')
+	
+	INSERT INTO C_R.Empresas ( Emp_Fecha_Creacion, Emp_Mail, Emp_RazonSocial, Emp_Cuit, Emp_User_Id, Emp_Dir_Calle, Emp_Dir_Nro, Emp_Dir_Piso, Emp_Dir_CodPostal, Emp_Dir_Depto, Emp_Dir_Localidad) values
+	(@Emp_Fecha_Creacion, @Emp_Mail, @Emp_RazonSocial, @Emp_Cuit, SCOPE_IDENTITY(),@Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad)
+	
+END
+GO
 
 CREATE TABLE [C_R].[Factura]
 ( 
@@ -149,11 +219,8 @@ CREATE TABLE [C_R].[Factura]
 	[Factura_Fecha]     datetime  NOT NULL ,
 	[Factura_Total]     numeric(18,2)  NOT NULL ,
 	[Pub_Codigo]        numeric(18)  NOT NULL 
+	CONSTRAINT [PK_Factura] PRIMARY KEY  CLUSTERED ([Factura_Nro] ASC)
 )
-go
-
-ALTER TABLE [C_R].[Factura]
-	ADD CONSTRAINT [PK_Factura] PRIMARY KEY  CLUSTERED ([Factura_Nro] ASC)
 go
 
 CREATE TABLE [C_R].[Factura_Items]
@@ -163,22 +230,16 @@ CREATE TABLE [C_R].[Factura_Items]
 	[Item_Cantidad]      numeric(18)  NOT NULL ,
 	[Item_Monto]         numeric(18,2)  NULL ,
 	[Item_Desc]          varchar(50)  NULL 
+	CONSTRAINT [PK_Factura_Items] PRIMARY KEY  CLUSTERED ([Item_Id] ASC)
 )
-go
-
-ALTER TABLE [C_R].[Factura_Items]
-	ADD CONSTRAINT [PK_Factura_Items] PRIMARY KEY  CLUSTERED ([Item_Id] ASC)
 go
 
 CREATE TABLE [C_R].[Factura_FormaPago]
 ( 
 	[Factura_FP_ID]      int  NOT NULL  IDENTITY ( 1,1 ) ,
 	[Factura_FP_Desc]    varchar(255)  NULL 
+	CONSTRAINT [PK_Factura_FormaPago] PRIMARY KEY  CLUSTERED ([Factura_FP_ID] ASC)
 )
-go
-
-ALTER TABLE [C_R].[Factura_FormaPago]
-	ADD CONSTRAINT [PK_Factura_FormaPago] PRIMARY KEY  CLUSTERED ([Factura_FP_ID] ASC)
 go
 
 CREATE TABLE [C_R].[Publicaciones]
@@ -193,40 +254,30 @@ CREATE TABLE [C_R].[Publicaciones]
 	[Pub_Rubro_Id]       int  NOT NULL ,
 	[Pub_Tipo_Id]        int  NOT NULL ,
 	[Pub_Estado_Id]      int  NOT NULL ,
-	[Cli_Id]             int  NULL 
+	[Pub_User_Id]            int  NULL 
+	CONSTRAINT [PK_Publicaciones] PRIMARY KEY  CLUSTERED ([Pub_Codigo] ASC)
 )
-go
-
-ALTER TABLE [C_R].[Publicaciones]
-	ADD CONSTRAINT [PK_Publicaciones] PRIMARY KEY  CLUSTERED ([Pub_Codigo] ASC)
 go
 
 CREATE TABLE [C_R].[Operaciones]
 ( 
 	[Ope_Codigo]         numeric(18) IDENTITY(1,1) NOT NULL ,
 	[Pub_Codigo]         numeric(18)  NULL ,
-	[Cli_Id]             int  NULL ,
+	[Ope_User_Id]            int  NULL ,
 	[Ope_Fecha]          datetime  NULL ,
 	[Ope_Tipo]           varchar(10) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL ,
 	[Ope_Monto]          numeric(18,2)  NULL ,
 	[Ope_Cantidad]       numeric(18)  NULL 
+	CONSTRAINT [PK_Operaciones] PRIMARY KEY  CLUSTERED ([Ope_Codigo] ASC)
 )
-go
-
-ALTER TABLE [C_R].[Operaciones]
-	ADD CONSTRAINT [PK_Operaciones] PRIMARY KEY  CLUSTERED ([Ope_Codigo] ASC)
 go
 
 CREATE TABLE [C_R].[Publicaciones_Estados]
 ( 
 	[Pub_Estado_Id]      int  NOT NULL ,
 	[Pub_Estado_Desc]    nvarchar(255) NULL 
+	CONSTRAINT [PK_Publicaciones_Estados] PRIMARY KEY  CLUSTERED ([Pub_Estado_Id] ASC)
 )
-go
-
-
-ALTER TABLE [C_R].[Publicaciones_Estados]
-	ADD CONSTRAINT [PK_Publicaciones_Estados] PRIMARY KEY  CLUSTERED ([Pub_Estado_Id] ASC)
 go
 
 CREATE TABLE [C_R].[Publicaciones_Visibilidad]
@@ -235,45 +286,24 @@ CREATE TABLE [C_R].[Publicaciones_Visibilidad]
 	[Pub_Visible_Descripcion] nvarchar(255) NOT NULL ,
 	[Pub_Visible_Precio] numeric(18,2)  NOT NULL ,
 	[Pub_Visible_Porcentaje] numeric(18,2)  NOT NULL 
+	CONSTRAINT [PK_Publicaciones_Visibilidad] PRIMARY KEY  CLUSTERED ([Pub_Visible_Cod] ASC)
 )
-go
-
-ALTER TABLE [C_R].[Publicaciones_Visibilidad]
-	ADD CONSTRAINT [PK_Publicaciones_Visibilidad] PRIMARY KEY  CLUSTERED ([Pub_Visible_Cod] ASC)
-go
-
-CREATE TABLE [C_R].[RL_Clientes_Direccion]
-( 
-	[Cli_Id]             int  NOT NULL ,
-	[Dir_Id]             int  NOT NULL ,
-	[Estado]             varchar(20) NULL 
-)
-go
-
-ALTER TABLE [C_R].[RL_Clientes_Direccion]
-	ADD CONSTRAINT [PK_RL_Clientes_Direccion] PRIMARY KEY  CLUSTERED ([Cli_Id] ASC,[Dir_Id] ASC)
 go
 
 CREATE TABLE [C_R].[Publicaciones_Rubro]
 ( 
 	[Pub_RubroId]        int  NOT NULL  IDENTITY ( 1,1 ) ,
 	[Pub_Descripcion]    nvarchar(255) NULL 
+	CONSTRAINT [PK_Publicaciones_Rubro] PRIMARY KEY  CLUSTERED ([Pub_RubroId] ASC)
 )
-go
-
-ALTER TABLE [C_R].[Publicaciones_Rubro]
-	ADD CONSTRAINT [PK_Publicaciones_Rubro] PRIMARY KEY  CLUSTERED ([Pub_RubroId] ASC)
 go
 
 CREATE TABLE [C_R].[Publicaciones_Tipo]
 ( 
 	[Pub_Tipo]           int  NOT NULL  IDENTITY ( 1,1 ) ,
 	[Pub_Descripcion]    nvarchar(255) NULL 
+	CONSTRAINT [PK_Publicaciones_Tipo] PRIMARY KEY  CLUSTERED ([Pub_Tipo] ASC)
 )
-go
-
-ALTER TABLE [C_R].[Publicaciones_Tipo]
-	ADD CONSTRAINT [PK_Publicaciones_Tipo] PRIMARY KEY  CLUSTERED ([Pub_Tipo] ASC)
 go
 
 CREATE TABLE [C_R].[Roles]
@@ -281,45 +311,33 @@ CREATE TABLE [C_R].[Roles]
 	[Rol_Id]             int  NOT NULL IDENTITY,
 	[Rol_Descripcion]    nvarchar(50)   NULL ,
 	[Rol_Estado]         varchar(50)  NULL 
+	CONSTRAINT [PK_Roles] PRIMARY KEY  CLUSTERED ([Rol_Id] ASC)
 )
 go
 
-ALTER TABLE [C_R].[Roles]
-	ADD CONSTRAINT [PK_Roles] PRIMARY KEY  CLUSTERED ([Rol_Id] ASC)
-go
-
-CREATE TABLE [C_R].[RL_Clientes_Roles]
+CREATE TABLE [C_R].[RL_Usuarios_Roles]
 ( 
 	[Rol_Id]             int  NOT NULL ,
-	[Cli_Id]             int  NOT NULL 
+	[User_Id]            int  NOT NULL 
+	CONSTRAINT [PK_RL_Usuarios_Roles] PRIMARY KEY  CLUSTERED ([Rol_Id] ASC,[User_Id] ASC)
 )
-go
-
-ALTER TABLE [C_R].[RL_Clientes_Roles]
-	ADD CONSTRAINT [PK_RL_Clientes_Roles] PRIMARY KEY  CLUSTERED ([Rol_Id] ASC,[Cli_Id] ASC)
 go
 
 CREATE TABLE [C_R].[Sis_Funciones]
 ( 
-	[Sis_Fun_Id]         int  NOT NULL ,
+	[Sis_Fun_Id]         int  NOT NULL IDENTITY ( 1,1 ),
 	[Sis_Fun_Des]        varchar(255)   NULL 
+	CONSTRAINT [PK_Sis_Funciones] PRIMARY KEY  CLUSTERED ([Sis_Fun_Id] ASC)
 )
-go
-
-ALTER TABLE [C_R].[Sis_Funciones]
-	ADD CONSTRAINT [PK_Sis_Funciones] PRIMARY KEY  CLUSTERED ([Sis_Fun_Id] ASC)
 go
 
 CREATE TABLE [C_R].[RL_Roles_Funciones]
 ( 
-	[Sis_Fun_Id]         int  NOT NULL  IDENTITY ( 1,1 ) ,
+	[Sis_Fun_Id]         int  NOT NULL ,
 	[Rol_Id]             int  NOT NULL ,
 	[Estado]             nvarchar(50)  NULL 
+	CONSTRAINT [PK_RL_Roles_Funciones] PRIMARY KEY  CLUSTERED ([Sis_Fun_Id] ASC,[Rol_Id] ASC)
 )
-go
-
-ALTER TABLE [C_R].[RL_Roles_Funciones]
-	ADD CONSTRAINT [PK_RL_Roles_Funciones] PRIMARY KEY  CLUSTERED ([Sis_Fun_Id] ASC,[Rol_Id] ASC)
 go
 
 CREATE TABLE [C_R].[Tipo_Docs]
@@ -327,12 +345,8 @@ CREATE TABLE [C_R].[Tipo_Docs]
 	[Cli_TipoDoc]        int  NOT NULL IDENTITY (1,1) ,
 	[Descripcion]        varchar(100) NULL,
 	[Des_Corta]			 varchar(10) null
-	
+	CONSTRAINT [PK_Tipo_Docs] PRIMARY KEY  CLUSTERED ([Cli_TipoDoc] ASC)
 )
-go
-
-ALTER TABLE [C_R].[Tipo_Docs]
-	ADD CONSTRAINT [PK_Tipo_Docs] PRIMARY KEY  CLUSTERED ([Cli_TipoDoc] ASC)
 go
 
 CREATE TABLE [C_R].[Inconsistencias_Operaciones]
@@ -353,6 +367,18 @@ go
 
 ALTER TABLE [C_R].[Clientes]
 	ADD CONSTRAINT [FK_Clientes_TipoDoc] FOREIGN KEY ([Cli_TipoDoc]) REFERENCES [C_R].[Tipo_Docs]([Cli_TipoDoc])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+ALTER TABLE [C_R].[Clientes]
+	ADD CONSTRAINT [FK_Clientes_Usuarios] FOREIGN KEY ([Cli_User_Id]) REFERENCES [C_R].[Usuarios]([User_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+go
+
+ALTER TABLE [C_R].[Empresas]
+	ADD CONSTRAINT [FK_Empresas_Usuarios] FOREIGN KEY ([Emp_User_Id]) REFERENCES [C_R].[Usuarios]([User_Id])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 go
@@ -427,14 +453,14 @@ ALTER TABLE [C_R].[Publicaciones]
 go
 
 ALTER TABLE [C_R].[Publicaciones]
-	ADD CONSTRAINT [FK_Publicaciones_Clientes] FOREIGN KEY ([Cli_Id]) REFERENCES [C_R].[Clientes]([Cli_Id])
+	ADD CONSTRAINT [FK_Publicaciones_Usuarios] FOREIGN KEY ([Pub_User_Id]) REFERENCES [C_R].[Usuarios]([User_Id])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 go
 
 
 ALTER TABLE [C_R].[Operaciones]
-	ADD CONSTRAINT [FK_Opercaiones_Clientes] FOREIGN KEY ([Cli_Id]) REFERENCES [C_R].[Clientes]([Cli_Id])
+	ADD CONSTRAINT [FK_Operaciones_Usuarios] FOREIGN KEY ([Ope_User_Id]) REFERENCES [C_R].[Usuarios]([User_Id])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 go
@@ -445,28 +471,14 @@ ALTER TABLE [C_R].[Operaciones]
 		ON UPDATE NO ACTION
 go
 
-
-ALTER TABLE [C_R].[RL_Clientes_Direccion]
-	ADD CONSTRAINT [FK_Clientes_Direccion_Direcciones] FOREIGN KEY ([Dir_Id]) REFERENCES [C_R].[Direcciones]([Dir_Id])
+ALTER TABLE [C_R].[RL_Usuarios_Roles]
+	ADD CONSTRAINT [FK_Usuarios_Roles_Roles] FOREIGN KEY ([Rol_Id]) REFERENCES [C_R].[Roles]([Rol_Id])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 go
 
-ALTER TABLE [C_R].[RL_Clientes_Direccion]
-	ADD CONSTRAINT [FK_Clientes_Drirecion_Clientes] FOREIGN KEY ([Cli_Id]) REFERENCES [C_R].[Clientes]([Cli_Id])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
-
-
-ALTER TABLE [C_R].[RL_Clientes_Roles]
-	ADD CONSTRAINT [FK_Clientes_Roles_Roles] FOREIGN KEY ([Rol_Id]) REFERENCES [C_R].[Roles]([Rol_Id])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
-
-ALTER TABLE [C_R].[RL_Clientes_Roles]
-	ADD CONSTRAINT [FK_Clientes_Roles_Clientes] FOREIGN KEY ([Cli_Id]) REFERENCES [C_R].[Clientes]([Cli_Id])
+ALTER TABLE [C_R].[RL_Usuarios_Roles]
+	ADD CONSTRAINT [FK_Usuarios_Roles_Usuarios] FOREIGN KEY ([User_Id]) REFERENCES [C_R].[Usuarios]([User_Id])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 go
@@ -485,22 +497,16 @@ ALTER TABLE [C_R].[RL_Roles_Funciones]
 go
 
 CREATE TABLE [C_R].[Operaciones_Calificadas]
-	(
+(
 	[Ope_Cal_Codigo] numeric(18) NOT NULL,
 	[Ope_Cal_CantEstrellas] numeric(18)  NULL ,
 	[Ope_Cal_Descripcion] varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL ,
 	[Ope_Codigo] numeric(18) NOT NULL
-	)
-GO
-ALTER TABLE  [C_R].[Operaciones_Calificadas]
-	ADD Constraint [PK_Operaciones_Calificadas] PRIMARY KEY CLUSTERED ([Ope_Cal_Codigo]) 
-	
-GO
-
-ALTER TABLE [C_R].[Operaciones_Calificadas] WITH CHECK
-	ADD CONSTRAINT [FK_Operaciones_Califiacion] FOREIGN KEY ([Ope_Codigo])  REFERENCES [C_R].[Operaciones]([Ope_Codigo])
-	ON DELETE NO ACTION
-	ON UPDATE NO ACTION
+	CONSTRAINT [PK_Operaciones_Calificadas] PRIMARY KEY CLUSTERED ([Ope_Cal_Codigo]) 
+	CONSTRAINT [FK_Operaciones_Califiacion] FOREIGN KEY ([Ope_Codigo])  REFERENCES [C_R].[Operaciones]([Ope_Codigo])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+)
 GO
 
 
@@ -541,77 +547,101 @@ VALUES ('Pasaporte Extrangero','PE')
 INSERT INTO C_R.Tipo_Docs
 VALUES ('Otro','OT')
 GO
+
 -- Insercion de clientes
-INSERT  C_R.Clientes ( Cli_TipoDoc, Cli_Doc, Cli_Nombre, Cli_Apellido, Cli_Fecha_Nac, Cli_Mail, Cli_UserName, Cli_Password,  Emp_RazonSocial, Emp_Cuit, Cli_CambioPass, Cli_Estado, Cli_Log_Error,Cli_Ultimo_Ingreso )
-select DISTINCT		1 Cli_TipoDoc,
+DECLARE @Cli_TipoDoc int,
+		@Cli_Doc numeric(18),
+		@Cli_Nombre varchar(255),
+		@Cli_Apellido varchar(255),
+		@Cli_Fecha_Nac datetime,
+		@Cli_Mail varchar(255),
+		@Cli_Dir_Calle varchar(255),
+		@Cli_Dir_Nro numeric(18),
+		@Cli_Dir_Piso numeric(18),
+		@Cli_Dir_CodPostal varchar(50),
+		@Cli_Dir_Depto varchar(50),
+		@Cli_Dir_Localidad varchar(50)
+
+DECLARE clientes_cursor CURSOR FOR  
+select DISTINCT	1 Cli_TipoDoc,
 Publ_Cli_Dni Cli_Doc,
 Publ_Cli_Nombre Cli_Nombre,
 Publ_Cli_Apeliido Cli_Apellido,
 Publ_Cli_Fecha_Nac Cli_Fecha_Nac,
 Publ_Cli_Mail Cli_Mail,
-SUBSTRING(Publ_Cli_Nombre,1,1)+Publ_Cli_Apeliido +Convert(varchar,(YEAR(Publ_Cli_Fecha_Nac))) Cli_UserName,
--- hash para password P4SSM1GR4D0
-'48654867b34905e313300729dbd4dba96d88a51587c8e9cbab60191b480d9be3' Cli_Password,
-null Emp_RazonSocial,
-null Emp_Cuit,
- 1 Cli_CambioPass,'ACTIVO' Cli_Estado ,0 Cli_Log_Error,GETDATE()Cli_Ultimo_Ingreso
+Publ_Cli_Dom_Calle, 
+Publ_Cli_Nro_Calle, 
+Publ_Cli_Piso, 
+Publ_Cli_Cod_Postal, 
+Publ_Cli_Depto,'LOC No asignada'
  from gd_esquema.Maestra
 where  Publ_Cli_Dni is not null or Publ_Cli_Apeliido is not null or Publ_Cli_Nombre is not null
 order by 1
-Go
+
+OPEN clientes_cursor		
+FETCH NEXT FROM clientes_cursor INTO @Cli_TipoDoc, @Cli_Doc, @Cli_Nombre, @Cli_Apellido, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad
+WHILE @@FETCH_STATUS = 0   
+BEGIN   
+   EXEC C_R.SP_ALTA_CLIENTE @Cli_TipoDoc, @Cli_Doc, @Cli_Nombre, @Cli_Apellido, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad
+   FETCH NEXT FROM clientes_cursor INTO @Cli_TipoDoc, @Cli_Doc, @Cli_Nombre, @Cli_Apellido, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad 
+   
+END   
+
+CLOSE clientes_cursor   
+DEALLOCATE clientes_cursor
+GO
 
 -- Insert de Empresas
-insert  C_R.Clientes ( Cli_TipoDoc, Cli_Fecha_Nac, Cli_Mail, Cli_UserName, Cli_Password,  Emp_RazonSocial, Emp_Cuit, Cli_CambioPass, Cli_Estado, Cli_Log_Error,Cli_Ultimo_Ingreso )
+DECLARE @Emp_Cuit varchar(50),
+		@Emp_RazonSocial varchar(255),
+		@Emp_Fecha_Creacion datetime,
+		@Emp_Mail varchar(255),
+		@Emp_Dir_Calle varchar(255),
+		@Emp_Dir_Nro numeric(18),
+		@Emp_Dir_Piso numeric(18),
+		@Emp_Dir_CodPostal varchar(50),
+		@Emp_Dir_Depto varchar(50),
+		@Emp_Dir_Localidad varchar(50)
+
+DECLARE empresas_cursor CURSOR FOR  
 select DISTINCT
-7 tipodoc,
+Publ_Empresa_Cuit,
+Publ_Empresa_Razon_Social,
 Publ_Empresa_Fecha_Creacion,
 Publ_Empresa_Mail,
-REPLACE(Publ_Empresa_Cuit,'-','') Usuario,
--- hash para password P4SSM1GR4D0
- '48654867b34905e313300729dbd4dba96d88a51587c8e9cbab60191b480d9be3' Pass,
-Publ_Empresa_Razon_Social,
-Publ_Empresa_Cuit,1,'ACTIVO',0,GETDATE()
+Publ_Empresa_Dom_Calle, 
+Publ_Empresa_Nro_Calle, 
+Publ_Empresa_Piso,  
+Publ_Empresa_Cod_Postal,
+Publ_Empresa_Depto,
+'LOC No asignada'
  from gd_esquema.Maestra
 where  Publ_Empresa_Cuit is not null or Publ_Empresa_Razon_Social is not null 
 order by 1,2,3
-Go
 
--- INSERCION DE DIRECIONES DE CLIENTE
-INSERT INTO C_R.Direcciones (Dir_Calle,Dir_Nro,Dir_Piso,Dir_CodPostal,Dir_Depto,Dir_Localidad)
-SELECT distinct  Publ_Cli_Dom_Calle, Publ_Cli_Nro_Calle, Publ_Cli_Piso, Publ_Cli_Cod_Postal, Publ_Cli_Depto,'LOC No asignada'
-FROM gd_esquema.Maestra
-WHERE Publ_Cli_Dom_Calle is not null
-GO
--- INSERCION DE RELACION CLIENTE DIRECCION
-INSERT INTO C_R.RL_Clientes_Direccion (Cli_Id,Dir_Id,Estado) 
-SELECT distinct C.Cli_Id, D.Dir_Id,'ACTIVO'
-FROM  gd_esquema.Maestra M join C_R.Clientes  C on ( M.Publ_Cli_Apeliido = C.Cli_Apellido and M.Publ_Cli_Nombre = C.Cli_Nombre and M.Publ_Cli_Dni = C.Cli_Doc)
-	  join   C_R.Direcciones  D  on (M.Publ_Cli_Dom_Calle = D.Dir_Calle and M.Publ_Cli_Nro_Calle = D.Dir_Nro and M.Publ_Cli_Cod_Postal = d.Dir_CodPostal)
-	  WHERE Publ_Cli_Dom_Calle is not null
+OPEN empresas_cursor		
+FETCH NEXT FROM empresas_cursor INTO @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Mail, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad
+WHILE @@FETCH_STATUS = 0   
+BEGIN   
+   EXEC C_R.SP_ALTA_EMPRESA @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Mail, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad
+   FETCH NEXT FROM empresas_cursor INTO @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Mail, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad
+   
+END   
+
+CLOSE empresas_cursor   
+DEALLOCATE empresas_cursor
 GO
 
---Direciones empresas
-INSERT INTO C_R.Direcciones (Dir_Calle,Dir_Nro,Dir_Piso,Dir_CodPostal,Dir_Depto,Dir_Localidad)
-SELECT distinct Publ_Empresa_Dom_Calle, Publ_Empresa_Nro_Calle, Publ_Empresa_Piso,  Publ_Empresa_Cod_Postal,Publ_Empresa_Depto,'LOC No asignada'
-FROM gd_esquema.Maestra
-WHERE Publ_Empresa_Dom_Calle is not null
-GO
--- Relaciones entre empresas y direcciones
-INSERT INTO C_R.RL_Clientes_Direccion (Cli_Id,Dir_Id,Estado) 
-SELECT distinct C.Cli_Id, D.Dir_Id,'ACTIVO'
-FROM  gd_esquema.Maestra M join C_R.Clientes  C on ( m.Publ_Empresa_Razon_Social = C.Emp_RazonSocial and M.Publ_Empresa_Cuit  = C.Emp_Cuit  )
-	  join   C_R.Direcciones  D  on (M.Publ_Empresa_Dom_Calle = D.Dir_Calle and M.Publ_Empresa_Nro_Calle = D.Dir_Nro and M.Publ_Empresa_Cod_Postal  = d.Dir_CodPostal)
-	  WHERE m.Publ_Empresa_Dom_Calle  is not null
+-- Relacional de  Usuarios - ROLES
+
+INSERT INTO C_R.RL_Usuarios_Roles
+SELECT 3, U.User_Id
+FROM C_R.Usuarios U INNER JOIN C_R.Clientes C on U.User_Id = C.Cli_User_Id
 GO
 
--- Relacional de  Clientes- ROLES
-
-INSERT INTO C_R.RL_Clientes_Roles 
-SELECT  CASE (C_R.Clientes.Cli_TipoDoc ) 			
-				WHEN 1 THEN 3 
-				WHEN 7 THEN 1 END ,
-		 C_R.Clientes.Cli_Id	
-FROM C_R.Clientes
+INSERT INTO C_R.RL_Usuarios_Roles
+SELECT 1, U.User_Id
+FROM C_R.Usuarios U INNER JOIN C_R.Empresas E on U.User_Id = E.Emp_User_Id
 GO
 
 -- Insercion de rubros publicaciones
@@ -664,8 +694,8 @@ SELECT  Publicacion_Cod,
 			  WHEN (SELECT isnull(sum(M2.Compra_Cantidad),0) FROM gd_esquema.Maestra M2 WHERE M2.Publicacion_Cod = gd_esquema.Maestra.Publicacion_Cod and M2.Calificacion_Codigo is not null) > gd_esquema.Maestra.Publicacion_Stock THEN 1 --'BORRADOR'
 			  END
 			    'ESTADO',
-		(SELECT C_R.Clientes.Cli_Id FROM C_R.Clientes WHERE C_R.Clientes.Cli_TipoDoc= 1 and 
-		 C_R.Clientes.Cli_Doc = gd_esquema.Maestra.Publ_Cli_Dni 
+		(SELECT C.Cli_User_Id FROM C_R.Clientes C WHERE C.Cli_TipoDoc = 1 and 
+		 C.Cli_Doc = gd_esquema.Maestra.Publ_Cli_Dni 
 				 )'IDCLIENTE'  
  FROM gd_esquema.Maestra
  WHERE Compra_Fecha is null and Oferta_Fecha is null  and Publ_Cli_Dni is not null and Factura_Nro is null
@@ -688,18 +718,17 @@ SELECT  Publicacion_Cod,
 			  WHEN (select isnull(sum(M2.Compra_Cantidad),0) FROM gd_esquema.Maestra M2 WHERE M2.Publicacion_Cod = gd_esquema.Maestra.Publicacion_Cod and M2.Calificacion_Codigo is not null) > gd_esquema.Maestra.Publicacion_Stock THEN 1 --'BORRADOR'
 			  END
 			    'ESTADO',
-		(SELECT C_R.Clientes.Cli_Id FROM C_R.Clientes  
-			WHERE C_R.Clientes.Cli_TipoDoc= 7 and 
-				 C_R.Clientes.Emp_Cuit  = gd_esquema.Maestra.Publ_Empresa_Cuit 
+		(SELECT E.Emp_User_Id FROM C_R.Empresas E
+			WHERE E.Emp_Cuit  = gd_esquema.Maestra.Publ_Empresa_Cuit 
 				 )'IDCLIENTE'  
  FROM gd_esquema.Maestra
 WHERE Compra_Fecha is null and Oferta_Fecha is null  and Publ_Empresa_Cuit  is not null and Factura_Nro is null 
 GO
 
 
-INSERT INTO C_R.Operaciones ( Pub_Codigo, Cli_Id, Ope_Fecha, Ope_Tipo, Ope_Monto, Ope_Cantidad) 
+INSERT INTO C_R.Operaciones ( Pub_Codigo, Ope_User_Id, Ope_Fecha, Ope_Tipo, Ope_Monto, Ope_Cantidad) 
 select Publicacion_Cod, 
-(SELECT Cli_Id from C_R.Clientes where C_R.Clientes.Cli_Doc = gd_esquema.Maestra.Cli_Dni),
+(SELECT C.Cli_User_Id from C_R.Clientes C where C.Cli_Doc = gd_esquema.Maestra.Cli_Dni),
 isnull(Compra_Fecha,oferta_fecha),
 case 
 when oferta_fecha is null then 'VENTA'
@@ -733,7 +762,7 @@ on m.Publicacion_Cod = o.Pub_Codigo and m.Compra_Fecha = o.Ope_Fecha and m.Compr
 where m.Calificacion_Codigo is not null
 and m.Calificacion_Codigo not in ( select Inc_Calificacion_Codigo from C_R.Inconsistencias_Operaciones where Inc_Calificacion_Codigo is not null )
 and o.Ope_Tipo = 'VENTA'
-and o.Cli_Id = ( select c.Cli_Id from C_R.Clientes c where c.Cli_Doc = m.Cli_Dni )
+and o.Ope_User_Id = ( select c.Cli_User_Id from C_R.Clientes c where c.Cli_Doc = m.Cli_Dni )
 
 -- FORMAS DE PAGO
 insert into C_R.Factura_FormaPago(Factura_FP_Desc) values ('Efectivo')
@@ -767,9 +796,9 @@ BEGIN
 	DECLARE @estado varchar(10)
 	DECLARE @cambio_pass bit
 	
-	select @hash = Cli_Password, @estado = Cli_Estado, @cambio_pass = Cli_CambioPass
-	from C_R.Clientes 
-	where Cli_UserName = @nombre
+	select @hash = User_Password, @estado = User_Estado, @cambio_pass = User_CambioPass
+	from C_R.Usuarios 
+	where User_Name = @nombre
 	
 	IF ( @estado IS NULL )
 	BEGIN
@@ -786,8 +815,8 @@ BEGIN
 	IF ( @hash = @password COLLATE Latin1_General_CS_AS )
 	BEGIN
 	
-		update C_R.Clientes set Cli_Log_Error = '0' 
-		where Cli_UserName = @nombre
+		update C_R.Usuarios set User_Log_Error = '0' 
+		where User_Name = @nombre
 		
 		IF ( @cambio_pass =	1 )
 		BEGIN
@@ -797,9 +826,9 @@ BEGIN
 				RETURN
 			END
 			
-			update C_R.Clientes 
-			set Cli_Password = @nuevo_password, Cli_CambioPass = 0
-			where Cli_UserName = @nombre
+			update C_R.Usuarios
+			set User_Password = @nuevo_password, User_CambioPass = 0
+			where User_Name = @nombre
 			
 		END
 		
@@ -811,18 +840,18 @@ BEGIN
 	SET @resultado = 3
 	DECLARE @logins_fallidos int
 	
-	select @logins_fallidos = (Cli_Log_Error + 1) 
-	from C_R.Clientes 
-	where Cli_UserName = @nombre
+	select @logins_fallidos = (User_Log_Error + 1) 
+	from C_R.Usuarios 
+	where User_Name = @nombre
 	
-	update C_R.Clientes set Cli_Log_Error = @logins_fallidos
-	where Cli_UserName = @nombre
+	update C_R.Usuarios set User_Log_Error = @logins_fallidos
+	where User_Name = @nombre
 	
 	IF ( @logins_fallidos > 2 )
 	BEGIN
 		SET @resultado = 4
-		update C_R.Clientes set Cli_Estado = 'INACTIVO'
-		where Cli_UserName = @nombre
+		update C_R.Usuarios set User_Estado = 'INACTIVO'
+		where User_Name = @nombre
 	END
 END
 GO

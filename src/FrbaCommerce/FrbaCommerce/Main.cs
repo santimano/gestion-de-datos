@@ -51,5 +51,12 @@ namespace FrbaCommerce
             abmRolForm.ShowDialog();
             this.Show();
         }
+        private void visibilidadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Abm_Visibilidad.Visibilidad_ABM abmVisiblibidadForm = new FrbaCommerce.Abm_Visibilidad.Visibilidad_ABM();
+            abmVisiblibidadForm.ShowDialog();
+            this.Show();
+        }
     }
 }

@@ -58,5 +58,7 @@ namespace FrbaCommerce
             abmVisiblibidadForm.ShowDialog();
             this.Show();
         }
+
+       
     }
 }

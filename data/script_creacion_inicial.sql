@@ -827,18 +827,30 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE C_R.SP_Visibilidad_ADD(@Descripcion char(255),@Precio numeric(18,2),@Porc numeric(18,2))
+CREATE PROCEDURE C_R.SP_Visibilidad_SAVE(@Codigo int,@Descripcion char(255),@Precio numeric(18,2),@Porc numeric(18,2))
 AS
 BEGIN
-  
-  INSERT INTO [GD1C2014].[C_R].[Publicaciones_Visibilidad]
-           ([Pub_Visible_Descripcion]
-           ,[Pub_Visible_Precio]
-           ,[Pub_Visible_Porcentaje])
-     VALUES
-           (@Descripcion,
+  if (@Codigo =-1)
+  Begin
+	INSERT INTO [GD1C2014].[C_R].[Publicaciones_Visibilidad]
+		   ([Pub_Visible_Descripcion]
+		   ,[Pub_Visible_Precio]
+		   ,[Pub_Visible_Porcentaje])
+	 VALUES
+		   (@Descripcion,
 			@Precio,
-            @Porc)
-
+		   @Porc)
+	end
+	else
+	begin
+		UPDATE Publicaciones_Visibilidad
+		set 
+			Pub_Visible_Descripcion = @Descripcion ,
+			Pub_Visible_Precio = @Precio,
+			Pub_Visible_Porcentaje = @Porc 
+		
+		where 
+		Publicaciones_Visibilidad.Pub_Visible_Cod = @Codigo
+	end
 
 END

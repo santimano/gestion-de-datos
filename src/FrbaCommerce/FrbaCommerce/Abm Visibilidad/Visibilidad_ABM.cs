@@ -38,6 +38,80 @@ namespace FrbaCommerce.Abm_Visibilidad
           
         }
 
+        private void BtnNuevo_Click(object sender, EventArgs e)
+        {
+            GbEdicion.Visible = true;
+            BtnNuevo.Visible = false;
+            BtnEliminar.Visible = false;
+            BtnEliminar.Visible = true;
+            TbCodigo.Text = "Nuevo";
+            Limpiadatos();
+        }
+
+        private void Limpiadatos()
+        {
+            TbDesc.Text = "";
+            TbPorcentaje.Text = "";
+            TbPrecio.Text = "";
+        }
+
+        private void Btn_Cancelar_Click(object sender, EventArgs e)
+        {
+            Limpiadatos();
+            GbEdicion.Visible = false;
+            BtnNuevo.Visible = true;
+        }
+
+        private void BtnGuardar_Click(object sender, EventArgs e)
+        {
+            if (EsValido())
+            {
+                if (TbCodigo.Text.Contains("Nuevo"))
+                { 
+                    BD.Instance.Productos_Visibilidad_SAVE(-1,TbDesc.Text,Convert.ToDecimal(TbPrecio.Text),Convert.ToDecimal(TbPorcentaje.Text): 
+                }
+                else
+                {
+                    BD.Instance.Productos_Visibilidad_SAVE(Convert.ToInt32(TbCodigo.Text),TbDesc.Text,Convert.ToDecimal(TbPrecio.Text),Convert.ToDecimal(TbPorcentaje.Text): 
+                }
+            }
+        }
+
+        protected bool EsValido()
+        {
+            Boolean RTA = true;
+            if (TbDesc.Text.Trim().Length < 1)
+            {
+                LbError.Text = LbError.Text + " * El Campo Descripcion esta vacio" + "\r\n";
+            }
+
+
+            try
+            {
+                Convert.ToDecimal(TbPorcentaje.Text);
+            }
+            catch{
+                LbError.Text = LbError.Text + " * El Campo Pocentaje no es de tipo decimal" + "\r\n";
+                RTA = false;
+            }
+
+            try
+            {
+                Convert.ToDecimal( TbPrecio.Text  );
+            }
+            catch
+            {
+                LbError.Text = LbError.Text + " * El Campo Precio no es de tipo decimal" + "\r\n";
+                RTA = false;
+            }
+            return RTA;
+        }
+
+    
+
+       
+
+     
     
         
 

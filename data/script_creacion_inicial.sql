@@ -217,8 +217,7 @@ CREATE TABLE [C_R].[Factura]
 	[Factura_Nro]       numeric(18)  NOT NULL ,
 	[Factura_FP_ID]     int  NOT NULL ,
 	[Factura_Fecha]     datetime  NOT NULL ,
-	[Factura_Total]     numeric(18,2)  NOT NULL ,
-	[Pub_Codigo]        numeric(18)  NOT NULL 
+	[Factura_Total]     numeric(18,2)  NOT NULL
 	CONSTRAINT [PK_Factura] PRIMARY KEY  CLUSTERED ([Factura_Nro] ASC)
 )
 go
@@ -229,7 +228,8 @@ CREATE TABLE [C_R].[Factura_Items]
 	[Factura_Nro]        numeric(18)  NOT NULL ,
 	[Item_Cantidad]      numeric(18)  NOT NULL ,
 	[Item_Monto]         numeric(18,2)  NULL ,
-	[Item_Desc]          varchar(50)  NULL 
+	[Item_Desc]          varchar(50)  NULL,
+	[Pub_Codigo]         numeric(18)  NOT NULL  
 	CONSTRAINT [PK_Factura_Items] PRIMARY KEY  CLUSTERED ([Item_Id] ASC)
 )
 go
@@ -394,8 +394,8 @@ ALTER TABLE [C_R].[Factura]
 	  WITH CHECK CHECK CONSTRAINT [FK_Factura_Factura_FormaPago]
 go
 
-ALTER TABLE [C_R].[Factura]
-	ADD CONSTRAINT [FK_Factura_Clientes] FOREIGN KEY ([Pub_Codigo]) REFERENCES [C_R].[Publicaciones]([Pub_Codigo])
+ALTER TABLE [C_R].[Factura_Items]
+	ADD CONSTRAINT [FK_Factura_Items_Publicaciones] FOREIGN KEY ([Pub_Codigo]) REFERENCES [C_R].[Publicaciones]([Pub_Codigo])
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 go
@@ -769,16 +769,15 @@ insert into C_R.Factura_FormaPago(Factura_FP_Desc) values ('Efectivo')
 insert into C_R.Factura_FormaPago(Factura_FP_Desc) values ('Tarjeta');
 
 -- FACTURAS
-insert into C_R.Factura(Factura_Nro, Factura_Fecha, Factura_Total, Factura_FP_ID, Pub_Codigo)
+insert into C_R.Factura(Factura_Nro, Factura_Fecha, Factura_Total, Factura_FP_ID)
 select distinct M.Factura_Nro, M.Factura_Fecha, M.Factura_Total, 
 (select Factura_FP_ID from C_R.Factura_FormaPago where Factura_FP_Desc = M.Forma_Pago_Desc) as FP
-, Publicacion_Cod 
 from gd_esquema.Maestra M
 where M.Factura_Nro is not null
 
 -- ITEMS
-insert into C_R.Factura_Items(Item_Monto, Item_Cantidad, Factura_Nro, Item_Desc)
-select Item_Factura_Monto, Item_Factura_Cantidad, Factura_Nro, 'ITEM-MIG'
+insert into C_R.Factura_Items(Item_Monto, Item_Cantidad, Factura_Nro, Item_Desc, Pub_Codigo)
+select Item_Factura_Monto, Item_Factura_Cantidad, Factura_Nro, 'ITEM-MIG', Publicacion_Cod
 from gd_esquema.Maestra M
 where M.Factura_Nro is not null
 GO

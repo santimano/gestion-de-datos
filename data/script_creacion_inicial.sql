@@ -826,3 +826,19 @@ BEGIN
 	END
 END
 GO
+
+CREATE PROCEDURE C_R.SP_Visibilidad_ADD(@Descripcion char(255),@Precio numeric(18,2),@Porc numeric(18,2))
+AS
+BEGIN
+  
+  INSERT INTO [GD1C2014].[C_R].[Publicaciones_Visibilidad]
+           ([Pub_Visible_Descripcion]
+           ,[Pub_Visible_Precio]
+           ,[Pub_Visible_Porcentaje])
+     VALUES
+           (@Descripcion,
+			@Precio,
+            @Porc)
+
+
+END

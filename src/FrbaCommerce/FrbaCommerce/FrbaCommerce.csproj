@@ -108,6 +108,20 @@
     </Compile>
     <Compile Include="Generar Publicacion\Publicacion.cs" />
     <Compile Include="Generar Publicacion\PublicacionDAO.cs" />
+    <Compile Include="Historial Cliente\CompraDAO.cs" />
+    <Compile Include="Historial Cliente\Compras.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Historial Cliente\Compras.Designer.cs">
+      <DependentUpon>Compras.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Historial Cliente\OfertaDAO.cs" />
+    <Compile Include="Historial Cliente\Ofertas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Historial Cliente\Ofertas.Designer.cs">
+      <DependentUpon>Ofertas.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\Encripcion.cs" />
     <Compile Include="Login\LoginDAO.cs" />
     <Compile Include="Login\LoginNuevoPass.cs">
@@ -140,12 +154,6 @@
     <Compile Include="Gestion de Preguntas\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Historial Cliente\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Historial Cliente\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Listado Estadistico\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -176,6 +184,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicacion\GenPublicacion.resx">
       <DependentUpon>GenPublicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Historial Cliente\Compras.resx">
+      <DependentUpon>Compras.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Historial Cliente\Ofertas.resx">
+      <DependentUpon>Ofertas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

@@ -85,6 +85,22 @@ namespace FrbaCommerce
             this.Show();
         }
 
+        private void ofertasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Historial_Cliente.Ofertas form = new FrbaCommerce.Historial_Cliente.Ofertas();
+            form.ShowDialog();
+            this.Show();
+        }
+
+        private void comprasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Historial_Cliente.Compras form = new FrbaCommerce.Historial_Cliente.Compras();
+            form.ShowDialog();
+            this.Show();
+        }
+
        
     }
 }

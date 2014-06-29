@@ -111,6 +111,14 @@ if exists(select * from sys.objects where name='Roles' and type ='u')
 	drop table [C_R].[Roles]
 go
 
+if exists(select * from sys.objects where name='Ofertas_Estado_VW' and type ='v')
+	drop view [C_R].[Ofertas_Estado_VW]
+go
+
+if exists(select * from sys.objects where name='Compras_VW' and type ='v')
+	drop view [C_R].[Compras_VW]
+go
+
 if exists(select * from sys.schemas where name ='C_R')
 	drop schema [C_R]
 go
@@ -1004,3 +1012,20 @@ BEGIN
 END
 GO
 
+CREATE VIEW C_R.Ofertas_Estado_VW AS
+SELECT O.Ofe_Codigo, P.Pub_Descripcion, O.Ofe_User_Id, O.Ofe_Fecha, O.Ope_Monto, 
+CASE
+	WHEN O.Ope_Monto = (SELECT MAX(Ope_Monto) FROM C_R.Ofertas O1 WHERE O.Pub_Codigo = O1.Pub_Codigo)
+	THEN 'GANADA'
+	ELSE 'NO GANADA'
+END Estado
+FROM C_R.Ofertas O, C_R.Publicaciones P
+WHERE O.Pub_Codigo = P.Pub_Codigo
+GO
+
+CREATE VIEW C_R.Compras_VW AS
+SELECT P.Pub_Descripcion, V.Ven_Fecha, Ven_Monto, P.Pub_Precio, T.Pub_Descripcion Tipo, V.Ven_User_Id
+FROM C_R.Ventas V, C_R.Publicaciones P, C_R.Publicaciones_Tipo T
+WHERE V.Pub_Codigo = P.Pub_Codigo
+AND P.Pub_Tipo_Id = T.Pub_Tipo
+GO

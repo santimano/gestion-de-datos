@@ -109,6 +109,7 @@
     <Compile Include="Generar Publicacion\Publicacion.cs" />
     <Compile Include="Generar Publicacion\PublicacionDAO.cs" />
     <Compile Include="Login\Encripcion.cs" />
+    <Compile Include="Login\LoginDAO.cs" />
     <Compile Include="Login\LoginNuevoPass.cs">
       <SubType>Form</SubType>
     </Compile>

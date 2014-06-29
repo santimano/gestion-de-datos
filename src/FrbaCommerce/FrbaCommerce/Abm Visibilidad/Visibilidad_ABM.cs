@@ -16,14 +16,14 @@ namespace FrbaCommerce.Abm_Visibilidad
         {
             InitializeComponent();
             DGVisibilidades.DataSource = BD.Instance.Productos_Visibilidad_Grilla().Tables[0];
-            DGVisibilidades.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);   
-           
+            DGVisibilidades.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+
         }
         private void Load()
         {
-            
+
             DGVisibilidades.DataSource = BD.Instance.Productos_Visibilidad_Grilla();
-            DGVisibilidades.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);           
+            DGVisibilidades.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
 
         private void DGVisibilidades_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -33,9 +33,9 @@ namespace FrbaCommerce.Abm_Visibilidad
             TbCodigo.Enabled = false;
             TbDesc.Text = DGVisibilidades.Rows[e.RowIndex].Cells["Pub_Visible_Descripcion"].Value.ToString();
             TbPrecio.Text = DGVisibilidades.Rows[e.RowIndex].Cells["Pub_Visible_Precio"].Value.ToString();
-            TbPorcentaje.Text = DGVisibilidades.Rows[e.RowIndex].Cells["Pub_Visible_Porcentaje"].Value.ToString(); 
+            TbPorcentaje.Text = DGVisibilidades.Rows[e.RowIndex].Cells["Pub_Visible_Porcentaje"].Value.ToString();
 
-          
+
         }
 
         private void BtnNuevo_Click(object sender, EventArgs e)
@@ -67,12 +67,12 @@ namespace FrbaCommerce.Abm_Visibilidad
             if (EsValido())
             {
                 if (TbCodigo.Text.Contains("Nuevo"))
-                { 
-                    BD.Instance.Productos_Visibilidad_SAVE(-1,TbDesc.Text,Convert.ToDecimal(TbPrecio.Text),Convert.ToDecimal(TbPorcentaje.Text): 
+                {
+                    BD.Instance.Productos_Visibilidad_SAVE(-1, TbDesc.Text, Convert.ToDecimal(TbPrecio.Text), Convert.ToDecimal(TbPorcentaje.Text));
                 }
                 else
                 {
-                    BD.Instance.Productos_Visibilidad_SAVE(Convert.ToInt32(TbCodigo.Text),TbDesc.Text,Convert.ToDecimal(TbPrecio.Text),Convert.ToDecimal(TbPorcentaje.Text): 
+                    BD.Instance.Productos_Visibilidad_SAVE(Convert.ToInt32(TbCodigo.Text), TbDesc.Text, Convert.ToDecimal(TbPrecio.Text), Convert.ToDecimal(TbPorcentaje.Text));
                 }
             }
         }
@@ -90,14 +90,15 @@ namespace FrbaCommerce.Abm_Visibilidad
             {
                 Convert.ToDecimal(TbPorcentaje.Text);
             }
-            catch{
+            catch
+            {
                 LbError.Text = LbError.Text + " * El Campo Pocentaje no es de tipo decimal" + "\r\n";
                 RTA = false;
             }
 
             try
             {
-                Convert.ToDecimal( TbPrecio.Text  );
+                Convert.ToDecimal(TbPrecio.Text);
             }
             catch
             {
@@ -106,15 +107,5 @@ namespace FrbaCommerce.Abm_Visibilidad
             }
             return RTA;
         }
-
-    
-
-       
-
-     
-    
-        
-
-     
     }
 }

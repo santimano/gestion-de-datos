@@ -59,6 +59,14 @@ namespace FrbaCommerce
             this.Show();
         }
 
+        private void clientesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Abm_Cliente.Cliente_ABM abmClienteForm = new Abm_Cliente.Cliente_ABM();
+            abmClienteForm.ShowDialog();
+            this.Show();
+        }
+
        
     }
 }

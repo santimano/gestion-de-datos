@@ -146,7 +146,8 @@ CREATE TABLE [C_R].[Clientes]
 	[Cli_Dir_Localidad]	 varchar(50)    NULL ,
 	[Cli_Telefono]		 varchar(50)	NULL default 'MIG-' +substring(convert(varchar(50), newID()),1,20)
 	CONSTRAINT [PK_Clientes] PRIMARY KEY  CLUSTERED ([Cli_Id] ASC),
-	CONSTRAINT [UQ_Cliente_Tel] UNIQUE ([Cli_Telefono] ASC)
+	CONSTRAINT [UQ_Cliente_Tel] UNIQUE ([Cli_Telefono] ASC),
+	CONSTRAINT [UQ_Cliente_Doc] UNIQUE ([Cli_TipoDoc] ASC, [Cli_Doc] ASC)
 )
 go
 

@@ -20,7 +20,6 @@ namespace FrbaCommerce.ABM_Rol
 
         public DataSet Roles_Grilla()
         {
-            List<String> roles = new List<String>();
 
             String query = "SELECT * "
            + "FROM C_R.Roles";

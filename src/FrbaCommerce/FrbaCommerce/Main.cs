@@ -13,6 +13,7 @@ namespace FrbaCommerce
     {
         public static String Rol { get; set; }
         public static DateTime FechaSistema { get; set; }
+        public static int Usuario { get; set; }
 
         public Main()
         {
@@ -31,6 +32,7 @@ namespace FrbaCommerce
         private void salirToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Rol = null;
+            Usuario = -1;
             actualizarMenu();
             MessageBox.Show("Logout exitoso");
         }
@@ -56,6 +58,22 @@ namespace FrbaCommerce
             this.Hide();
             Abm_Visibilidad.Visibilidad_ABM abmVisiblibidadForm = new FrbaCommerce.Abm_Visibilidad.Visibilidad_ABM();
             abmVisiblibidadForm.ShowDialog();
+            this.Show();
+        }
+
+        private void nuevaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Generar_Publicacion.GenPublicacion genPublicacionForm = new FrbaCommerce.Generar_Publicacion.GenPublicacion();
+            genPublicacionForm.ShowDialog();
+            this.Show();
+        }
+
+        private void editarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Editar_Publicacion.EditarPublicacion form = new FrbaCommerce.Editar_Publicacion.EditarPublicacion();
+            form.ShowDialog();
             this.Show();
         }
 

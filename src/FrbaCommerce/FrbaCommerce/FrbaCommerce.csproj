@@ -74,6 +74,7 @@
     <Compile Include="Abm Rubro\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Visibilidad\VisibilidadDAO.cs" />
     <Compile Include="Abm Visibilidad\Visibilidad_ABM.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,6 +106,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\Encripcion.cs" />
+    <Compile Include="Login\LoginDAO.cs" />
     <Compile Include="Login\LoginNuevoPass.cs">
       <SubType>Form</SubType>
     </Compile>

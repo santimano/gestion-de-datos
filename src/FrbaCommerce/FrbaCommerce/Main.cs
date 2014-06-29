@@ -47,7 +47,7 @@ namespace FrbaCommerce
         private void rolesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Hide();
-            ABM_Rol.ListadoRol abmRolForm = new ABM_Rol.ListadoRol();
+            ABM_Rol.Rol_ABM abmRolForm = new ABM_Rol.Rol_ABM();
             abmRolForm.ShowDialog();
             this.Show();
         }

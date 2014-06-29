@@ -15,10 +15,6 @@ if exists(select * from sys.objects where name ='SP_Visibilidad_SAVE' and type =
 	drop procedure [C_R].[SP_Visibilidad_SAVE]
 go
 
-if exists(select * from sys.objects where name ='SP_Rol_SAVE' and type = 'P')
-	drop procedure [C_R].[SP_Rol_SAVE]
-go
-
 if exists(select * from sys.objects where name ='SP_ALTA_CLIENTE' and type = 'P')
 	drop procedure [C_R].[SP_ALTA_CLIENTE]
 go
@@ -921,30 +917,6 @@ BEGIN
 		Publicaciones_Visibilidad.Pub_Visible_Cod = @Codigo
 	end
 
-END
-GO
-
-CREATE PROCEDURE C_R.SP_Rol_SAVE(@Codigo int,@Descripcion nvarchar(50),@Estado varchar(50))
-AS
-BEGIN
-  if (@Codigo =-1)
-  Begin
-	INSERT INTO Roles
-		   (Rol_Descripcion
-		   ,Rol_Estado)
-	 VALUES
-		   (@Descripcion,
-			@Estado)
-	end
-	else
-	begin
-		UPDATE Roles
-		set 
-			Rol_Descripcion = @Descripcion ,
-			Rol_Estado = @Estado
-		where 
-		Rol_Id = @Codigo
-	end
 END
 GO
 

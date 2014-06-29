@@ -18,25 +18,52 @@ namespace FrbaCommerce.ABM_Rol
             this.Conexion = Conexion;
         }
 
-        public DataSet Roles_Grilla()
+        public List<Rol> obtenerRoles(string descripcion, string estado)
         {
-            List<String> roles = new List<String>();
-
-            String query = "SELECT * "
-           + "FROM C_R.Roles";
-
+            Dictionary<string, object> parametros = new Dictionary<string,object>();
+            Dictionary<string, object> tipos = new Dictionary<string, object>();
+            Dictionary<string, object> sizes = new Dictionary<string, object>();
+            String query = " SELECT Rol_Descripcion, Rol_Estado, Rol_Id FROM C_R.Roles WHERE 1 = 1 ";
+            if (null != descripcion && descripcion.Length != 0)
+            {
+                query += " AND Rol_Descripcion like @descripcion+'%' ";
+            }
+            if (null != estado)
+            {
+                query += " AND Rol_Estado = @estado ";
+            }
 
             SqlCommand command = new SqlCommand(query, Conexion);
             command.CommandType = CommandType.Text;
-            DataSet Ds = new DataSet();
+
+            if (null != descripcion && descripcion.Length != 0)
+            {
+                command.Parameters.Add("@descripcion", SqlDbType.VarChar, 50);
+                command.Parameters["@descripcion"].Value = descripcion;
+            }
+            if (null != estado)
+            {
+                command.Parameters.Add("@estado", SqlDbType.VarChar, 50);
+                command.Parameters["@estado"].Value = estado;
+            }
+
+            SqlDataReader datareader;
+            List<Rol> roles = new List<Rol>();
             try
             {
                 Conexion.Open();
+                datareader = command.ExecuteReader();
 
-                // Conexion Abierta
-                SqlDataAdapter sDa = new SqlDataAdapter(command);
-                sDa.Fill(Ds);
+                if (datareader.HasRows)
+                {
+                    while (datareader.Read())
+                    {
+                        Rol rol = new Rol(datareader.GetString(0), datareader.GetString(1));
+                        rol.Id = datareader.GetInt32(2);
+                        roles.Add(rol);
+                    }
 
+                }
             }
             catch (Exception ex)
             {
@@ -46,54 +73,23 @@ namespace FrbaCommerce.ABM_Rol
             {
                 Conexion.Close();
             }
-            return Ds;
 
+            return roles;
         }
 
-        public void guardar(int Codigo, string Desc, string Estado)
+        public void agregarRol(Rol rol)
         {
-
-            SqlCommand command = new SqlCommand("C_R.SP_Rol_SAVE", Conexion);
-            command.CommandType = CommandType.StoredProcedure;
-
-            command.Parameters.Add("@Codigo", SqlDbType.Int);
-            command.Parameters.Add("@Descripcion", SqlDbType.NVarChar, 50);
-            command.Parameters.Add("@Estado", SqlDbType.VarChar, 50);
-            command.Parameters["@Codigo"].Value = Codigo;
-            command.Parameters["@Descripcion"].Value = Desc;
-            command.Parameters["@Estado"].Value = Estado;
-
-            try
-            {
-                Conexion.Open();
-                command.ExecuteNonQuery();
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(null, ex.Message, "Error");
-            }
-            finally
-            {
-                Conexion.Close();
-            }
-        }
-
-        public void borrar(int id)
-        {
-
-            SqlCommand command = new SqlCommand("UPDATE C_R.Roles SET Rol_Estado = 'INACTIVO'"
-            + "WHERE Rol_Id = @Rol_Id", Conexion);
-            
+            String query = "INSERT INTO C_R.Roles(Rol_Descripcion, Rol_Estado) VALUES (@descripcion, @estado)";
+            SqlCommand command = new SqlCommand(query, Conexion);
             command.CommandType = CommandType.Text;
-            command.Parameters.Add("@Rol_Id", SqlDbType.Int);
-            command.Parameters["@Rol_Id"].Value = id;
-
             try
             {
                 Conexion.Open();
+                command.Parameters.Add("@descripcion", SqlDbType.NVarChar, 50);
+                command.Parameters["@descripcion"].Value = rol.Descripcion;
+                command.Parameters.Add("@estado", SqlDbType.VarChar, 50);
+                command.Parameters["@estado"].Value = rol.Estado;
                 command.ExecuteNonQuery();
-
             }
             catch (Exception ex)
             {
@@ -105,6 +101,53 @@ namespace FrbaCommerce.ABM_Rol
             }
         }
 
+        public void actualizarRol(Rol rol)
+        {
+            String query = "UPDATE C_R.Roles set Rol_Descripcion = @descripcion, Rol_Estado = @estado WHERE Rol_Id = @id";
+            SqlCommand command = new SqlCommand(query, Conexion);
+            command.CommandType = CommandType.Text;
+            try
+            {
+                Conexion.Open();
+                command.Parameters.Add("@descripcion", SqlDbType.NVarChar, 50);
+                command.Parameters["@descripcion"].Value = rol.Descripcion;
+                command.Parameters.Add("@estado", SqlDbType.VarChar, 50);
+                command.Parameters["@estado"].Value = rol.Estado;
+                command.Parameters.Add("@id", SqlDbType.Int);
+                command.Parameters["@id"].Value = rol.Id;
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+        }
+
+        public void borrarRol(Rol rol)
+        {
+            String query = "DELETE C_R.Roles WHERE Rol_Id = @id";
+            SqlCommand command = new SqlCommand(query, Conexion);
+            command.CommandType = CommandType.Text;
+            try
+            {
+                Conexion.Open();
+                command.Parameters.Add("@id", SqlDbType.Int);
+                command.Parameters["@id"].Value = rol.Id;
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+        }
     }
 
 }

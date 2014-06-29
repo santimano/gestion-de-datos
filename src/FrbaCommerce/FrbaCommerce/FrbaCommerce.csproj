@@ -60,21 +60,13 @@
     <Compile Include="Abm Empresa\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Rol\EditarRol.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ABM Rol\EditarRol.Designer.cs">
-      <DependentUpon>EditarRol.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ABM Rol\Funcionalidad.cs" />
-    <Compile Include="ABM Rol\ListadoRol.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ABM Rol\ListadoRol.Designer.cs">
-      <DependentUpon>ListadoRol.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ABM Rol\Rol.cs" />
     <Compile Include="ABM Rol\RolDAO.cs" />
+    <Compile Include="ABM Rol\Rol_ABM.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Rol\Rol_ABM.Designer.cs">
+      <DependentUpon>Rol_ABM.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm Rubro\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -163,11 +155,8 @@
     <Compile Include="Modelo\BD.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ABM Rol\EditarRol.resx">
-      <DependentUpon>EditarRol.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ABM Rol\ListadoRol.resx">
-      <DependentUpon>ListadoRol.cs</DependentUpon>
+    <EmbeddedResource Include="ABM Rol\Rol_ABM.resx">
+      <DependentUpon>Rol_ABM.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Visibilidad\Visibilidad_ABM.resx">
       <DependentUpon>Visibilidad_ABM.cs</DependentUpon>

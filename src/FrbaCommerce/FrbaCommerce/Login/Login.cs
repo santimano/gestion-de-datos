@@ -49,13 +49,17 @@ namespace FrbaCommerce.Login
             {
                 this.Hide();
                 new Roles(roles).ShowDialog();
+                Main.Usuario = BD.Instance.FindUsuario(this.textBoxUsuario.Text);
             }
             else if (roles.Count == 1)
+            {
                 Main.Rol = roles[0];
+                Main.Usuario = BD.Instance.FindUsuario(this.textBoxUsuario.Text);
+            }
             else
-                // no se encontraron roles
+            {// no se encontraron roles
                 Main.Rol = "N/A";
-
+            }
             this.Close();
 
         }

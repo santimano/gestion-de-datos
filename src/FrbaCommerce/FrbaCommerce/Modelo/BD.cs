@@ -207,8 +207,32 @@ namespace FrbaCommerce.Modelo
                  Conexion.Close();
              }
 
-
          }
 
+
+         public int FindUsuario(string username)
+         {
+             SqlCommand command = new SqlCommand("SELECT User_Id FROM C_R.Usuarios WHERE User_Name = @Usuario", Conexion);
+             command.CommandType = CommandType.Text;
+
+             command.Parameters.Add("@Usuario", SqlDbType.VarChar, 255);
+             command.Parameters["@Usuario"].Value = username;
+
+             try
+             {
+                 Conexion.Open();
+                 return (int) command.ExecuteScalar();
+
+             }
+             catch (Exception ex)
+             {
+                 MessageBox.Show(null, ex.Message, "Error");
+             }
+             finally
+             {
+                 Conexion.Close();
+             }
+             return -1;
+         }
     }
 }

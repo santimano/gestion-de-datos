@@ -12,6 +12,8 @@ namespace FrbaCommerce.Login
 {
     public partial class LoginNuevoPass : Form
     {
+        private LoginDAO dao = new LoginDAO(BD.Instance.Conexion);
+
         private String usuario;
 
         public LoginNuevoPass(String user)
@@ -36,7 +38,7 @@ namespace FrbaCommerce.Login
             byte login;
             try
             {
-                login = BD.Instance.Login(usuario, this.textBoxPassAnt.Text, this.textBoxPassNuevo.Text);
+                login = dao.Login(usuario, this.textBoxPassAnt.Text, this.textBoxPassNuevo.Text);
             }
             catch (Exception ex)
             {

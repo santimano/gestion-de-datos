@@ -15,6 +15,10 @@ if exists(select * from sys.objects where name ='SP_Visibilidad_SAVE' and type =
 	drop procedure [C_R].[SP_Visibilidad_SAVE]
 go
 
+if exists(select * from sys.objects where name ='SP_Publicacion_SAVE' and type = 'P')
+	drop procedure [C_R].[SP_Publicacion_SAVE]
+go
+
 if exists(select * from sys.objects where name ='SP_Rol_SAVE' and type = 'P')
 	drop procedure [C_R].[SP_Rol_SAVE]
 go
@@ -107,6 +111,14 @@ if exists(select * from sys.objects where name='Roles' and type ='u')
 	drop table [C_R].[Roles]
 go
 
+if exists(select * from sys.objects where name='Ofertas_Estado_VW' and type ='v')
+	drop view [C_R].[Ofertas_Estado_VW]
+go
+
+if exists(select * from sys.objects where name='Compras_VW' and type ='v')
+	drop view [C_R].[Compras_VW]
+go
+
 if exists(select * from sys.schemas where name ='C_R')
 	drop schema [C_R]
 go
@@ -146,7 +158,8 @@ CREATE TABLE [C_R].[Clientes]
 	[Cli_Dir_Localidad]	 varchar(50)    NULL ,
 	[Cli_Telefono]		 varchar(50)	NULL default 'MIG-' +substring(convert(varchar(50), newID()),1,20)
 	CONSTRAINT [PK_Clientes] PRIMARY KEY  CLUSTERED ([Cli_Id] ASC),
-	CONSTRAINT [UQ_Cliente_Tel] UNIQUE ([Cli_Telefono] ASC)
+	CONSTRAINT [UQ_Cliente_Tel] UNIQUE ([Cli_Telefono] ASC),
+	CONSTRAINT [UQ_Cliente_Doc] UNIQUE ([Cli_TipoDoc] ASC, [Cli_Doc] ASC)
 )
 go
 
@@ -255,7 +268,7 @@ go
 
 CREATE TABLE [C_R].[Publicaciones]
 ( 
-	[Pub_Codigo]         numeric(18)  NOT NULL ,
+	[Pub_Codigo]         numeric(18)  NOT NULL IDENTITY(1,1),
 	[Pub_Descripcion]    nvarchar(255) NULL ,
 	[Pub_Stock]          numeric(18)  NOT NULL ,
 	[Pub_Fecha]          datetime  NOT NULL ,
@@ -711,8 +724,9 @@ FROM gd_esquema.Maestra
 GROUP BY gd_esquema.Maestra.Publicacion_Visibilidad_Desc ,Publicacion_Visibilidad_Precio,Publicacion_Visibilidad_Porcentaje 
 GO
 
---Publicaciones Clientes 
-INSERT INTO C_R.Publicaciones 
+--Publicaciones Clientes
+SET IDENTITY_INSERT C_R.Publicaciones on; 
+INSERT INTO C_R.Publicaciones(Pub_Codigo, Pub_Descripcion, Pub_Stock, Pub_Fecha, Pub_Fecha_Venc, Pub_Precio, Pub_Visible_Cod, Pub_Rubro_Id, Pub_Tipo_Id, Pub_Estado_Id, Pub_User_Id) 
 SELECT  Publicacion_Cod,
 		Publicacion_Descripcion,
 		Publicacion_Stock,
@@ -732,11 +746,13 @@ SELECT  Publicacion_Cod,
 				 )'IDCLIENTE'  
  FROM gd_esquema.Maestra
  WHERE Compra_Fecha is null and Oferta_Fecha is null  and Publ_Cli_Dni is not null and Factura_Nro is null
+SET IDENTITY_INSERT C_R.Publicaciones off;
 GO
 
 
 --Publicaciones empresas
-INSERT  INTO C_R.Publicaciones
+SET IDENTITY_INSERT C_R.Publicaciones on;
+INSERT INTO C_R.Publicaciones(Pub_Codigo, Pub_Descripcion, Pub_Stock, Pub_Fecha, Pub_Fecha_Venc, Pub_Precio, Pub_Visible_Cod, Pub_Rubro_Id, Pub_Tipo_Id, Pub_Estado_Id, Pub_User_Id)
 SELECT  Publicacion_Cod,
 		Publicacion_Descripcion,
 		Publicacion_Stock,
@@ -756,6 +772,7 @@ SELECT  Publicacion_Cod,
 				 )'IDCLIENTE'  
  FROM gd_esquema.Maestra
 WHERE Compra_Fecha is null and Oferta_Fecha is null  and Publ_Empresa_Cuit  is not null and Factura_Nro is null 
+SET IDENTITY_INSERT C_R.Publicaciones off;
 GO
  
 INSERT INTO C_R.Ofertas ( Pub_Codigo, Ofe_User_Id, Ofe_Fecha, Ope_Monto ) 
@@ -959,3 +976,67 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE C_R.SP_Publicacion_SAVE(@Codigo int, @Descripcion nvarchar(255)
+			, @Stock numeric(18), @Fecha datetime
+			, @Fecha_Venc datetime, @Precio numeric(18,2)
+			, @Visibilidad nvarchar(255), @Rubro nvarchar(255)
+			, @Tipo nvarchar(255), @Estado nvarchar(255), @Usuario int
+			)
+AS
+BEGIN
+
+	IF (@Codigo =-1)
+		BEGIN
+			INSERT INTO C_R.Publicaciones
+				   (Pub_Descripcion
+				   ,Pub_Stock
+				   ,Pub_Fecha
+				   ,Pub_Fecha_Venc
+				   ,Pub_Precio
+				   ,Pub_Visible_Cod
+				   ,Pub_Rubro_Id
+				   ,Pub_Tipo_Id
+				   ,Pub_Estado_Id
+				   ,Pub_User_Id)
+			SELECT @Descripcion, @Stock, @Fecha, @Fecha_Venc, @Precio
+				,(SELECT Pub_Visible_Cod FROM C_R.Publicaciones_Visibilidad where Pub_Visible_Descripcion = @Visibilidad)
+				,(SELECT Pub_RubroId FROM C_R.Publicaciones_Rubro where Pub_Descripcion = @Rubro)
+				,(SELECT Pub_Tipo FROM C_R.Publicaciones_Tipo where Pub_Descripcion = @Tipo)
+				,(SELECT Pub_Estado_Id FROM C_R.Publicaciones_Estados where Pub_Estado_Desc = @Estado)
+				, @Usuario
+		END
+	ELSE
+		BEGIN
+			UPDATE C_R.Publicaciones SET
+				Pub_Descripcion = @Descripcion
+				,Pub_Stock = @Stock
+				   ,Pub_Fecha = @Fecha
+				   ,Pub_Fecha_Venc = @Fecha_Venc
+				   ,Pub_Precio = @Precio
+				   ,Pub_Visible_Cod = (SELECT Pub_Visible_Cod FROM C_R.Publicaciones_Visibilidad where Pub_Visible_Descripcion = @Visibilidad)
+				   ,Pub_Rubro_Id = (SELECT Pub_RubroId FROM C_R.Publicaciones_Rubro where Pub_Descripcion = @Rubro)
+				   ,Pub_Tipo_Id = (SELECT Pub_Tipo FROM C_R.Publicaciones_Tipo where Pub_Descripcion = @Tipo)
+				   ,Pub_Estado_Id = (SELECT Pub_Estado_Id FROM C_R.Publicaciones_Estados where Pub_Estado_Desc = @Estado)
+				   ,Pub_User_Id = @Usuario
+			WHERE Pub_Codigo = @Codigo	
+		END		       
+END
+GO
+
+CREATE VIEW C_R.Ofertas_Estado_VW AS
+SELECT O.Ofe_Codigo, P.Pub_Descripcion, O.Ofe_User_Id, O.Ofe_Fecha, O.Ope_Monto, 
+CASE
+	WHEN O.Ope_Monto = (SELECT MAX(Ope_Monto) FROM C_R.Ofertas O1 WHERE O.Pub_Codigo = O1.Pub_Codigo)
+	THEN 'GANADA'
+	ELSE 'NO GANADA'
+END Estado
+FROM C_R.Ofertas O, C_R.Publicaciones P
+WHERE O.Pub_Codigo = P.Pub_Codigo
+GO
+
+CREATE VIEW C_R.Compras_VW AS
+SELECT P.Pub_Descripcion, V.Ven_Fecha, Ven_Monto, P.Pub_Precio, T.Pub_Descripcion Tipo, V.Ven_User_Id
+FROM C_R.Ventas V, C_R.Publicaciones P, C_R.Publicaciones_Tipo T
+WHERE V.Pub_Codigo = P.Pub_Codigo
+AND P.Pub_Tipo_Id = T.Pub_Tipo
+GO

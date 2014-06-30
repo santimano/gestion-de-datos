@@ -48,11 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abm Cliente\Form1.cs">
+    <Compile Include="Abm Cliente\ClienteDAO.cs" />
+    <Compile Include="Abm Cliente\Cliente_ABM.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm Cliente\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Abm Cliente\Cliente_ABM.Designer.cs">
+      <DependentUpon>Cliente_ABM.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm Empresa\Form1.cs">
       <SubType>Form</SubType>
@@ -73,6 +74,8 @@
     <Compile Include="Abm Rubro\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Rubro\RubroDAO.cs" />
+    <Compile Include="Abm Visibilidad\VisibilidadDAO.cs" />
     <Compile Include="Abm Visibilidad\Visibilidad_ABM.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,11 +94,11 @@
     <Compile Include="Comprar-Ofertar\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Editar Publicacion\Form1.cs">
+    <Compile Include="Editar Publicacion\EditarPublicacion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Editar Publicacion\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Editar Publicacion\EditarPublicacion.Designer.cs">
+      <DependentUpon>EditarPublicacion.cs</DependentUpon>
     </Compile>
     <Compile Include="Facturar Publicaciones\Form1.cs">
       <SubType>Form</SubType>
@@ -103,7 +106,24 @@
     <Compile Include="Facturar Publicaciones\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Generar Publicacion\Publicacion.cs" />
+    <Compile Include="Generar Publicacion\PublicacionDAO.cs" />
+    <Compile Include="Historial Cliente\CompraDAO.cs" />
+    <Compile Include="Historial Cliente\Compras.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Historial Cliente\Compras.Designer.cs">
+      <DependentUpon>Compras.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Historial Cliente\OfertaDAO.cs" />
+    <Compile Include="Historial Cliente\Ofertas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Historial Cliente\Ofertas.Designer.cs">
+      <DependentUpon>Ofertas.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\Encripcion.cs" />
+    <Compile Include="Login\LoginDAO.cs" />
     <Compile Include="Login\LoginNuevoPass.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,22 +142,16 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="Generar Publicacion\Form1.cs">
+    <Compile Include="Generar Publicacion\GenPublicacion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Generar Publicacion\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Generar Publicacion\GenPublicacion.Designer.cs">
+      <DependentUpon>GenPublicacion.cs</DependentUpon>
     </Compile>
     <Compile Include="Gestion de Preguntas\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Gestion de Preguntas\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Historial Cliente\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Historial Cliente\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Listado Estadistico\Form1.cs">
@@ -153,13 +167,29 @@
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
     <Compile Include="Modelo\BD.cs" />
+    <Compile Include="Modelo\TipoPublicacionDAO.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Abm Cliente\Cliente_ABM.resx">
+      <DependentUpon>Cliente_ABM.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ABM Rol\Rol_ABM.resx">
       <DependentUpon>Rol_ABM.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Visibilidad\Visibilidad_ABM.resx">
       <DependentUpon>Visibilidad_ABM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editar Publicacion\EditarPublicacion.resx">
+      <DependentUpon>EditarPublicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generar Publicacion\GenPublicacion.resx">
+      <DependentUpon>GenPublicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Historial Cliente\Compras.resx">
+      <DependentUpon>Compras.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Historial Cliente\Ofertas.resx">
+      <DependentUpon>Ofertas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

@@ -13,6 +13,8 @@ namespace FrbaCommerce.Login
     public partial class Login : Form
     {
 
+        private LoginDAO dao = new LoginDAO(BD.Instance.Conexion);
+
         public Login()
         {
             InitializeComponent();
@@ -20,7 +22,7 @@ namespace FrbaCommerce.Login
 
         private void button1_Click(object sender, EventArgs e)
         {
-            switch (BD.Instance.Login(this.textBoxUsuario.Text, this.textBoxPassword.Text, null))
+            switch (dao.Login(this.textBoxUsuario.Text, this.textBoxPassword.Text, null))
             {
                 case 2:
                     MessageBox.Show(null, "Usuario inexsistente.", "Login");
@@ -43,19 +45,23 @@ namespace FrbaCommerce.Login
                     return;
             }
 
-            List<String> roles = BD.Instance.Roles(this.textBoxUsuario.Text);
+            List<String> roles = dao.Roles(this.textBoxUsuario.Text);
 
             if (roles.Count > 1)
             {
                 this.Hide();
                 new Roles(roles).ShowDialog();
+                Main.Usuario = BD.Instance.FindUsuario(this.textBoxUsuario.Text);
             }
             else if (roles.Count == 1)
+            {
                 Main.Rol = roles[0];
+                Main.Usuario = BD.Instance.FindUsuario(this.textBoxUsuario.Text);
+            }
             else
-                // no se encontraron roles
+            {// no se encontraron roles
                 Main.Rol = "N/A";
-
+            }
             this.Close();
 
         }

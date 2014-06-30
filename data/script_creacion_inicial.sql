@@ -822,6 +822,9 @@ from gd_esquema.Maestra M
 where M.Factura_Nro is not null
 GO
 
+If exists (select * from sys.objects where name like 'SP_LOGIN' and type like'p')
+	drop procedure C_R.SP_LOGIN
+
 CREATE PROCEDURE C_R.SP_LOGIN
 @nombre varchar(255),
 @password varchar(255),
@@ -895,6 +898,10 @@ BEGIN
 END
 GO
 
+
+If exists (select * from sys.objects where name like 'SP_Visibilidad_SAVE' and type like'p')
+	drop procedure C_R.SP_Visibilidad_SAVE
+
 CREATE PROCEDURE C_R.SP_Visibilidad_SAVE(@Codigo int,@Descripcion char(255),@Precio numeric(18,2),@Porc numeric(18,2))
 AS
 BEGIN
@@ -924,6 +931,10 @@ BEGIN
 END
 GO
 
+
+If exists (select * from sys.objects where name like 'SP_Rol_SAVE' and type like'p')
+	drop procedure C_R.SP_Rol_SAVE
+	
 CREATE PROCEDURE C_R.SP_Rol_SAVE(@Codigo int,@Descripcion nvarchar(50),@Estado varchar(50))
 AS
 BEGIN

@@ -19,7 +19,7 @@ namespace FrbaCommerce.Abm_Visibilidad
             DGVisibilidades.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);   
            
         }
-        private void Load()
+        protected void Load_Grilla()
         {
             
             DGVisibilidades.DataSource = BD.Instance.Productos_Visibilidad_Grilla();
@@ -67,13 +67,15 @@ namespace FrbaCommerce.Abm_Visibilidad
             if (EsValido())
             {
                 if (TbCodigo.Text.Contains("Nuevo"))
-                { 
-                    BD.Instance.Productos_Visibilidad_SAVE(-1,TbDesc.Text,Convert.ToDecimal(TbPrecio.Text),Convert.ToDecimal(TbPorcentaje.Text): 
+                {
+                    BD.Instance.Productos_Visibilidad_SAVE(-1, TbDesc.Text, Convert.ToDecimal(TbPrecio.Text), Convert.ToDecimal(TbPorcentaje.Text));
                 }
                 else
                 {
-                    BD.Instance.Productos_Visibilidad_SAVE(Convert.ToInt32(TbCodigo.Text),TbDesc.Text,Convert.ToDecimal(TbPrecio.Text),Convert.ToDecimal(TbPorcentaje.Text): 
+                    BD.Instance.Productos_Visibilidad_SAVE(Convert.ToInt32(TbCodigo.Text),TbDesc.Text,Convert.ToDecimal(TbPrecio.Text),Convert.ToDecimal(TbPorcentaje.Text));
                 }
+                GbEdicion.Visible = false;
+                Load_Grilla();
             }
         }
 

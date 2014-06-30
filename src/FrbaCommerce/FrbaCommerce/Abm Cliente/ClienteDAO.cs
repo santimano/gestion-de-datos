@@ -21,7 +21,8 @@ namespace FrbaCommerce.Abm_Cliente
         {
             List<String> clientes = new List<String>();
 
-            String query = "SELECT C.Cli_Nombre"
+            String query = "SELECT C.Cli_Id"
+                        + ",C.Cli_Nombre"
                         + ",C.Cli_Apellido"
                         + ",D.Des_Corta"
                         + ",C.Cli_Doc"
@@ -34,9 +35,11 @@ namespace FrbaCommerce.Abm_Cliente
                         + ",C.Cli_Dir_Depto"
                         + ",C.Cli_Dir_Localidad"
                         + ",C.Cli_Telefono "
-                        + "FROM C_R.Clientes C inner join C_R.Tipo_Docs D "
-                        + "on C.Cli_TipoDoc = D.Cli_TipoDoc "
-                        + "where 1 = 1 ";
+                        + ",U.User_Estado "
+                        + "FROM C_R.Clientes C "
+                        + "inner join C_R.Tipo_Docs D on C.Cli_TipoDoc = D.Cli_TipoDoc "
+                        + "inner join C_R.Usuarios U on C.Cli_User_Id = U.User_Id "
+                        + "where U.User_Eliminado = 0 ";
 
             if (nombre.Length > 0)
                 query += "and C.Cli_Nombre = @nombre ";
@@ -96,6 +99,7 @@ namespace FrbaCommerce.Abm_Cliente
             {
                 Conexion.Close();
             }
+            
             return Ds;
 
         }
@@ -139,6 +143,101 @@ namespace FrbaCommerce.Abm_Cliente
 
         }
 
+        public bool GuardarCliente(string id_cliente, string nombre, string apellido, string tipodoc, string doc, 
+            string fecha_nac, string mail, string calle, string nro, string piso, string cod_postal, 
+            string depto, string localidad, string telefono, string estado)
+        {
+
+            bool resultado = true;
+
+            SqlCommand command = new SqlCommand("C_R.SP_CLIENTE_SAVE", this.Conexion);
+            command.CommandType = CommandType.StoredProcedure;
+
+            command.Parameters.Add("@Cli_Id", SqlDbType.Int);
+            command.Parameters.Add("@Cli_Nombre", SqlDbType.VarChar,255);
+            command.Parameters.Add("@Cli_Apellido", SqlDbType.VarChar, 255);
+            command.Parameters.Add("@Des_Corta", SqlDbType.VarChar, 10);
+            command.Parameters.Add("@Cli_Doc", SqlDbType.Int);
+            command.Parameters.Add("@Cli_Fecha_Nac", SqlDbType.DateTime);
+            command.Parameters.Add("@Cli_Mail", SqlDbType.VarChar, 255);
+            command.Parameters.Add("@Cli_Dir_Calle", SqlDbType.VarChar, 255);
+            command.Parameters.Add("@Cli_Dir_Nro", SqlDbType.Int);
+            command.Parameters.Add("@Cli_Dir_Piso", SqlDbType.Int);
+            command.Parameters.Add("@Cli_Dir_CodPostal", SqlDbType.VarChar, 50);
+            command.Parameters.Add("@Cli_Dir_Depto", SqlDbType.VarChar, 50);
+            command.Parameters.Add("@Cli_Dir_Localidad", SqlDbType.VarChar, 50);
+            command.Parameters.Add("@Cli_Telefono", SqlDbType.VarChar, 50);
+            command.Parameters.Add("@User_Estado", SqlDbType.VarChar, 10);
+
+            command.Parameters["@Cli_Id"].Value = (id_cliente.Length > 0) ? Convert.ToInt32(id_cliente) : (object)DBNull.Value;
+            command.Parameters["@Cli_Nombre"].Value = nombre;
+            command.Parameters["@Cli_Apellido"].Value = apellido;
+            command.Parameters["@Des_Corta"].Value = tipodoc;
+            command.Parameters["@Cli_Doc"].Value = Convert.ToInt32(doc);
+            command.Parameters["@Cli_Fecha_Nac"].Value = Convert.ToDateTime(fecha_nac, new System.Globalization.CultureInfo("es-AR", true));
+            command.Parameters["@Cli_Mail"].Value = mail;
+            command.Parameters["@Cli_Dir_Calle"].Value = calle;
+            command.Parameters["@Cli_Dir_Nro"].Value = Convert.ToInt32(nro);
+            command.Parameters["@Cli_Dir_Piso"].Value = Convert.ToInt32(piso);
+            command.Parameters["@Cli_Dir_CodPostal"].Value = cod_postal;
+            command.Parameters["@Cli_Dir_Depto"].Value = depto;
+            command.Parameters["@Cli_Dir_Localidad"].Value = localidad;
+            command.Parameters["@Cli_Telefono"].Value = telefono;
+            command.Parameters["@User_Estado"].Value = estado;
+
+            try
+            {
+                this.Conexion.Open();
+                command.ExecuteNonQuery();
+                MessageBox.Show(null, "El cliente ha sido actualizado con exito.", "Informacion");
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.ToUpper().Contains("UQ_CLIENTE_TEL"))
+                    MessageBox.Show(null, "El telefono ingresado ya corresponde a un cliente.", "Error");
+                else if (ex.Message.ToUpper().Contains("UQ_CLIENTE_DOC"))
+                    MessageBox.Show(null, "El tipo y numero de documento ingresado ya corresponde a un cliente.", "Error");
+                else 
+                    MessageBox.Show(null, ex.Message, "Error");
+                resultado = false;
+            }
+            finally
+            {
+                this.Conexion.Close();
+            }
+
+            return resultado;
+
+        }
+
+        public void EliminarCliente(string id_cliente)
+        {
+            string query = "UPDATE C_R.Usuarios "
+                        + "SET User_Eliminado = 1 "
+                        + "WHERE User_Id = (SELECT Cli_User_Id FROM C_R.Clientes WHERE Cli_User_Id = @Cli_User_Id)";
+
+            SqlCommand command = new SqlCommand(query, Conexion);
+
+            command.CommandType = CommandType.Text;
+            command.Parameters.Add("@Cli_User_Id", SqlDbType.Int);
+            command.Parameters["@Cli_User_Id"].Value = Convert.ToInt32(id_cliente);
+
+            try
+            {
+                Conexion.Open();
+                command.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+
+        }
 
     }
 }

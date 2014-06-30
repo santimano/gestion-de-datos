@@ -24,7 +24,17 @@ namespace FrbaCommerce.Abm_Cliente
         private void actualizar()
         {
             dataGridViewClientes.DataSource = dao.ClientesGrilla(textBoxNombre.Text, textBoxApellido.Text, textBoxMail.Text, textBoxDocumento.Text, comboBoxTipoDocumento.SelectedItem == null ? "" : comboBoxTipoDocumento.SelectedItem.ToString()).Tables[0];
+            dataGridViewClientes.Columns["Fecha_Nac"].DefaultCellStyle.Format = "dd/MM/yyyy";
             dataGridViewClientes.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+        }
+
+        private void limpiar()
+        {
+            textBoxApellido.Clear();
+            textBoxNombre.Clear();
+            textBoxMail.Clear();
+            textBoxDocumento.Clear();
+            comboBoxTipoDocumento.SelectedIndex = -1;
         }
 
         private void buttonBuscar_Click(object sender, EventArgs e)
@@ -34,11 +44,31 @@ namespace FrbaCommerce.Abm_Cliente
 
         private void buttonLimpiar_Click(object sender, EventArgs e)
         {
-            textBoxApellido.Clear();
-            textBoxNombre.Clear();
-            textBoxMail.Clear();
-            textBoxDocumento.Clear();
-            comboBoxTipoDocumento.SelectedIndex = -1;
+            this.limpiar();
+        }
+
+        private void dataGridViewClientes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                new EditarCliente("modificacion", dataGridViewClientes.Rows[e.RowIndex]).ShowDialog();
+                this.actualizar();
+            }
+            if (e.ColumnIndex == 1)
+            {
+                DialogResult resultado = MessageBox.Show("Esta seguro que desea eliminar el cliente ?", "Eliminar", MessageBoxButtons.YesNo);
+                if (resultado == DialogResult.Yes)
+                {
+                    dao.EliminarCliente(dataGridViewClientes.Rows[e.RowIndex].Cells["ID"].Value.ToString());
+                }
+                this.actualizar();
+            }
+        }
+
+        private void buttonNuevo_Click(object sender, EventArgs e)
+        {
+            new EditarCliente("alta", null).ShowDialog();
+            this.actualizar();
         }
     }
 }

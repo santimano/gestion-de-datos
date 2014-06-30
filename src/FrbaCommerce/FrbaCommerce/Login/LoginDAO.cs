@@ -20,6 +20,12 @@ namespace FrbaCommerce.Login
         public byte Login(String usuario, String pass, String nuevopass)
         {
             byte resultado = 255;
+            DateTime fecha = new DateTime(Main.FechaSistema.Year,
+                                        Main.FechaSistema.Month,
+                                        Main.FechaSistema.Day,
+                                        DateTime.Now.Hour,
+                                        DateTime.Now.Minute,
+                                        DateTime.Now.Second);
 
             SqlCommand command = new SqlCommand("C_R.SP_LOGIN", Conexion);
             command.CommandType = CommandType.StoredProcedure;
@@ -27,9 +33,11 @@ namespace FrbaCommerce.Login
             command.Parameters.Add("@nombre", SqlDbType.VarChar, 255);
             command.Parameters.Add("@password", SqlDbType.VarChar, 255);
             command.Parameters.Add("@nuevo_password", SqlDbType.VarChar, 255);
+            command.Parameters.Add("@fecha", SqlDbType.DateTime);
             command.Parameters.Add("@resultado", SqlDbType.TinyInt).Direction = ParameterDirection.Output;
             command.Parameters["@nombre"].Value = usuario;
             command.Parameters["@password"].Value = Encripcion.CalcularHash(pass);
+            command.Parameters["@fecha"].Value = fecha;
             command.Parameters["@nuevo_password"].Value = (nuevopass == null) ? (object)DBNull.Value : Encripcion.CalcularHash(nuevopass);
 
             try

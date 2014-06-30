@@ -36,6 +36,9 @@ namespace FrbaCommerce.Login
                 case 5:
                     MessageBox.Show(null, "El usuario ha sido bloqueado. Contactese con su administrador.", "Login");
                     return;
+                case 6:
+                    MessageBox.Show(null, "El usuario ha sido eliminado del sistema. Contactese con su administrador.", "Login");
+                    return;
                 case 10:
                     // hay que cambiar el password
                     new LoginNuevoPass(this.textBoxUsuario.Text).ShowDialog();

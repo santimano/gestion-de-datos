@@ -23,14 +23,13 @@ if exists(select * from sys.objects where name ='SP_Rol_SAVE' and type = 'P')
 	drop procedure [C_R].[SP_Rol_SAVE]
 go
 
-if exists(select * from sys.objects where name ='SP_ALTA_CLIENTE' and type = 'P')
-	drop procedure [C_R].[SP_ALTA_CLIENTE]
-go
-
 if exists(select * from sys.objects where name ='SP_ALTA_EMPRESA' and type = 'P')
 	drop procedure [C_R].[SP_ALTA_EMPRESA]
 go
 
+if exists(select * from sys.objects where name ='SP_CLIENTE_SAVE' and type = 'P')
+	drop procedure [C_R].[SP_CLIENTE_SAVE]
+go
 if exists(select * from sys.objects where name ='Inconsistencias_Calificaciones' and type = 'u')
 	drop table [C_R].[Inconsistencias_Calificaciones]
 go
@@ -131,8 +130,9 @@ CREATE TABLE [C_R].[Usuarios]
 	[User_Id]             int		   NOT NULL  IDENTITY ( 1,1 ) ,
 	[User_Name]           varchar(255) NOT NULL ,
 	[User_Password]       varchar(255) NOT NULL ,
-	[User_CambioPass]     bit		   NULL default 1,
-	[User_Estado]         varchar(10)  NULL  default 'ACTIVO',
+	[User_CambioPass]     bit		   NOT NULL default 1,
+	[User_Eliminado]      bit		   NOT NULL default 0,
+	[User_Estado]         varchar(10)  NOT NULL default 'ACTIVO',
 	[User_Log_Error]	  int          NOT NULL default 0,
 	[User_Ultimo_Ingreso] datetime 	   NULL default NULL
 	CONSTRAINT [PK_Ususarios] PRIMARY KEY  CLUSTERED ([User_Id] ASC),
@@ -143,20 +143,20 @@ go
 CREATE TABLE [C_R].[Clientes]
 ( 
 	[Cli_Id]             int  NOT NULL  IDENTITY ( 1,1 ) ,
-	[Cli_TipoDoc]        int  NULL ,
-	[Cli_Doc]            numeric(18)	NULL ,
-	[Cli_Nombre]         varchar(255)	NULL ,
-	[Cli_Apellido]       varchar(255)   NULL ,
-	[Cli_Fecha_Nac]      datetime		NULL ,
-	[Cli_Mail]           varchar(255)   NULL ,
-	[Cli_User_Id]        int			NULL ,
-	[Cli_Dir_Calle]      varchar(255)   NULL ,
-	[Cli_Dir_Nro]        numeric(18)    NULL ,
+	[Cli_TipoDoc]        int  NOT NULL ,
+	[Cli_Doc]            numeric(18)	NOT NULL ,
+	[Cli_Nombre]         varchar(255)	NOT NULL ,
+	[Cli_Apellido]       varchar(255)   NOT NULL ,
+	[Cli_Fecha_Nac]      datetime		NOT NULL ,
+	[Cli_Mail]           varchar(255)   NOT NULL ,
+	[Cli_User_Id]        int			NOT NULL ,
+	[Cli_Dir_Calle]      varchar(255)   NOT NULL ,
+	[Cli_Dir_Nro]        numeric(18)    NOT NULL ,
 	[Cli_Dir_Piso]       numeric(18)    NULL ,
-	[Cli_Dir_CodPostal]  varchar(50)    NULL ,
+	[Cli_Dir_CodPostal]  varchar(50)    NOT NULL ,
 	[Cli_Dir_Depto]      varchar(50)    NULL ,
 	[Cli_Dir_Localidad]	 varchar(50)    NULL ,
-	[Cli_Telefono]		 varchar(50)	NULL default 'MIG-' +substring(convert(varchar(50), newID()),1,20)
+	[Cli_Telefono]		 varchar(50)	NOT NULL 
 	CONSTRAINT [PK_Clientes] PRIMARY KEY  CLUSTERED ([Cli_Id] ASC),
 	CONSTRAINT [UQ_Cliente_Tel] UNIQUE ([Cli_Telefono] ASC),
 	CONSTRAINT [UQ_Cliente_Doc] UNIQUE ([Cli_TipoDoc] ASC, [Cli_Doc] ASC)
@@ -182,33 +182,6 @@ CREATE TABLE [C_R].[Empresas]
 	CONSTRAINT [UQ_Empresa_Tel] UNIQUE ([Emp_Telefono] ASC)
 )
 go
-
-CREATE PROCEDURE C_R.SP_ALTA_CLIENTE
-@Cli_TipoDoc int,
-@Cli_Doc numeric(18),
-@Cli_Nombre varchar(255),
-@Cli_Apellido varchar(255),
-@Cli_Fecha_Nac datetime,
-@Cli_Mail varchar(255),
-@Cli_Dir_Calle varchar(255),
-@Cli_Dir_Nro numeric(18),
-@Cli_Dir_Piso numeric(18),
-@Cli_Dir_CodPostal varchar(50),
-@Cli_Dir_Depto varchar(50),
-@Cli_Dir_Localidad varchar(50)
-AS
-BEGIN
-	SET NOCOUNT ON;
-	
-	-- hash para password "changeme"
-	INSERT INTO C_R.Usuarios(User_Name, User_Password) values
-	(SUBSTRING(@Cli_Nombre,1,1)+@Cli_Apellido +Convert(varchar,(YEAR(@Cli_Fecha_Nac))),'057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86')
-	
-	INSERT INTO C_R.Clientes ( Cli_TipoDoc, Cli_Doc, Cli_Nombre, Cli_Apellido, Cli_Fecha_Nac, Cli_Mail, Cli_User_Id, Cli_Dir_Calle, Cli_Dir_Nro, Cli_Dir_Piso, Cli_Dir_CodPostal, Cli_Dir_Depto, Cli_Dir_Localidad) values
-	(@Cli_TipoDoc, @Cli_Doc, @Cli_Nombre, @Cli_Apellido, @Cli_Fecha_Nac, @Cli_Mail, SCOPE_IDENTITY(), @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad)
-	
-END
-GO
 
 CREATE PROCEDURE C_R.SP_ALTA_EMPRESA
 @Emp_Cuit varchar(50),
@@ -594,8 +567,108 @@ INSERT INTO C_R.Tipo_Docs
 VALUES ('Otro','OT')
 GO
 
+CREATE PROCEDURE C_R.SP_CLIENTE_SAVE
+@Cli_Id int,
+@Cli_Nombre varchar(255),
+@Cli_Apellido varchar(255),
+@Des_Corta varchar(10),
+@Cli_Doc numeric(18),
+@Cli_Fecha_Nac datetime,
+@Cli_Mail varchar(255),
+@Cli_Dir_Calle varchar(255),
+@Cli_Dir_Nro numeric(18),
+@Cli_Dir_Piso numeric(18),
+@Cli_Dir_CodPostal varchar(50),
+@Cli_Dir_Depto varchar(50),
+@Cli_Dir_Localidad varchar(50),
+@Cli_Telefono varchar(50),
+@User_Estado varchar(10)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+	DECLARE @Cli_TipoDoc int
+	
+	SELECT @Cli_TipoDoc = Cli_TipoDoc FROM C_R.Tipo_Docs WHERE Des_Corta = @Des_Corta
+	
+	IF (@Cli_Id IS NULL)
+	BEGIN
+		
+		INSERT INTO C_R.Usuarios
+			(User_Name
+			,User_Password) 
+		VALUES
+			(SUBSTRING(@Cli_Nombre,1,1)+@Cli_Apellido +Convert(varchar,(YEAR(@Cli_Fecha_Nac)))
+			-- hash para password "changeme"
+			,'057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86')
+		
+		INSERT INTO C_R.Clientes 
+			(Cli_TipoDoc
+			,Cli_Doc
+			,Cli_Nombre
+			,Cli_Apellido
+			,Cli_Fecha_Nac
+			,Cli_Mail
+			,Cli_User_Id
+			,Cli_Dir_Calle
+			,Cli_Dir_Nro
+			,Cli_Dir_Piso
+			,Cli_Dir_CodPostal
+			,Cli_Dir_Depto
+			,Cli_Dir_Localidad
+			,Cli_Telefono)
+		VALUES
+			(@Cli_TipoDoc
+			,@Cli_Doc
+			,@Cli_Nombre
+			,@Cli_Apellido
+			,@Cli_Fecha_Nac
+			,@Cli_Mail
+			,SCOPE_IDENTITY()
+			,@Cli_Dir_Calle
+			,@Cli_Dir_Nro
+			,@Cli_Dir_Piso
+			,@Cli_Dir_CodPostal
+			,@Cli_Dir_Depto
+			,@Cli_Dir_Localidad
+			,@Cli_Telefono)
+		
+		RETURN
+
+	END
+	
+	DECLARE @User_Id int
+	
+	SELECT @User_Id = Cli_User_Id FROM C_R.Clientes where Cli_Id = @Cli_Id
+	
+	UPDATE C_R.Clientes
+	SET
+		Cli_Nombre = @Cli_Nombre,
+		Cli_Apellido = @Cli_Apellido,
+		Cli_TipoDoc = @Cli_TipoDoc,
+		Cli_Doc = @Cli_Doc,
+		Cli_Fecha_Nac = @Cli_Fecha_Nac,
+		Cli_Mail = @Cli_Mail,
+		Cli_Dir_Calle = @Cli_Dir_Calle,
+		Cli_Dir_Nro = @Cli_Dir_Nro,
+		Cli_Dir_CodPostal = @Cli_Dir_CodPostal,
+		Cli_Dir_Depto = @Cli_Dir_Depto,
+		Cli_Dir_Localidad = @Cli_Dir_Localidad,
+		Cli_Telefono = @Cli_Telefono
+	WHERE
+		Cli_Id = @Cli_Id
+		
+	UPDATE C_R.Usuarios
+	SET
+		User_Estado = @User_Estado
+	WHERE
+		User_Id = @User_Id
+	
+END
+GO
+
 -- Insercion de clientes
-DECLARE @Cli_TipoDoc int,
+DECLARE @Des_Corta varchar(10),
 		@Cli_Doc numeric(18),
 		@Cli_Nombre varchar(255),
 		@Cli_Apellido varchar(255),
@@ -606,10 +679,11 @@ DECLARE @Cli_TipoDoc int,
 		@Cli_Dir_Piso numeric(18),
 		@Cli_Dir_CodPostal varchar(50),
 		@Cli_Dir_Depto varchar(50),
-		@Cli_Dir_Localidad varchar(50)
+		@Cli_Dir_Localidad varchar(50),
+		@Cli_Telefono varchar(50)
 
 DECLARE clientes_cursor CURSOR FOR  
-select DISTINCT	1 Cli_TipoDoc,
+select DISTINCT	'DNI' Des_Corta,
 Publ_Cli_Dni Cli_Doc,
 Publ_Cli_Nombre Cli_Nombre,
 Publ_Cli_Apeliido Cli_Apellido,
@@ -619,24 +693,25 @@ Publ_Cli_Dom_Calle,
 Publ_Cli_Nro_Calle, 
 Publ_Cli_Piso, 
 Publ_Cli_Cod_Postal, 
-Publ_Cli_Depto,'LOC No asignada'
- from gd_esquema.Maestra
+Publ_Cli_Depto,
+'LOC No asignada'
+from gd_esquema.Maestra
 where  Publ_Cli_Dni is not null or Publ_Cli_Apeliido is not null or Publ_Cli_Nombre is not null
 order by 1
 
 OPEN clientes_cursor		
-FETCH NEXT FROM clientes_cursor INTO @Cli_TipoDoc, @Cli_Doc, @Cli_Nombre, @Cli_Apellido, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad
+FETCH NEXT FROM clientes_cursor INTO @Des_Corta, @Cli_Doc, @Cli_Nombre, @Cli_Apellido, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad
 WHILE @@FETCH_STATUS = 0   
 BEGIN   
-   EXEC C_R.SP_ALTA_CLIENTE @Cli_TipoDoc, @Cli_Doc, @Cli_Nombre, @Cli_Apellido, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad
-   FETCH NEXT FROM clientes_cursor INTO @Cli_TipoDoc, @Cli_Doc, @Cli_Nombre, @Cli_Apellido, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad 
+   SET @Cli_Telefono = 'MIG-' + substring(convert(varchar(50), newID()),1,20)
+   EXEC C_R.SP_CLIENTE_SAVE NULL, @Cli_Nombre, @Cli_Apellido, @Des_Corta, @Cli_Doc, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad, @Cli_Telefono, NULL
+   FETCH NEXT FROM clientes_cursor INTO @Des_Corta, @Cli_Doc, @Cli_Nombre, @Cli_Apellido, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad
    
 END   
 
 CLOSE clientes_cursor   
 DEALLOCATE clientes_cursor
 GO
-
 -- Insert de Empresas
 DECLARE @Emp_Cuit varchar(50),
 		@Emp_RazonSocial varchar(255),
@@ -839,13 +914,11 @@ from gd_esquema.Maestra M
 where M.Factura_Nro is not null
 GO
 
-If exists (select * from sys.objects where name like 'SP_LOGIN' and type like'p')
-	drop procedure C_R.SP_LOGIN
-
 CREATE PROCEDURE C_R.SP_LOGIN
 @nombre varchar(255),
 @password varchar(255),
 @nuevo_password varchar(255),
+@fecha datetime,
 @resultado tinyint OUTPUT
 AS
 BEGIN
@@ -853,15 +926,22 @@ BEGIN
 	
 	DECLARE @hash varchar(255)
 	DECLARE @estado varchar(10)
+	DECLARE @eliminado bit
 	DECLARE @cambio_pass bit
 	
-	select @hash = User_Password, @estado = User_Estado, @cambio_pass = User_CambioPass
+	select @hash = User_Password, @estado = User_Estado, @cambio_pass = User_CambioPass, @eliminado = User_Eliminado
 	from C_R.Usuarios 
 	where User_Name = @nombre
 	
 	IF ( @estado IS NULL )
 	BEGIN
 		SET @resultado = 2
+		RETURN
+	END
+	
+	IF ( @eliminado = 1 )
+	BEGIN
+		SET @resultado = 6
 		RETURN
 	END
 	
@@ -874,7 +954,7 @@ BEGIN
 	IF ( @hash = @password COLLATE Latin1_General_CS_AS )
 	BEGIN
 	
-		update C_R.Usuarios set User_Log_Error = '0' 
+		update C_R.Usuarios set User_Log_Error = '0', User_Ultimo_Ingreso = @fecha 
 		where User_Name = @nombre
 		
 		IF ( @cambio_pass =	1 )
@@ -915,10 +995,6 @@ BEGIN
 END
 GO
 
-
-If exists (select * from sys.objects where name like 'SP_Visibilidad_SAVE' and type like'p')
-	drop procedure C_R.SP_Visibilidad_SAVE
-
 CREATE PROCEDURE C_R.SP_Visibilidad_SAVE(@Codigo int,@Descripcion char(255),@Precio numeric(18,2),@Porc numeric(18,2))
 AS
 BEGIN
@@ -948,10 +1024,6 @@ BEGIN
 END
 GO
 
-
-If exists (select * from sys.objects where name like 'SP_Rol_SAVE' and type like'p')
-	drop procedure C_R.SP_Rol_SAVE
-	
 CREATE PROCEDURE C_R.SP_Rol_SAVE(@Codigo int,@Descripcion nvarchar(50),@Estado varchar(50))
 AS
 BEGIN

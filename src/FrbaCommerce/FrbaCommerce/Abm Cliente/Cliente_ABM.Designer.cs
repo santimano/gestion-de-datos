@@ -29,6 +29,10 @@
         private void InitializeComponent()
         {
             this.groupBoxFiltros = new System.Windows.Forms.GroupBox();
+            this.textBoxDocumento = new System.Windows.Forms.TextBox();
+            this.labelDocumento = new System.Windows.Forms.Label();
+            this.textBoxMail = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.comboBoxTipoDocumento = new System.Windows.Forms.ComboBox();
             this.labelTipoDocumento = new System.Windows.Forms.Label();
             this.textBoxApellido = new System.Windows.Forms.TextBox();
@@ -40,6 +44,7 @@
             this.buttonBuscar = new System.Windows.Forms.Button();
             this.groupBoxClientes = new System.Windows.Forms.GroupBox();
             this.dataGridViewClientes = new System.Windows.Forms.DataGridView();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Apellido = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Tipo_Doc = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -53,11 +58,9 @@
             this.Depto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Localidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Telefono = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Editar = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBoxMail = new System.Windows.Forms.TextBox();
-            this.textBoxDocumento = new System.Windows.Forms.TextBox();
-            this.labelDocumento = new System.Windows.Forms.Label();
+            this.Eliminar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.groupBoxFiltros.SuspendLayout();
             this.groupBoxClientes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClientes)).BeginInit();
@@ -81,6 +84,38 @@
             this.groupBoxFiltros.TabIndex = 0;
             this.groupBoxFiltros.TabStop = false;
             this.groupBoxFiltros.Text = "Filtros";
+            // 
+            // textBoxDocumento
+            // 
+            this.textBoxDocumento.Location = new System.Drawing.Point(375, 51);
+            this.textBoxDocumento.Name = "textBoxDocumento";
+            this.textBoxDocumento.Size = new System.Drawing.Size(101, 20);
+            this.textBoxDocumento.TabIndex = 9;
+            // 
+            // labelDocumento
+            // 
+            this.labelDocumento.AutoSize = true;
+            this.labelDocumento.Location = new System.Drawing.Point(263, 54);
+            this.labelDocumento.Name = "labelDocumento";
+            this.labelDocumento.Size = new System.Drawing.Size(104, 13);
+            this.labelDocumento.TabIndex = 8;
+            this.labelDocumento.Text = "Documento (Exacto)";
+            // 
+            // textBoxMail
+            // 
+            this.textBoxMail.Location = new System.Drawing.Point(128, 83);
+            this.textBoxMail.Name = "textBoxMail";
+            this.textBoxMail.Size = new System.Drawing.Size(101, 20);
+            this.textBoxMail.TabIndex = 7;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(14, 86);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(77, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Mail (Contiene)";
             // 
             // comboBoxTipoDocumento
             // 
@@ -139,6 +174,7 @@
             this.buttonNuevo.TabIndex = 1;
             this.buttonNuevo.Text = "Nuevo";
             this.buttonNuevo.UseVisualStyleBackColor = true;
+            this.buttonNuevo.Click += new System.EventHandler(this.buttonNuevo_Click);
             // 
             // buttonLimpiar
             // 
@@ -176,6 +212,7 @@
             this.dataGridViewClientes.AllowUserToDeleteRows = false;
             this.dataGridViewClientes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewClientes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ID,
             this.Nombre,
             this.Apellido,
             this.Tipo_Doc,
@@ -189,12 +226,22 @@
             this.Depto,
             this.Localidad,
             this.Telefono,
-            this.Editar});
+            this.Estado,
+            this.Editar,
+            this.Eliminar});
             this.dataGridViewClientes.Location = new System.Drawing.Point(14, 29);
             this.dataGridViewClientes.Name = "dataGridViewClientes";
             this.dataGridViewClientes.ReadOnly = true;
             this.dataGridViewClientes.Size = new System.Drawing.Size(470, 210);
             this.dataGridViewClientes.TabIndex = 0;
+            this.dataGridViewClientes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewClientes_CellContentClick);
+            // 
+            // ID
+            // 
+            this.ID.DataPropertyName = "Cli_Id";
+            this.ID.HeaderText = "ID";
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
             // 
             // Nombre
             // 
@@ -287,6 +334,13 @@
             this.Telefono.Name = "Telefono";
             this.Telefono.ReadOnly = true;
             // 
+            // Estado
+            // 
+            this.Estado.DataPropertyName = "User_Estado";
+            this.Estado.HeaderText = "Estado";
+            this.Estado.Name = "Estado";
+            this.Estado.ReadOnly = true;
+            // 
             // Editar
             // 
             this.Editar.HeaderText = "Editar";
@@ -294,37 +348,11 @@
             this.Editar.ReadOnly = true;
             this.Editar.Text = "Editar";
             // 
-            // label1
+            // Eliminar
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 86);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Mail (Contiene)";
-            // 
-            // textBoxMail
-            // 
-            this.textBoxMail.Location = new System.Drawing.Point(128, 83);
-            this.textBoxMail.Name = "textBoxMail";
-            this.textBoxMail.Size = new System.Drawing.Size(101, 20);
-            this.textBoxMail.TabIndex = 7;
-            // 
-            // textBoxDocumento
-            // 
-            this.textBoxDocumento.Location = new System.Drawing.Point(375, 51);
-            this.textBoxDocumento.Name = "textBoxDocumento";
-            this.textBoxDocumento.Size = new System.Drawing.Size(101, 20);
-            this.textBoxDocumento.TabIndex = 9;
-            // 
-            // labelDocumento
-            // 
-            this.labelDocumento.AutoSize = true;
-            this.labelDocumento.Location = new System.Drawing.Point(263, 54);
-            this.labelDocumento.Name = "labelDocumento";
-            this.labelDocumento.Size = new System.Drawing.Size(104, 13);
-            this.labelDocumento.TabIndex = 8;
-            this.labelDocumento.Text = "Documento (Exacto)";
+            this.Eliminar.HeaderText = "Eliminar";
+            this.Eliminar.Name = "Eliminar";
+            this.Eliminar.ReadOnly = true;
             // 
             // Cliente_ABM
             // 
@@ -360,6 +388,11 @@
         private System.Windows.Forms.Button buttonBuscar;
         private System.Windows.Forms.GroupBox groupBoxClientes;
         private System.Windows.Forms.DataGridView dataGridViewClientes;
+        private System.Windows.Forms.TextBox textBoxDocumento;
+        private System.Windows.Forms.Label labelDocumento;
+        private System.Windows.Forms.TextBox textBoxMail;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Nombre;
         private System.Windows.Forms.DataGridViewTextBoxColumn Apellido;
         private System.Windows.Forms.DataGridViewTextBoxColumn Tipo_Doc;
@@ -373,10 +406,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Depto;
         private System.Windows.Forms.DataGridViewTextBoxColumn Localidad;
         private System.Windows.Forms.DataGridViewTextBoxColumn Telefono;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Estado;
         private System.Windows.Forms.DataGridViewButtonColumn Editar;
-        private System.Windows.Forms.TextBox textBoxDocumento;
-        private System.Windows.Forms.Label labelDocumento;
-        private System.Windows.Forms.TextBox textBoxMail;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DataGridViewButtonColumn Eliminar;
     }
 }

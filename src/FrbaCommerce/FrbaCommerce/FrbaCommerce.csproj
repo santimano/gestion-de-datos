@@ -55,6 +55,12 @@
     <Compile Include="Abm Cliente\Cliente_ABM.Designer.cs">
       <DependentUpon>Cliente_ABM.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Cliente\EditarCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Cliente\EditarCliente.Designer.cs">
+      <DependentUpon>EditarCliente.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm Empresa\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,6 +178,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Abm Cliente\Cliente_ABM.resx">
       <DependentUpon>Cliente_ABM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Cliente\EditarCliente.resx">
+      <DependentUpon>EditarCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Rol\Rol_ABM.resx">
       <DependentUpon>Rol_ABM.cs</DependentUpon>

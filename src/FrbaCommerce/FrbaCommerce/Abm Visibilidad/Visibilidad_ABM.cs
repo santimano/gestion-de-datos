@@ -12,6 +12,8 @@ namespace FrbaCommerce.Abm_Visibilidad
 {
     public partial class Visibilidad_ABM : Form
     {
+        private VisibilidadDAO dao = new VisibilidadDAO(BD.Instance.Conexion);
+
         public Visibilidad_ABM()
         {
             InitializeComponent();
@@ -68,11 +70,11 @@ namespace FrbaCommerce.Abm_Visibilidad
             {
                 if (TbCodigo.Text.Contains("Nuevo"))
                 {
-                    BD.Instance.Productos_Visibilidad_SAVE(-1, TbDesc.Text, Convert.ToDecimal(TbPrecio.Text), Convert.ToDecimal(TbPorcentaje.Text));
+                    dao.Productos_Visibilidad_SAVE(-1, TbDesc.Text, Convert.ToDecimal(TbPrecio.Text), Convert.ToDecimal(TbPorcentaje.Text));
                 }
                 else
                 {
-                    BD.Instance.Productos_Visibilidad_SAVE(Convert.ToInt32(TbCodigo.Text),TbDesc.Text,Convert.ToDecimal(TbPrecio.Text),Convert.ToDecimal(TbPorcentaje.Text));
+                    dao.Productos_Visibilidad_SAVE(Convert.ToInt32(TbCodigo.Text),TbDesc.Text,Convert.ToDecimal(TbPrecio.Text),Convert.ToDecimal(TbPorcentaje.Text));
                 }
                 GbEdicion.Visible = false;
                 Load_Grilla();

@@ -29,6 +29,10 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBoxCUIL = new System.Windows.Forms.TextBox();
+            this.labelCUIL = new System.Windows.Forms.Label();
+            this.buttonFecha = new System.Windows.Forms.Button();
+            this.monthCalendarFechaNacimiento = new System.Windows.Forms.MonthCalendar();
             this.textBoxID = new System.Windows.Forms.TextBox();
             this.buttonFechaNacimiento = new System.Windows.Forms.Button();
             this.textBoxFechaNacimiento = new System.Windows.Forms.TextBox();
@@ -63,10 +67,6 @@
             this.labelCalle = new System.Windows.Forms.Label();
             this.buttonAceptar = new System.Windows.Forms.Button();
             this.buttonCancelar = new System.Windows.Forms.Button();
-            this.monthCalendarFechaNacimiento = new System.Windows.Forms.MonthCalendar();
-            this.buttonFecha = new System.Windows.Forms.Button();
-            this.textBoxCUIL = new System.Windows.Forms.TextBox();
-            this.labelCUIL = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBoxDireccion.SuspendLayout();
             this.SuspendLayout();
@@ -74,7 +74,6 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.textBoxCUIL);
-            this.groupBox1.Controls.Add(this.labelCUIL);
             this.groupBox1.Controls.Add(this.buttonFecha);
             this.groupBox1.Controls.Add(this.monthCalendarFechaNacimiento);
             this.groupBox1.Controls.Add(this.textBoxID);
@@ -96,19 +95,59 @@
             this.groupBox1.Controls.Add(this.labelID);
             this.groupBox1.Controls.Add(this.comboBoxEstado);
             this.groupBox1.Controls.Add(this.labelEstado);
+            this.groupBox1.Controls.Add(this.labelCUIL);
             this.groupBox1.Location = new System.Drawing.Point(20, 18);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(623, 274);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos Personales";
             // 
+            // textBoxCUIL
+            // 
+            this.textBoxCUIL.Location = new System.Drawing.Point(472, 110);
+            this.textBoxCUIL.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxCUIL.Name = "textBoxCUIL";
+            this.textBoxCUIL.Size = new System.Drawing.Size(121, 22);
+            this.textBoxCUIL.TabIndex = 20;
+            // 
+            // labelCUIL
+            // 
+            this.labelCUIL.AutoSize = true;
+            this.labelCUIL.Location = new System.Drawing.Point(322, 114);
+            this.labelCUIL.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelCUIL.Name = "labelCUIL";
+            this.labelCUIL.Size = new System.Drawing.Size(38, 17);
+            this.labelCUIL.TabIndex = 19;
+            this.labelCUIL.Text = "CUIL";
+            // 
+            // buttonFecha
+            // 
+            this.buttonFecha.Location = new System.Drawing.Point(119, 223);
+            this.buttonFecha.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonFecha.Name = "buttonFecha";
+            this.buttonFecha.Size = new System.Drawing.Size(241, 34);
+            this.buttonFecha.TabIndex = 16;
+            this.buttonFecha.Text = "Aceptar";
+            this.buttonFecha.UseVisualStyleBackColor = true;
+            this.buttonFecha.Visible = false;
+            this.buttonFecha.Click += new System.EventHandler(this.buttonFecha_Click);
+            // 
+            // monthCalendarFechaNacimiento
+            // 
+            this.monthCalendarFechaNacimiento.Location = new System.Drawing.Point(119, 37);
+            this.monthCalendarFechaNacimiento.Margin = new System.Windows.Forms.Padding(12, 11, 12, 11);
+            this.monthCalendarFechaNacimiento.MaxSelectionCount = 1;
+            this.monthCalendarFechaNacimiento.Name = "monthCalendarFechaNacimiento";
+            this.monthCalendarFechaNacimiento.TabIndex = 13;
+            this.monthCalendarFechaNacimiento.Visible = false;
+            // 
             // textBoxID
             // 
             this.textBoxID.Location = new System.Drawing.Point(472, 186);
-            this.textBoxID.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxID.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxID.Name = "textBoxID";
             this.textBoxID.ReadOnly = true;
             this.textBoxID.Size = new System.Drawing.Size(123, 22);
@@ -117,7 +156,7 @@
             // buttonFechaNacimiento
             // 
             this.buttonFechaNacimiento.Location = new System.Drawing.Point(175, 192);
-            this.buttonFechaNacimiento.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonFechaNacimiento.Margin = new System.Windows.Forms.Padding(4);
             this.buttonFechaNacimiento.Name = "buttonFechaNacimiento";
             this.buttonFechaNacimiento.Size = new System.Drawing.Size(119, 27);
             this.buttonFechaNacimiento.TabIndex = 15;
@@ -128,7 +167,7 @@
             // textBoxFechaNacimiento
             // 
             this.textBoxFechaNacimiento.Location = new System.Drawing.Point(171, 150);
-            this.textBoxFechaNacimiento.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxFechaNacimiento.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxFechaNacimiento.Name = "textBoxFechaNacimiento";
             this.textBoxFechaNacimiento.ReadOnly = true;
             this.textBoxFechaNacimiento.Size = new System.Drawing.Size(121, 22);
@@ -147,7 +186,7 @@
             // textBoxTelefono
             // 
             this.textBoxTelefono.Location = new System.Drawing.Point(473, 146);
-            this.textBoxTelefono.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxTelefono.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxTelefono.Name = "textBoxTelefono";
             this.textBoxTelefono.Size = new System.Drawing.Size(121, 22);
             this.textBoxTelefono.TabIndex = 11;
@@ -165,7 +204,7 @@
             // textBoxMail
             // 
             this.textBoxMail.Location = new System.Drawing.Point(171, 106);
-            this.textBoxMail.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxMail.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxMail.Name = "textBoxMail";
             this.textBoxMail.Size = new System.Drawing.Size(123, 22);
             this.textBoxMail.TabIndex = 9;
@@ -183,7 +222,7 @@
             // textBoxDocumento
             // 
             this.textBoxDocumento.Location = new System.Drawing.Point(473, 71);
-            this.textBoxDocumento.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxDocumento.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxDocumento.Name = "textBoxDocumento";
             this.textBoxDocumento.Size = new System.Drawing.Size(121, 22);
             this.textBoxDocumento.TabIndex = 7;
@@ -212,7 +251,7 @@
             // 
             this.comboBoxTipoDocumento.FormattingEnabled = true;
             this.comboBoxTipoDocumento.Location = new System.Drawing.Point(171, 71);
-            this.comboBoxTipoDocumento.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxTipoDocumento.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxTipoDocumento.Name = "comboBoxTipoDocumento";
             this.comboBoxTipoDocumento.Size = new System.Drawing.Size(121, 24);
             this.comboBoxTipoDocumento.TabIndex = 4;
@@ -220,7 +259,7 @@
             // textBoxApellido
             // 
             this.textBoxApellido.Location = new System.Drawing.Point(473, 33);
-            this.textBoxApellido.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxApellido.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxApellido.Name = "textBoxApellido";
             this.textBoxApellido.Size = new System.Drawing.Size(121, 22);
             this.textBoxApellido.TabIndex = 3;
@@ -238,7 +277,7 @@
             // textBoxNombre
             // 
             this.textBoxNombre.Location = new System.Drawing.Point(171, 33);
-            this.textBoxNombre.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxNombre.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxNombre.Name = "textBoxNombre";
             this.textBoxNombre.Size = new System.Drawing.Size(123, 22);
             this.textBoxNombre.TabIndex = 1;
@@ -270,7 +309,7 @@
             "ACTIVO",
             "INACTIVO"});
             this.comboBoxEstado.Location = new System.Drawing.Point(472, 227);
-            this.comboBoxEstado.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxEstado.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxEstado.Name = "comboBoxEstado";
             this.comboBoxEstado.Size = new System.Drawing.Size(121, 24);
             this.comboBoxEstado.TabIndex = 18;
@@ -300,9 +339,9 @@
             this.groupBoxDireccion.Controls.Add(this.textBoxCalle);
             this.groupBoxDireccion.Controls.Add(this.labelCalle);
             this.groupBoxDireccion.Location = new System.Drawing.Point(20, 300);
-            this.groupBoxDireccion.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBoxDireccion.Margin = new System.Windows.Forms.Padding(4);
             this.groupBoxDireccion.Name = "groupBoxDireccion";
-            this.groupBoxDireccion.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBoxDireccion.Padding = new System.Windows.Forms.Padding(4);
             this.groupBoxDireccion.Size = new System.Drawing.Size(633, 144);
             this.groupBoxDireccion.TabIndex = 1;
             this.groupBoxDireccion.TabStop = false;
@@ -311,7 +350,7 @@
             // textBoxDepto
             // 
             this.textBoxDepto.Location = new System.Drawing.Point(477, 57);
-            this.textBoxDepto.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxDepto.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxDepto.Name = "textBoxDepto";
             this.textBoxDepto.Size = new System.Drawing.Size(123, 22);
             this.textBoxDepto.TabIndex = 13;
@@ -329,7 +368,7 @@
             // textBoxLocalidad
             // 
             this.textBoxLocalidad.Location = new System.Drawing.Point(168, 91);
-            this.textBoxLocalidad.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxLocalidad.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxLocalidad.Name = "textBoxLocalidad";
             this.textBoxLocalidad.Size = new System.Drawing.Size(123, 22);
             this.textBoxLocalidad.TabIndex = 15;
@@ -347,7 +386,7 @@
             // textBoxNumero
             // 
             this.textBoxNumero.Location = new System.Drawing.Point(477, 23);
-            this.textBoxNumero.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxNumero.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxNumero.Name = "textBoxNumero";
             this.textBoxNumero.Size = new System.Drawing.Size(123, 22);
             this.textBoxNumero.TabIndex = 13;
@@ -355,7 +394,7 @@
             // textBoxCodPostal
             // 
             this.textBoxCodPostal.Location = new System.Drawing.Point(476, 91);
-            this.textBoxCodPostal.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxCodPostal.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxCodPostal.Name = "textBoxCodPostal";
             this.textBoxCodPostal.Size = new System.Drawing.Size(123, 22);
             this.textBoxCodPostal.TabIndex = 13;
@@ -383,7 +422,7 @@
             // textBoxPiso
             // 
             this.textBoxPiso.Location = new System.Drawing.Point(169, 57);
-            this.textBoxPiso.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxPiso.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxPiso.Name = "textBoxPiso";
             this.textBoxPiso.Size = new System.Drawing.Size(123, 22);
             this.textBoxPiso.TabIndex = 7;
@@ -401,7 +440,7 @@
             // textBoxCalle
             // 
             this.textBoxCalle.Location = new System.Drawing.Point(169, 23);
-            this.textBoxCalle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxCalle.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxCalle.Name = "textBoxCalle";
             this.textBoxCalle.Size = new System.Drawing.Size(123, 22);
             this.textBoxCalle.TabIndex = 3;
@@ -419,7 +458,7 @@
             // buttonAceptar
             // 
             this.buttonAceptar.Location = new System.Drawing.Point(172, 459);
-            this.buttonAceptar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonAceptar.Margin = new System.Windows.Forms.Padding(4);
             this.buttonAceptar.Name = "buttonAceptar";
             this.buttonAceptar.Size = new System.Drawing.Size(123, 30);
             this.buttonAceptar.TabIndex = 2;
@@ -430,52 +469,13 @@
             // buttonCancelar
             // 
             this.buttonCancelar.Location = new System.Drawing.Point(337, 459);
-            this.buttonCancelar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonCancelar.Margin = new System.Windows.Forms.Padding(4);
             this.buttonCancelar.Name = "buttonCancelar";
             this.buttonCancelar.Size = new System.Drawing.Size(123, 30);
             this.buttonCancelar.TabIndex = 3;
             this.buttonCancelar.Text = "Cancelar";
             this.buttonCancelar.UseVisualStyleBackColor = true;
             this.buttonCancelar.Click += new System.EventHandler(this.buttonCancelar_Click);
-            // 
-            // monthCalendarFechaNacimiento
-            // 
-            this.monthCalendarFechaNacimiento.Location = new System.Drawing.Point(119, 37);
-            this.monthCalendarFechaNacimiento.Margin = new System.Windows.Forms.Padding(12, 11, 12, 11);
-            this.monthCalendarFechaNacimiento.MaxSelectionCount = 1;
-            this.monthCalendarFechaNacimiento.Name = "monthCalendarFechaNacimiento";
-            this.monthCalendarFechaNacimiento.TabIndex = 13;
-            this.monthCalendarFechaNacimiento.Visible = false;
-            // 
-            // buttonFecha
-            // 
-            this.buttonFecha.Location = new System.Drawing.Point(119, 223);
-            this.buttonFecha.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.buttonFecha.Name = "buttonFecha";
-            this.buttonFecha.Size = new System.Drawing.Size(241, 34);
-            this.buttonFecha.TabIndex = 16;
-            this.buttonFecha.Text = "Aceptar";
-            this.buttonFecha.UseVisualStyleBackColor = true;
-            this.buttonFecha.Visible = false;
-            this.buttonFecha.Click += new System.EventHandler(this.buttonFecha_Click);
-            // 
-            // textBoxCUIL
-            // 
-            this.textBoxCUIL.Location = new System.Drawing.Point(472, 110);
-            this.textBoxCUIL.Margin = new System.Windows.Forms.Padding(4);
-            this.textBoxCUIL.Name = "textBoxCUIL";
-            this.textBoxCUIL.Size = new System.Drawing.Size(121, 22);
-            this.textBoxCUIL.TabIndex = 20;
-            // 
-            // labelCUIL
-            // 
-            this.labelCUIL.AutoSize = true;
-            this.labelCUIL.Location = new System.Drawing.Point(322, 114);
-            this.labelCUIL.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelCUIL.Name = "labelCUIL";
-            this.labelCUIL.Size = new System.Drawing.Size(38, 17);
-            this.labelCUIL.TabIndex = 19;
-            this.labelCUIL.Text = "CUIL";
             // 
             // EditarCliente
             // 
@@ -486,7 +486,7 @@
             this.Controls.Add(this.buttonAceptar);
             this.Controls.Add(this.groupBoxDireccion);
             this.Controls.Add(this.groupBox1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "EditarCliente";
             this.Text = "EditarCliente";
             this.groupBox1.ResumeLayout(false);

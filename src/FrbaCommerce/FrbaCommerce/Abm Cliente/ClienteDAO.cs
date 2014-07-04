@@ -26,6 +26,7 @@ namespace FrbaCommerce.Abm_Cliente
                         + ",C.Cli_Apellido"
                         + ",D.Des_Corta"
                         + ",C.Cli_Doc"
+                        + ",C.Cli_Cuil"
                         + ",C.Cli_Fecha_Nac"
                         + ",C.Cli_Mail"
                         + ",C.Cli_Dir_Calle"
@@ -144,7 +145,7 @@ namespace FrbaCommerce.Abm_Cliente
         }
 
         public bool GuardarCliente(string id_cliente, string nombre, string apellido, string tipodoc, string doc, 
-            string fecha_nac, string mail, string calle, string nro, string piso, string cod_postal, 
+            string cuil, string fecha_nac, string mail, string calle, string nro, string piso, string cod_postal, 
             string depto, string localidad, string telefono, string estado)
         {
 
@@ -158,6 +159,7 @@ namespace FrbaCommerce.Abm_Cliente
             command.Parameters.Add("@Cli_Apellido", SqlDbType.VarChar, 255);
             command.Parameters.Add("@Des_Corta", SqlDbType.VarChar, 10);
             command.Parameters.Add("@Cli_Doc", SqlDbType.Int);
+            command.Parameters.Add("@Cli_Cuil", SqlDbType.VarChar, 18);
             command.Parameters.Add("@Cli_Fecha_Nac", SqlDbType.DateTime);
             command.Parameters.Add("@Cli_Mail", SqlDbType.VarChar, 255);
             command.Parameters.Add("@Cli_Dir_Calle", SqlDbType.VarChar, 255);
@@ -174,6 +176,7 @@ namespace FrbaCommerce.Abm_Cliente
             command.Parameters["@Cli_Apellido"].Value = apellido;
             command.Parameters["@Des_Corta"].Value = tipodoc;
             command.Parameters["@Cli_Doc"].Value = Convert.ToInt32(doc);
+            command.Parameters["@Cli_Cuil"].Value = cuil;
             command.Parameters["@Cli_Fecha_Nac"].Value = Convert.ToDateTime(fecha_nac, new System.Globalization.CultureInfo("es-AR", true));
             command.Parameters["@Cli_Mail"].Value = mail;
             command.Parameters["@Cli_Dir_Calle"].Value = calle;
@@ -197,6 +200,8 @@ namespace FrbaCommerce.Abm_Cliente
                     MessageBox.Show(null, "El telefono ingresado ya corresponde a un cliente.", "Error");
                 else if (ex.Message.ToUpper().Contains("UQ_CLIENTE_DOC"))
                     MessageBox.Show(null, "El tipo y numero de documento ingresado ya corresponde a un cliente.", "Error");
+                else if (ex.Message.ToUpper().Contains("UQ_CLIENTE_CUIL"))
+                    MessageBox.Show(null, "El numero de CUIL ingresado ya corresponde a un cliente.", "Error");
                 else 
                     MessageBox.Show(null, ex.Message, "Error");
                 resultado = false;

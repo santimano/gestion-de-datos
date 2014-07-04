@@ -37,6 +37,7 @@ namespace FrbaCommerce.Abm_Cliente
             textBoxNombre.Text = linea.Cells["Nombre"].Value.ToString();
             textBoxApellido.Text = linea.Cells["Apellido"].Value.ToString();
             textBoxDocumento.Text = linea.Cells["Nro_Doc"].Value.ToString();
+            textBoxCUIL.Text = linea.Cells["Cuil"].Value.ToString();
             textBoxMail.Text = linea.Cells["Mail"].Value.ToString();
             textBoxFechaNacimiento.Text = ((DateTime)linea.Cells["Fecha_Nac"].Value).ToString("dd/MM/yyyy");
             comboBoxTipoDocumento.SelectedItem = linea.Cells["Tipo_Doc"].Value.ToString();
@@ -70,6 +71,7 @@ namespace FrbaCommerce.Abm_Cliente
                 textBoxApellido.Text,
                 comboBoxTipoDocumento.SelectedItem.ToString(),
                 textBoxDocumento.Text,
+                textBoxCUIL.Text,
                 textBoxFechaNacimiento.Text,
                 textBoxMail.Text,
                 textBoxCalle.Text,

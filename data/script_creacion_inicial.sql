@@ -157,6 +157,7 @@ CREATE TABLE [C_R].[Clientes]
 	[Cli_Id]             int  NOT NULL  IDENTITY ( 1,1 ) ,
 	[Cli_TipoDoc]        int  NOT NULL ,
 	[Cli_Doc]            numeric(18)	NOT NULL ,
+	[Cli_Cuil]           varchar(18)	NOT NULL ,
 	[Cli_Nombre]         varchar(255)	NOT NULL ,
 	[Cli_Apellido]       varchar(255)   NOT NULL ,
 	[Cli_Fecha_Nac]      datetime		NOT NULL ,
@@ -171,7 +172,8 @@ CREATE TABLE [C_R].[Clientes]
 	[Cli_Telefono]		 varchar(50)	NOT NULL 
 	CONSTRAINT [PK_Clientes] PRIMARY KEY  CLUSTERED ([Cli_Id] ASC),
 	CONSTRAINT [UQ_Cliente_Tel] UNIQUE ([Cli_Telefono] ASC),
-	CONSTRAINT [UQ_Cliente_Doc] UNIQUE ([Cli_TipoDoc] ASC, [Cli_Doc] ASC)
+	CONSTRAINT [UQ_Cliente_Doc] UNIQUE ([Cli_TipoDoc] ASC, [Cli_Doc] ASC),
+	CONSTRAINT [UQ_Cliente_Cuil] UNIQUE ([Cli_Cuil] ASC)
 )
 go
 
@@ -179,19 +181,21 @@ CREATE TABLE [C_R].[Empresas]
 ( 
 	[Emp_Id]             int  NOT NULL  IDENTITY ( 1,1 ) ,
 	[Emp_Fecha_Creacion] datetime		NULL ,
-	[Emp_Mail]           varchar(255)   NULL ,
-	[Emp_Telefono]		 varchar(50)	NULL default 'MIG-' +substring(convert(varchar(50), newID()),1,20),
-	[Emp_RazonSocial]    varchar(255)	NULL ,
-	[Emp_User_Id]        int			NULL ,
-	[Emp_Dir_Calle]      varchar(255)   NULL ,
-	[Emp_Dir_Nro]        numeric(18)    NULL ,
+	[Emp_Mail]           varchar(255)   NOT NULL ,
+	[Emp_Telefono]		 varchar(50)	NOT NULL default 'MIG-' +substring(convert(varchar(50), newID()),1,20),
+	[Emp_RazonSocial]    varchar(255)	NOT NULL ,
+	[Emp_User_Id]        int			NOT NULL ,
+	[Emp_Dir_Calle]      varchar(255)   NOT NULL ,
+	[Emp_Dir_Nro]        numeric(18)    NOT NULL ,
 	[Emp_Dir_Piso]       numeric(18)    NULL ,
-	[Emp_Dir_CodPostal]  varchar(50)    NULL ,
+	[Emp_Dir_CodPostal]  varchar(50)    NOT NULL ,
 	[Emp_Dir_Depto]      varchar(50)    NULL ,
 	[Emp_Dir_Localidad]	 varchar(50)    NULL ,
-	[Emp_Cuit]           varchar(50)	NULL
+	[Emp_Cuit]           varchar(50)	NOT NULL
 	CONSTRAINT [PK_Empresas] PRIMARY KEY  CLUSTERED ([Emp_Id] ASC),
-	CONSTRAINT [UQ_Empresa_Tel] UNIQUE ([Emp_Telefono] ASC)
+	CONSTRAINT [UQ_Empresa_Tel] UNIQUE ([Emp_Telefono] ASC),
+	CONSTRAINT [UQ_Empresa_Cuit] UNIQUE ([Emp_Cuit] ASC),
+	CONSTRAINT [UQ_Empresa_RazonSocial] UNIQUE ([Emp_RazonSocial] ASC)
 )
 go
 
@@ -589,6 +593,7 @@ CREATE PROCEDURE C_R.SP_CLIENTE_SAVE
 @Cli_Apellido varchar(255),
 @Des_Corta varchar(10),
 @Cli_Doc numeric(18),
+@Cli_Cuil varchar(18),
 @Cli_Fecha_Nac datetime,
 @Cli_Mail varchar(255),
 @Cli_Dir_Calle varchar(255),
@@ -621,6 +626,7 @@ BEGIN
 		INSERT INTO C_R.Clientes 
 			(Cli_TipoDoc
 			,Cli_Doc
+			,Cli_Cuil
 			,Cli_Nombre
 			,Cli_Apellido
 			,Cli_Fecha_Nac
@@ -636,6 +642,7 @@ BEGIN
 		VALUES
 			(@Cli_TipoDoc
 			,@Cli_Doc
+			,@Cli_Cuil
 			,@Cli_Nombre
 			,@Cli_Apellido
 			,@Cli_Fecha_Nac
@@ -663,6 +670,7 @@ BEGIN
 		Cli_Apellido = @Cli_Apellido,
 		Cli_TipoDoc = @Cli_TipoDoc,
 		Cli_Doc = @Cli_Doc,
+		Cli_Cuil = @Cli_Cuil,
 		Cli_Fecha_Nac = @Cli_Fecha_Nac,
 		Cli_Mail = @Cli_Mail,
 		Cli_Dir_Calle = @Cli_Dir_Calle,
@@ -686,6 +694,7 @@ GO
 -- Insercion de clientes
 DECLARE @Des_Corta varchar(10),
 		@Cli_Doc numeric(18),
+		@Cli_Cuil varchar(18),
 		@Cli_Nombre varchar(255),
 		@Cli_Apellido varchar(255),
 		@Cli_Fecha_Nac datetime,
@@ -720,7 +729,8 @@ FETCH NEXT FROM clientes_cursor INTO @Des_Corta, @Cli_Doc, @Cli_Nombre, @Cli_Ape
 WHILE @@FETCH_STATUS = 0   
 BEGIN   
    SET @Cli_Telefono = 'MIG-' + substring(convert(varchar(50), newID()),1,20)
-   EXEC C_R.SP_CLIENTE_SAVE NULL, @Cli_Nombre, @Cli_Apellido, @Des_Corta, @Cli_Doc, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad, @Cli_Telefono, NULL
+   SET @Cli_Cuil = SUBSTRING(CAST(@Cli_Doc AS varchar),1,2) + '-' + CAST(@Cli_Doc AS varchar) + '-' + SUBSTRING(CAST(@Cli_Doc AS varchar),3,1)
+   EXEC C_R.SP_CLIENTE_SAVE NULL, @Cli_Nombre, @Cli_Apellido, @Des_Corta, @Cli_Doc, @Cli_Cuil, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad, @Cli_Telefono, NULL
    FETCH NEXT FROM clientes_cursor INTO @Des_Corta, @Cli_Doc, @Cli_Nombre, @Cli_Apellido, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad
    
 END   

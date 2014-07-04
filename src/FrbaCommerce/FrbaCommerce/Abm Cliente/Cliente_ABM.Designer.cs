@@ -49,6 +49,7 @@
             this.Apellido = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Tipo_Doc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Nro_Doc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cuil = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Fecha_Nac = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Mail = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Calle = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -78,99 +79,112 @@
             this.groupBoxFiltros.Controls.Add(this.labelApellido);
             this.groupBoxFiltros.Controls.Add(this.textBoxNombre);
             this.groupBoxFiltros.Controls.Add(this.labelNombre);
-            this.groupBoxFiltros.Location = new System.Drawing.Point(11, 11);
+            this.groupBoxFiltros.Location = new System.Drawing.Point(15, 14);
+            this.groupBoxFiltros.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBoxFiltros.Name = "groupBoxFiltros";
-            this.groupBoxFiltros.Size = new System.Drawing.Size(502, 123);
+            this.groupBoxFiltros.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBoxFiltros.Size = new System.Drawing.Size(669, 151);
             this.groupBoxFiltros.TabIndex = 0;
             this.groupBoxFiltros.TabStop = false;
             this.groupBoxFiltros.Text = "Filtros";
             // 
             // textBoxDocumento
             // 
-            this.textBoxDocumento.Location = new System.Drawing.Point(375, 51);
+            this.textBoxDocumento.Location = new System.Drawing.Point(500, 63);
+            this.textBoxDocumento.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxDocumento.Name = "textBoxDocumento";
-            this.textBoxDocumento.Size = new System.Drawing.Size(101, 20);
+            this.textBoxDocumento.Size = new System.Drawing.Size(133, 22);
             this.textBoxDocumento.TabIndex = 9;
             // 
             // labelDocumento
             // 
             this.labelDocumento.AutoSize = true;
-            this.labelDocumento.Location = new System.Drawing.Point(263, 54);
+            this.labelDocumento.Location = new System.Drawing.Point(351, 66);
+            this.labelDocumento.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelDocumento.Name = "labelDocumento";
-            this.labelDocumento.Size = new System.Drawing.Size(104, 13);
+            this.labelDocumento.Size = new System.Drawing.Size(136, 17);
             this.labelDocumento.TabIndex = 8;
             this.labelDocumento.Text = "Documento (Exacto)";
             // 
             // textBoxMail
             // 
-            this.textBoxMail.Location = new System.Drawing.Point(128, 83);
+            this.textBoxMail.Location = new System.Drawing.Point(171, 102);
+            this.textBoxMail.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxMail.Name = "textBoxMail";
-            this.textBoxMail.Size = new System.Drawing.Size(101, 20);
+            this.textBoxMail.Size = new System.Drawing.Size(133, 22);
             this.textBoxMail.TabIndex = 7;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 86);
+            this.label1.Location = new System.Drawing.Point(19, 106);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 13);
+            this.label1.Size = new System.Drawing.Size(103, 17);
             this.label1.TabIndex = 6;
             this.label1.Text = "Mail (Contiene)";
             // 
             // comboBoxTipoDocumento
             // 
             this.comboBoxTipoDocumento.FormattingEnabled = true;
-            this.comboBoxTipoDocumento.Location = new System.Drawing.Point(375, 18);
+            this.comboBoxTipoDocumento.Location = new System.Drawing.Point(500, 22);
+            this.comboBoxTipoDocumento.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxTipoDocumento.Name = "comboBoxTipoDocumento";
-            this.comboBoxTipoDocumento.Size = new System.Drawing.Size(102, 21);
+            this.comboBoxTipoDocumento.Size = new System.Drawing.Size(135, 24);
             this.comboBoxTipoDocumento.TabIndex = 5;
             // 
             // labelTipoDocumento
             // 
             this.labelTipoDocumento.AutoSize = true;
-            this.labelTipoDocumento.Location = new System.Drawing.Point(263, 21);
+            this.labelTipoDocumento.Location = new System.Drawing.Point(351, 26);
+            this.labelTipoDocumento.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelTipoDocumento.Name = "labelTipoDocumento";
-            this.labelTipoDocumento.Size = new System.Drawing.Size(86, 13);
+            this.labelTipoDocumento.Size = new System.Drawing.Size(112, 17);
             this.labelTipoDocumento.TabIndex = 4;
             this.labelTipoDocumento.Text = "Tipo Documento";
             // 
             // textBoxApellido
             // 
-            this.textBoxApellido.Location = new System.Drawing.Point(128, 51);
+            this.textBoxApellido.Location = new System.Drawing.Point(171, 63);
+            this.textBoxApellido.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxApellido.Name = "textBoxApellido";
-            this.textBoxApellido.Size = new System.Drawing.Size(101, 20);
+            this.textBoxApellido.Size = new System.Drawing.Size(133, 22);
             this.textBoxApellido.TabIndex = 3;
             // 
             // labelApellido
             // 
             this.labelApellido.AutoSize = true;
-            this.labelApellido.Location = new System.Drawing.Point(14, 56);
+            this.labelApellido.Location = new System.Drawing.Point(19, 69);
+            this.labelApellido.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelApellido.Name = "labelApellido";
-            this.labelApellido.Size = new System.Drawing.Size(95, 13);
+            this.labelApellido.Size = new System.Drawing.Size(128, 17);
             this.labelApellido.TabIndex = 2;
             this.labelApellido.Text = "Apellido (Contiene)";
             // 
             // textBoxNombre
             // 
-            this.textBoxNombre.Location = new System.Drawing.Point(129, 21);
+            this.textBoxNombre.Location = new System.Drawing.Point(172, 26);
+            this.textBoxNombre.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxNombre.Name = "textBoxNombre";
-            this.textBoxNombre.Size = new System.Drawing.Size(100, 20);
+            this.textBoxNombre.Size = new System.Drawing.Size(132, 22);
             this.textBoxNombre.TabIndex = 1;
             // 
             // labelNombre
             // 
             this.labelNombre.AutoSize = true;
-            this.labelNombre.Location = new System.Drawing.Point(14, 24);
+            this.labelNombre.Location = new System.Drawing.Point(19, 30);
+            this.labelNombre.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelNombre.Name = "labelNombre";
-            this.labelNombre.Size = new System.Drawing.Size(86, 13);
+            this.labelNombre.Size = new System.Drawing.Size(114, 17);
             this.labelNombre.TabIndex = 0;
             this.labelNombre.Text = "Nombre (Exacto)";
             // 
             // buttonNuevo
             // 
-            this.buttonNuevo.Location = new System.Drawing.Point(28, 140);
+            this.buttonNuevo.Location = new System.Drawing.Point(37, 172);
+            this.buttonNuevo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonNuevo.Name = "buttonNuevo";
-            this.buttonNuevo.Size = new System.Drawing.Size(76, 22);
+            this.buttonNuevo.Size = new System.Drawing.Size(101, 27);
             this.buttonNuevo.TabIndex = 1;
             this.buttonNuevo.Text = "Nuevo";
             this.buttonNuevo.UseVisualStyleBackColor = true;
@@ -178,9 +192,10 @@
             // 
             // buttonLimpiar
             // 
-            this.buttonLimpiar.Location = new System.Drawing.Point(119, 140);
+            this.buttonLimpiar.Location = new System.Drawing.Point(159, 172);
+            this.buttonLimpiar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonLimpiar.Name = "buttonLimpiar";
-            this.buttonLimpiar.Size = new System.Drawing.Size(75, 22);
+            this.buttonLimpiar.Size = new System.Drawing.Size(100, 27);
             this.buttonLimpiar.TabIndex = 2;
             this.buttonLimpiar.Text = "Limpiar";
             this.buttonLimpiar.UseVisualStyleBackColor = true;
@@ -188,9 +203,10 @@
             // 
             // buttonBuscar
             // 
-            this.buttonBuscar.Location = new System.Drawing.Point(212, 140);
+            this.buttonBuscar.Location = new System.Drawing.Point(283, 172);
+            this.buttonBuscar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonBuscar.Name = "buttonBuscar";
-            this.buttonBuscar.Size = new System.Drawing.Size(75, 22);
+            this.buttonBuscar.Size = new System.Drawing.Size(100, 27);
             this.buttonBuscar.TabIndex = 3;
             this.buttonBuscar.Text = "Buscar";
             this.buttonBuscar.UseVisualStyleBackColor = true;
@@ -199,9 +215,11 @@
             // groupBoxClientes
             // 
             this.groupBoxClientes.Controls.Add(this.dataGridViewClientes);
-            this.groupBoxClientes.Location = new System.Drawing.Point(12, 178);
+            this.groupBoxClientes.Location = new System.Drawing.Point(16, 219);
+            this.groupBoxClientes.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBoxClientes.Name = "groupBoxClientes";
-            this.groupBoxClientes.Size = new System.Drawing.Size(500, 252);
+            this.groupBoxClientes.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBoxClientes.Size = new System.Drawing.Size(667, 310);
             this.groupBoxClientes.TabIndex = 4;
             this.groupBoxClientes.TabStop = false;
             this.groupBoxClientes.Text = "Clientes";
@@ -217,6 +235,7 @@
             this.Apellido,
             this.Tipo_Doc,
             this.Nro_Doc,
+            this.Cuil,
             this.Fecha_Nac,
             this.Mail,
             this.Calle,
@@ -229,10 +248,12 @@
             this.Estado,
             this.Editar,
             this.Eliminar});
-            this.dataGridViewClientes.Location = new System.Drawing.Point(14, 29);
+            this.dataGridViewClientes.Location = new System.Drawing.Point(19, 36);
+            this.dataGridViewClientes.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dataGridViewClientes.Name = "dataGridViewClientes";
             this.dataGridViewClientes.ReadOnly = true;
-            this.dataGridViewClientes.Size = new System.Drawing.Size(470, 210);
+            this.dataGridViewClientes.RowTemplate.Height = 24;
+            this.dataGridViewClientes.Size = new System.Drawing.Size(627, 258);
             this.dataGridViewClientes.TabIndex = 0;
             this.dataGridViewClientes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewClientes_CellContentClick);
             // 
@@ -270,6 +291,13 @@
             this.Nro_Doc.HeaderText = "Nro_Doc";
             this.Nro_Doc.Name = "Nro_Doc";
             this.Nro_Doc.ReadOnly = true;
+            // 
+            // Cuil
+            // 
+            this.Cuil.DataPropertyName = "Cli_Cuil";
+            this.Cuil.HeaderText = "Cuil";
+            this.Cuil.Name = "Cuil";
+            this.Cuil.ReadOnly = true;
             // 
             // Fecha_Nac
             // 
@@ -356,14 +384,15 @@
             // 
             // Cliente_ABM
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(524, 451);
+            this.ClientSize = new System.Drawing.Size(699, 555);
             this.Controls.Add(this.groupBoxClientes);
             this.Controls.Add(this.buttonBuscar);
             this.Controls.Add(this.buttonLimpiar);
             this.Controls.Add(this.buttonNuevo);
             this.Controls.Add(this.groupBoxFiltros);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Cliente_ABM";
             this.Text = "Cliente_ABM";
             this.groupBoxFiltros.ResumeLayout(false);
@@ -397,6 +426,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Apellido;
         private System.Windows.Forms.DataGridViewTextBoxColumn Tipo_Doc;
         private System.Windows.Forms.DataGridViewTextBoxColumn Nro_Doc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cuil;
         private System.Windows.Forms.DataGridViewTextBoxColumn Fecha_Nac;
         private System.Windows.Forms.DataGridViewTextBoxColumn Mail;
         private System.Windows.Forms.DataGridViewTextBoxColumn Calle;

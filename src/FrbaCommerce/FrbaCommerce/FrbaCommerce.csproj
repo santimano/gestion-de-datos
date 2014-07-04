@@ -114,6 +114,12 @@
     </Compile>
     <Compile Include="Generar Publicacion\Publicacion.cs" />
     <Compile Include="Generar Publicacion\PublicacionDAO.cs" />
+    <Compile Include="Historial Cliente\Calificaciones.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Historial Cliente\Calificaciones.Designer.cs">
+      <DependentUpon>Calificaciones.cs</DependentUpon>
+    </Compile>
     <Compile Include="Historial Cliente\CompraDAO.cs" />
     <Compile Include="Historial Cliente\Compras.cs">
       <SubType>Form</SubType>
@@ -121,6 +127,7 @@
     <Compile Include="Historial Cliente\Compras.Designer.cs">
       <DependentUpon>Compras.cs</DependentUpon>
     </Compile>
+    <Compile Include="Historial Cliente\CalificacionDAO.cs" />
     <Compile Include="Historial Cliente\OfertaDAO.cs" />
     <Compile Include="Historial Cliente\Ofertas.cs">
       <SubType>Form</SubType>
@@ -193,6 +200,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicacion\GenPublicacion.resx">
       <DependentUpon>GenPublicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Historial Cliente\Calificaciones.resx">
+      <DependentUpon>Calificaciones.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\Compras.resx">
       <DependentUpon>Compras.cs</DependentUpon>

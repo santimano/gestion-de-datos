@@ -118,6 +118,10 @@ if exists(select * from sys.objects where name='Compras_VW' and type ='v')
 	drop view [C_R].[Compras_VW]
 go
 
+if exists(select * from sys.objects where name='Calificaciones_VW' and type ='v')
+	drop view [C_R].[Compras_VW]
+go
+
 if exists(select * from sys.schemas where name ='C_R')
 	drop schema [C_R]
 go
@@ -1111,4 +1115,13 @@ SELECT P.Pub_Descripcion, V.Ven_Fecha, Ven_Monto, P.Pub_Precio, T.Pub_Descripcio
 FROM C_R.Ventas V, C_R.Publicaciones P, C_R.Publicaciones_Tipo T
 WHERE V.Pub_Codigo = P.Pub_Codigo
 AND P.Pub_Tipo_Id = T.Pub_Tipo
+GO
+
+CREATE VIEW C_R.Calificaciones_VW AS
+SELECT V.Ven_Fecha Fecha, C.Cal_CantEstrellas Estrellas, 
+C.Cal_Descripcion Descripcion, V.Ven_User_Id idComprador, P.Pub_User_Id idVendedor,
+U_C.User_Name Comprador, U_V.User_Name Vendedor
+FROM C_R.Calificaciones C, C_R.Ventas V, C_R.Publicaciones P, C_R.Usuarios U_V, C_R.Usuarios U_C
+WHERE V.Ven_Codigo = C.Ven_Codigo AND P.Pub_Codigo = V.Pub_Codigo
+AND U_C.User_Id = V.Ven_User_Id AND U_V.User_Id = P.Pub_User_Id
 GO

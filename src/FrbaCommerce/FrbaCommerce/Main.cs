@@ -101,6 +101,22 @@ namespace FrbaCommerce
             this.Show();
         }
 
+        private void calificacionesToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Historial_Cliente.Calificaciones form = new FrbaCommerce.Historial_Cliente.Calificaciones(false);
+            form.ShowDialog();
+            this.Show();
+        }
+
+        private void calificacionesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Historial_Cliente.Calificaciones form = new FrbaCommerce.Historial_Cliente.Calificaciones(true);
+            form.ShowDialog();
+            this.Show();
+        }
+
        
     }
 }

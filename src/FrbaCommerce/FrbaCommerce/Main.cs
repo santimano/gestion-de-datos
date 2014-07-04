@@ -117,6 +117,14 @@ namespace FrbaCommerce
             this.Show();
         }
 
+        private void calificarVendedorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Calificar_Vendedor.CalificarVendedor form = new FrbaCommerce.Calificar_Vendedor.CalificarVendedor();
+            form.ShowDialog();
+            this.Show();
+        }
+
        
     }
 }

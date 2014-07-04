@@ -57,5 +57,36 @@ namespace FrbaCommerce.Historial_Cliente
             return Ds;
 
         }
+
+        public DataSet Pendientes_Grilla()
+        {
+            String query = "SELECT * FROM C_R.Calificaciones_Pendientes_VW WHERE Comprador = @Usuario";
+            query += " ORDER BY Fecha ";
+
+            SqlCommand command = new SqlCommand(query, Conexion);
+            command.CommandType = CommandType.Text;
+            command.Parameters.Add("@Usuario", SqlDbType.Int);
+            command.Parameters["@Usuario"].Value = Main.Usuario;
+
+            DataSet Ds = new DataSet();
+            try
+            {
+                Conexion.Open();
+
+                // Conexion Abierta
+                SqlDataAdapter sDa = new SqlDataAdapter(command);
+                sDa.Fill(Ds);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+            return Ds;
+        }
     }
 }

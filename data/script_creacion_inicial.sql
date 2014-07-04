@@ -119,7 +119,15 @@ if exists(select * from sys.objects where name='Compras_VW' and type ='v')
 go
 
 if exists(select * from sys.objects where name='Calificaciones_VW' and type ='v')
-	drop view [C_R].[Compras_VW]
+	drop view [C_R].[Calificaciones_VW]
+go
+
+if exists(select * from sys.objects where name='Calificaciones_Pendientes_VW' and type ='v')
+	drop view [C_R].[Calificaciones_Pendientes_VW]
+go
+
+if exists(select * from sys.objects where name='Inhabilitados_Compra_Oferta' and type ='v')
+	drop view [C_R].[Inhabilitados_Compra_Oferta]
 go
 
 if exists(select * from sys.schemas where name ='C_R')
@@ -531,6 +539,10 @@ CREATE TABLE [C_R].[Calificaciones]
 		ON DELETE NO ACTION
 		ON UPDATE NO ACTION
 )
+GO
+
+ALTER TABLE [C_R].[Calificaciones]
+	ADD CONSTRAINT [UQ_Venta] UNIQUE ([Ven_Codigo]  ASC)
 GO
 
 --Insercion de Roles
@@ -1124,4 +1136,19 @@ U_C.User_Name Comprador, U_V.User_Name Vendedor
 FROM C_R.Calificaciones C, C_R.Ventas V, C_R.Publicaciones P, C_R.Usuarios U_V, C_R.Usuarios U_C
 WHERE V.Ven_Codigo = C.Ven_Codigo AND P.Pub_Codigo = V.Pub_Codigo
 AND U_C.User_Id = V.Ven_User_Id AND U_V.User_Id = P.Pub_User_Id
+GO
+
+CREATE VIEW C_R.Calificaciones_Pendientes_VW AS
+SELECT P.Pub_Descripcion Publicacion, V.Ven_Cantidad Cantidad, V.Ven_Monto Monto, 
+V.Ven_Codigo Venta, V.Ven_User_Id Comprador, P.Pub_User_Id Ven_Id, U.User_Name Vendedor, 
+V.Ven_Fecha Fecha
+FROM C_R.Ventas V, C_R.Publicaciones P, C_R.Usuarios U
+WHERE V.Pub_Codigo = P.Pub_Codigo AND U.User_Id = P.Pub_User_Id
+AND NOT EXISTS (SELECT 1 FROM C_R.Calificaciones C WHERE C.Ven_Codigo = V.Ven_Codigo)
+GO
+
+CREATE VIEW C_R.Inhabilitados_Compra_Oferta AS
+SELECT Comprador FROM C_R.Calificaciones_Pendientes_VW
+GROUP BY Comprador
+HAVING COUNT(1) > 5
 GO

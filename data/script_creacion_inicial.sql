@@ -308,7 +308,8 @@ CREATE TABLE [C_R].[Publicaciones_Visibilidad]
 	[Pub_Visible_Cod]    numeric(18) IDENTITY (1,1)  NOT NULL ,
 	[Pub_Visible_Descripcion] nvarchar(255) NOT NULL ,
 	[Pub_Visible_Precio] numeric(18,2)  NOT NULL ,
-	[Pub_Visible_Porcentaje] numeric(18,2)  NOT NULL 
+	[Pub_Visible_Porcentaje] numeric(18,2)  NOT NULL,
+	[Pub_Visible_Estado] nvarchar(10) DEFAULT 'ACTIVO' NOT NULL,
 	CONSTRAINT [PK_Publicaciones_Visibilidad] PRIMARY KEY  CLUSTERED ([Pub_Visible_Cod] ASC)
 )
 go
@@ -1162,3 +1163,9 @@ SELECT Comprador FROM C_R.Calificaciones_Pendientes_VW
 GROUP BY Comprador
 HAVING COUNT(1) > 5
 GO
+
+-- Se agrega columan en Publicaciones_Visibilidad para eliminacion logica
+-- PARCHE UPDATE
+--ALTER TABLE C_R.Publicaciones_Visibilidad add	[Pub_Visible_Estado] nvarchar(10) DEFAULT 'ACTIVO'
+--update C_R.Publicaciones_Visibilidad
+--set Pub_Visible_Estado = 'ACTIVO'

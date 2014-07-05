@@ -142,6 +142,10 @@ if exists(select * from sys.objects where name='Preguntas_Pendientes_VW' and typ
 	drop view [C_R].[Preguntas_Pendientes_VW]
 go
 
+if exists(select * from sys.objects where name='Respondidas_VW' and type ='v')
+	drop view [C_R].[Respondidas_VW]
+go
+
 if exists(select * from sys.schemas where name ='C_R')
 	drop schema [C_R]
 go
@@ -573,7 +577,7 @@ CREATE TABLE [C_R].[Preguntas]
 	[Pre_Id]              int		     NOT NULL  IDENTITY ( 1,1 ) ,
 	[Pub_Codigo]          numeric(18,0)  NOT NULL ,
 	[Pre_Texto]           varchar(255)   NOT NULL ,
-	[Pre_Fecha]           datetime       NOT NULL ,
+	[Pre_Fecha]           datetime       NOT NULL DEFAULT GETDATE(),
 	[User_Id]             int		     NOT NULL
 	CONSTRAINT [PK_Preguntas] PRIMARY KEY  CLUSTERED ([Pre_Id] ASC),
 	CONSTRAINT [FK_Preguntas_Publicaciones] FOREIGN KEY ([Pub_Codigo]) REFERENCES [C_R].[Publicaciones]([Pub_Codigo])
@@ -1233,4 +1237,12 @@ from C_R.Publicaciones Pub, C_R.Usuarios U, C_R.Preguntas Pre
 LEFT JOIN C_R.Respuestas R ON R.Pre_Id = Pre.Pre_Id
 WHERE Pre.Pub_Codigo = Pub.Pub_Codigo AND Pre.User_Id = U.User_Id
 AND R.Res_Id IS NULL
+GO
+
+CREATE VIEW C_R.Respondidas_VW AS
+SELECT Pub.Pub_Descripcion Publicacion, Pub.Pub_Precio Precio, Pub.Pub_Stock Stock, P_E.Pub_Estado_Desc Estado, P.Pre_Texto Pregunta, P.Pre_Fecha Fecha_Pregunta, R.Res_Texto Respuesta, P.User_Id
+FROM C_R.Preguntas P LEFT JOIN C_R.Respuestas R ON R.Pre_Id = P.Pre_Id, 
+C_R.Publicaciones Pub, C_R.Publicaciones_Estados P_E
+WHERE Pub.Pub_Codigo = P.Pub_Codigo AND Pub.Pub_Estado_Id = P_E.Pub_Estado_Id
+AND NOT Pub.Pub_Estado_Id = (SELECT Pub_Estado_Id FROM C_R.Publicaciones_Estados WHERE Pub_Estado_Desc = 'borrador')
 GO

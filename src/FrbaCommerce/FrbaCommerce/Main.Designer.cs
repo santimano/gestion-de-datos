@@ -47,12 +47,12 @@
             this.comprasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.calificacionesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.calificarVendedorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.empresaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.historialToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.calificacionesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preguntasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.recibidasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hechasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.empresaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.historialToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.calificacionesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preguntasRecibidasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -213,6 +213,29 @@
             this.calificarVendedorToolStripMenuItem.Text = "Calificar Vendedor";
             this.calificarVendedorToolStripMenuItem.Click += new System.EventHandler(this.calificarVendedorToolStripMenuItem_Click);
             // 
+            // preguntasToolStripMenuItem
+            // 
+            this.preguntasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.recibidasToolStripMenuItem,
+            this.hechasToolStripMenuItem});
+            this.preguntasToolStripMenuItem.Name = "preguntasToolStripMenuItem";
+            this.preguntasToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.preguntasToolStripMenuItem.Text = "Preguntas";
+            // 
+            // recibidasToolStripMenuItem
+            // 
+            this.recibidasToolStripMenuItem.Name = "recibidasToolStripMenuItem";
+            this.recibidasToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.recibidasToolStripMenuItem.Text = "Recibidas";
+            this.recibidasToolStripMenuItem.Click += new System.EventHandler(this.recibidasToolStripMenuItem_Click);
+            // 
+            // hechasToolStripMenuItem
+            // 
+            this.hechasToolStripMenuItem.Name = "hechasToolStripMenuItem";
+            this.hechasToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.hechasToolStripMenuItem.Text = "Hechas";
+            this.hechasToolStripMenuItem.Click += new System.EventHandler(this.hechasToolStripMenuItem_Click);
+            // 
             // empresaToolStripMenuItem
             // 
             this.empresaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -237,28 +260,6 @@
             this.calificacionesToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.calificacionesToolStripMenuItem.Text = "Calificaciones";
             this.calificacionesToolStripMenuItem.Click += new System.EventHandler(this.calificacionesToolStripMenuItem_Click);
-            // 
-            // preguntasToolStripMenuItem
-            // 
-            this.preguntasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.recibidasToolStripMenuItem,
-            this.hechasToolStripMenuItem});
-            this.preguntasToolStripMenuItem.Name = "preguntasToolStripMenuItem";
-            this.preguntasToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.preguntasToolStripMenuItem.Text = "Preguntas";
-            // 
-            // recibidasToolStripMenuItem
-            // 
-            this.recibidasToolStripMenuItem.Name = "recibidasToolStripMenuItem";
-            this.recibidasToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.recibidasToolStripMenuItem.Text = "Recibidas";
-            this.recibidasToolStripMenuItem.Click += new System.EventHandler(this.recibidasToolStripMenuItem_Click);
-            // 
-            // hechasToolStripMenuItem
-            // 
-            this.hechasToolStripMenuItem.Name = "hechasToolStripMenuItem";
-            this.hechasToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.hechasToolStripMenuItem.Text = "Hechas";
             // 
             // preguntasRecibidasToolStripMenuItem
             // 

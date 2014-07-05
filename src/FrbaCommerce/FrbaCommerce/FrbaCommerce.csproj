@@ -133,6 +133,12 @@
     <Compile Include="Gestion de Preguntas\Responder.Designer.cs">
       <DependentUpon>Responder.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gestion de Preguntas\Respuestas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gestion de Preguntas\Respuestas.Designer.cs">
+      <DependentUpon>Respuestas.cs</DependentUpon>
+    </Compile>
     <Compile Include="Historial Cliente\Calificaciones.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -225,6 +231,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Gestion de Preguntas\Responder.resx">
       <DependentUpon>Responder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gestion de Preguntas\Respuestas.resx">
+      <DependentUpon>Respuestas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\Calificaciones.resx">
       <DependentUpon>Calificaciones.cs</DependentUpon>

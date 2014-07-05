@@ -52,7 +52,7 @@ namespace FrbaCommerce.Gestion_de_Preguntas
             return Ds;
         }
 
-        internal void Guardar_Respuesta(int pregunta, string respuesta)
+        public void Guardar_Respuesta(int pregunta, string respuesta)
         {
             String query = "INSERT INTO C_R.Respuestas(Pre_Id, Res_Texto) VALUES (@Pregunta, @Respuesta)";
 
@@ -76,6 +76,56 @@ namespace FrbaCommerce.Gestion_de_Preguntas
             {
                 Conexion.Close();
             }
+        }
+
+        public DataSet Respuestas_Grilla(string estado, bool respondidas, bool sinResponder)
+        {
+            SqlCommand command = new SqlCommand();
+            command.Connection = Conexion;
+            command.CommandType = CommandType.Text;
+            command.Parameters.Add("@Usuario", SqlDbType.Int);
+            command.Parameters["@Usuario"].Value = Main.Usuario;
+
+            String query = "SELECT Publicacion, Precio, Stock, Estado, Pregunta, Fecha_Pregunta, Respuesta FROM C_R.Respondidas_VW WHERE User_Id = @Usuario ";
+
+            if (respondidas)
+            {
+                query += " AND Respuesta IS NOT NULL ";
+            }
+            if (sinResponder)
+            {
+                query += " AND Respuesta IS NULL ";
+            }
+            if (estado != null && !"".Equals(estado))
+            {
+                query += " AND Estado = @Estado ";
+                command.Parameters.Add("@Estado", SqlDbType.VarChar, 255);
+                command.Parameters["@Estado"].Value = estado;
+            }
+
+            query += "ORDER BY Fecha_Pregunta DESC ";
+
+            command.CommandText = query;  
+
+            DataSet Ds = new DataSet();
+            try
+            {
+                Conexion.Open();
+
+                // Conexion Abierta
+                SqlDataAdapter sDa = new SqlDataAdapter(command);
+                sDa.Fill(Ds);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+            return Ds;
         }
     }
 }

@@ -138,6 +138,14 @@ namespace FrbaCommerce
             recibidasToolStripMenuItem_Click(sender, e);
         }
 
+        private void hechasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Gestion_de_Preguntas.Respuestas form = new FrbaCommerce.Gestion_de_Preguntas.Respuestas();
+            form.ShowDialog();
+            this.Show();
+        }
+
        
     }
 }

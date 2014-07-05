@@ -36,7 +36,8 @@
             this.Cantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Monto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Vendedor = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Ven_Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Fecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Venta = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Calificar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -71,7 +72,8 @@
             this.Cantidad,
             this.Monto,
             this.Vendedor,
-            this.Ven_Id,
+            this.Fecha,
+            this.Venta,
             this.Calificar});
             this.dataGridView1.Location = new System.Drawing.Point(7, 20);
             this.dataGridView1.Name = "dataGridView1";
@@ -118,13 +120,20 @@
             this.Vendedor.Name = "Vendedor";
             this.Vendedor.ReadOnly = true;
             // 
-            // Ven_Id
+            // Fecha
             // 
-            this.Ven_Id.DataPropertyName = "Ven_Id";
-            this.Ven_Id.HeaderText = "Ven_Id";
-            this.Ven_Id.Name = "Ven_Id";
-            this.Ven_Id.ReadOnly = true;
-            this.Ven_Id.Visible = false;
+            this.Fecha.DataPropertyName = "Fecha";
+            this.Fecha.HeaderText = "Fecha";
+            this.Fecha.Name = "Fecha";
+            this.Fecha.ReadOnly = true;
+            // 
+            // Venta
+            // 
+            this.Venta.DataPropertyName = "Venta";
+            this.Venta.HeaderText = "Venta";
+            this.Venta.Name = "Venta";
+            this.Venta.ReadOnly = true;
+            this.Venta.Visible = false;
             // 
             // Calificar
             // 
@@ -158,7 +167,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Cantidad;
         private System.Windows.Forms.DataGridViewTextBoxColumn Monto;
         private System.Windows.Forms.DataGridViewTextBoxColumn Vendedor;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Ven_Id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Fecha;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Venta;
         private System.Windows.Forms.DataGridViewButtonColumn Calificar;
     }
 }

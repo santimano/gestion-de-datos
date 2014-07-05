@@ -58,6 +58,14 @@ if exists (select * from sys.objects where name = 'Ofertas' and type = 'u')
     drop table  [C_R].[Ofertas]
 go
 
+if exists(select * from sys.objects where name='Respuestas' and type ='u')
+	drop table [C_R].[Respuestas]
+go
+
+if exists(select * from sys.objects where name='Preguntas' and type ='u')
+	drop table [C_R].[Preguntas]
+go
+
 if exists (select * from sys.objects where name = 'Publicaciones' and type = 'u')
     drop table [C_R].[Publicaciones]
 go
@@ -126,8 +134,12 @@ if exists(select * from sys.objects where name='Calificaciones_Pendientes_VW' an
 	drop view [C_R].[Calificaciones_Pendientes_VW]
 go
 
-if exists(select * from sys.objects where name='Inhabilitados_Compra_Oferta' and type ='v')
-	drop view [C_R].[Inhabilitados_Compra_Oferta]
+if exists(select * from sys.objects where name='Inhabilitados_Compra_Oferta_VW' and type ='v')
+	drop view [C_R].[Inhabilitados_Compra_Oferta_VW]
+go
+
+if exists(select * from sys.objects where name='Preguntas_Pendientes_VW' and type ='v')
+	drop view [C_R].[Preguntas_Pendientes_VW]
 go
 
 if exists(select * from sys.schemas where name ='C_R')
@@ -548,6 +560,37 @@ GO
 
 ALTER TABLE [C_R].[Calificaciones]
 	ADD CONSTRAINT [UQ_Venta] UNIQUE ([Ven_Codigo]  ASC)
+GO
+
+CREATE TABLE [C_R].[Preguntas]
+( 
+	[Pre_Id]              int		     NOT NULL  IDENTITY ( 1,1 ) ,
+	[Pub_Codigo]          numeric(18,0)  NOT NULL ,
+	[Pre_Texto]           varchar(255)   NOT NULL ,
+	[Pre_Fecha]           datetime       NOT NULL ,
+	[User_Id]             int		     NOT NULL
+	CONSTRAINT [PK_Preguntas] PRIMARY KEY  CLUSTERED ([Pre_Id] ASC),
+	CONSTRAINT [FK_Preguntas_Publicaciones] FOREIGN KEY ([Pub_Codigo]) REFERENCES [C_R].[Publicaciones]([Pub_Codigo])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION,
+	CONSTRAINT [FK_Preguntas_Usuarios] FOREIGN KEY ([User_Id]) REFERENCES [C_R].[Usuarios]([User_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
+)
+GO
+
+CREATE TABLE [C_R].[Respuestas]
+( 
+	[Res_Id]              int		     NOT NULL  IDENTITY ( 1,1 ) ,
+	[Pre_Id]              int			 NOT NULL ,
+	[Res_Fecha]           datetime       NOT NULL ,
+	[Res_Texto]           varchar(255)   NOT NULL
+	CONSTRAINT [PK_Respuestas] PRIMARY KEY  CLUSTERED ([Res_Id] ASC),
+	CONSTRAINT [FK_Respuestas_Preguntas] FOREIGN KEY ([Pre_Id]) REFERENCES [C_R].[Preguntas]([Pre_Id])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION,
+	CONSTRAINT [UQ_Respuesta_Pregunta] UNIQUE ([Pre_Id] ASC)
+)
 GO
 
 --Insercion de Roles
@@ -1160,7 +1203,7 @@ WHERE V.Pub_Codigo = P.Pub_Codigo AND U.User_Id = P.Pub_User_Id
 AND NOT EXISTS (SELECT 1 FROM C_R.Calificaciones C WHERE C.Ven_Codigo = V.Ven_Codigo)
 GO
 
-CREATE VIEW C_R.Inhabilitados_Compra_Oferta AS
+CREATE VIEW C_R.Inhabilitados_Compra_Oferta_VW AS
 SELECT Comprador FROM C_R.Calificaciones_Pendientes_VW
 GROUP BY Comprador
 HAVING COUNT(1) > 5
@@ -1171,3 +1214,11 @@ GO
 --ALTER TABLE C_R.Publicaciones_Visibilidad add	[Pub_Visible_Estado] nvarchar(10) DEFAULT 'ACTIVO'
 --update C_R.Publicaciones_Visibilidad
 --set Pub_Visible_Estado = 'ACTIVO'
+
+CREATE VIEW C_R.Preguntas_Pendientes_VW AS
+SELECT Pub.Pub_Descripcion, Pre.Pre_Texto, U.User_Name, Pre.Pre_Fecha, Pre.Pre_Id 
+from C_R.Publicaciones Pub, C_R.Usuarios U, C_R.Preguntas Pre 
+LEFT JOIN C_R.Respuestas R ON R.Pre_Id = Pre.Pre_Id
+WHERE Pre.Pub_Codigo = Pub.Pub_Codigo AND Pub.Pub_User_Id = U.User_Id
+AND R.Res_Id IS NULL
+GO

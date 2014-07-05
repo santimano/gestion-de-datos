@@ -125,6 +125,19 @@ namespace FrbaCommerce
             this.Show();
         }
 
+        private void recibidasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Gestion_de_Preguntas.Preguntas form = new FrbaCommerce.Gestion_de_Preguntas.Preguntas();
+            form.ShowDialog();
+            this.Show();
+        }
+
+        private void preguntasRecibidasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            recibidasToolStripMenuItem_Click(sender, e);
+        }
+
        
     }
 }

@@ -164,6 +164,12 @@ CREATE TABLE [C_R].[Usuarios]
 )
 go
 
+-- hash para password "w23a"
+INSERT INTO C_R.Usuarios(User_Name, User_Password, User_CambioPass) values
+	('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0)
+GO
+	
+
 CREATE TABLE [C_R].[Clientes]
 ( 
 	[Cli_Id]             int  NOT NULL  IDENTITY ( 1,1 ) ,
@@ -583,7 +589,7 @@ CREATE TABLE [C_R].[Respuestas]
 ( 
 	[Res_Id]              int		     NOT NULL  IDENTITY ( 1,1 ) ,
 	[Pre_Id]              int			 NOT NULL ,
-	[Res_Fecha]           datetime       NOT NULL ,
+	[Res_Fecha]           datetime       NOT NULL DEFAULT GETDATE(),
 	[Res_Texto]           varchar(255)   NOT NULL
 	CONSTRAINT [PK_Respuestas] PRIMARY KEY  CLUSTERED ([Res_Id] ASC),
 	CONSTRAINT [FK_Respuestas_Preguntas] FOREIGN KEY ([Pre_Id]) REFERENCES [C_R].[Preguntas]([Pre_Id])
@@ -835,6 +841,9 @@ SELECT 1, U.User_Id
 FROM C_R.Usuarios U INNER JOIN C_R.Empresas E on U.User_Id = E.Emp_User_Id
 GO
 
+INSERT INTO C_R.RL_Usuarios_Roles(Rol_Id, User_Id) VALUES (2,1)
+GO
+
 -- Insercion de rubros publicaciones
 
 INSERT INTO C_R.Publicaciones_Rubro
@@ -1076,7 +1085,8 @@ BEGIN
 	INSERT INTO [GD1C2014].[C_R].[Publicaciones_Visibilidad]
 		   ([Pub_Visible_Descripcion]
 		   ,[Pub_Visible_Precio]
-		   ,[Pub_Visible_Porcentaje])
+		   ,[Pub_Visible_Porcentaje]
+		   ,[Pub_Visible_Estado])
 	 VALUES
 		   (@Descripcion,
 			@Precio,
@@ -1218,9 +1228,9 @@ GO
 --set Pub_Visible_Estado = 'ACTIVO'
 
 CREATE VIEW C_R.Preguntas_Pendientes_VW AS
-SELECT Pub.Pub_Descripcion, Pre.Pre_Texto, U.User_Name, Pre.Pre_Fecha, Pre.Pre_Id 
+SELECT Pub.Pub_Descripcion, Pre.Pre_Texto, U.User_Name, Pre.Pre_Fecha, Pre.Pre_Id, Pub.Pub_User_Id 
 from C_R.Publicaciones Pub, C_R.Usuarios U, C_R.Preguntas Pre 
 LEFT JOIN C_R.Respuestas R ON R.Pre_Id = Pre.Pre_Id
-WHERE Pre.Pub_Codigo = Pub.Pub_Codigo AND Pub.Pub_User_Id = U.User_Id
+WHERE Pre.Pub_Codigo = Pub.Pub_Codigo AND Pre.User_Id = U.User_Id
 AND R.Res_Id IS NULL
 GO

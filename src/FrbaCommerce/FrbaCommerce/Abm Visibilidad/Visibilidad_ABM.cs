@@ -45,8 +45,8 @@ namespace FrbaCommerce.Abm_Visibilidad
         {
             GbEdicion.Visible = true;
             BtnNuevo.Visible = false;
-            BtnEliminar.Visible = false;
-            BtnEliminar.Visible = true;
+            //BtnEliminar.Visible = false;
+            //BtnEliminar.Visible = true;
             TbCodigo.Text = "Nuevo";
             Limpiadatos();
         }

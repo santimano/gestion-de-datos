@@ -120,6 +120,19 @@
     </Compile>
     <Compile Include="Generar Publicacion\Publicacion.cs" />
     <Compile Include="Generar Publicacion\PublicacionDAO.cs" />
+    <Compile Include="Gestion de Preguntas\Preguntas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gestion de Preguntas\Preguntas.Designer.cs">
+      <DependentUpon>Preguntas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion de Preguntas\PreguntasDAO.cs" />
+    <Compile Include="Gestion de Preguntas\Responder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gestion de Preguntas\Responder.Designer.cs">
+      <DependentUpon>Responder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Historial Cliente\Calificaciones.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -167,12 +180,6 @@
     <Compile Include="Generar Publicacion\GenPublicacion.Designer.cs">
       <DependentUpon>GenPublicacion.cs</DependentUpon>
     </Compile>
-    <Compile Include="Gestion de Preguntas\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gestion de Preguntas\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Listado Estadistico\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -212,6 +219,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicacion\GenPublicacion.resx">
       <DependentUpon>GenPublicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gestion de Preguntas\Preguntas.resx">
+      <DependentUpon>Preguntas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gestion de Preguntas\Responder.resx">
+      <DependentUpon>Responder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\Calificaciones.resx">
       <DependentUpon>Calificaciones.cs</DependentUpon>

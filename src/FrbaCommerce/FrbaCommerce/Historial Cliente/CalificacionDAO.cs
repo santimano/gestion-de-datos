@@ -88,5 +88,34 @@ namespace FrbaCommerce.Historial_Cliente
             }
             return Ds;
         }
+
+        public void Insertar_Calificacion(decimal venta, int estrellas, string descripcion)
+        {
+            String query = "INSERT INTO C_R.Calificaciones(Cal_CantEstrellas, Cal_Descripcion, Ven_Codigo)";
+            query += " VALUES(@Estrellas, @Descripcion, @Venta) ";
+
+            SqlCommand command = new SqlCommand(query, Conexion);
+            command.CommandType = CommandType.Text;
+            command.Parameters.Add("@Estrellas", SqlDbType.Int);
+            command.Parameters.Add("@Descripcion", SqlDbType.VarChar, 255);
+            command.Parameters.Add("@Venta", SqlDbType.Int);
+            command.Parameters["@Estrellas"].Value = estrellas;
+            command.Parameters["@Descripcion"].Value = descripcion;
+            command.Parameters["@Venta"].Value = venta;
+
+            try
+            {
+                Conexion.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+        }
     }
 }

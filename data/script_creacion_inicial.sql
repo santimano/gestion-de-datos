@@ -534,7 +534,7 @@ go
 
 CREATE TABLE [C_R].[Calificaciones]
 (
-	[Cal_Codigo] numeric(18) NOT NULL,
+	[Cal_Codigo] numeric(18) NOT NULL IDENTITY,
 	[Cal_CantEstrellas] numeric(18)  NULL ,
 	[Cal_Descripcion] varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
 	[Ven_Codigo] numeric(18) NOT NULL
@@ -875,7 +875,7 @@ SELECT  Publicacion_Cod,
 WHERE Compra_Fecha is null and Oferta_Fecha is null  and Publ_Empresa_Cuit  is not null and Factura_Nro is null 
 SET IDENTITY_INSERT C_R.Publicaciones off;
 GO
- 
+
 INSERT INTO C_R.Ofertas ( Pub_Codigo, Ofe_User_Id, Ofe_Fecha, Ope_Monto ) 
 select Publicacion_Cod, 
 (SELECT C.Cli_User_Id from C_R.Clientes C where C.Cli_Doc = gd_esquema.Maestra.Cli_Dni ),
@@ -885,18 +885,18 @@ from gd_esquema.Maestra
 where publicacion_tipo = 'subasta' and Oferta_Fecha is not null
 GO
 
--- esto esta tirando un warning 
 INSERT INTO C_R.Ventas ( Pub_Codigo, Ven_User_Id, Ven_Fecha, Ven_Monto, Ven_Cantidad ) 
 select Publicacion_Cod, 
 (SELECT C.Cli_User_Id from C_R.Clientes C where C.Cli_Doc = gd_esquema.Maestra.Cli_Dni ),
 Compra_Fecha,
 case 
 	when publicacion_tipo = 'compra inmediata' then Publicacion_Precio
-	when publicacion_tipo = 'subasta' then ( SELECT MAX(M1.Oferta_Monto) FROM gd_esquema.Maestra M1 WHERE  M1.Publicacion_Cod = gd_esquema.Maestra.Publicacion_Cod )
+	when publicacion_tipo = 'subasta' then ( SELECT MAX(M1.Oferta_Monto) FROM gd_esquema.Maestra M1 WHERE  M1.Publicacion_Cod = gd_esquema.Maestra.Publicacion_Cod and M1.Oferta_Monto IS NOT NULL)
 end,
-Compra_Cantidad 
+SUM(Compra_Cantidad) 
 from gd_esquema.Maestra
 where Compra_Fecha is not null and Calificacion_Codigo is null
+group by Publicacion_Cod, Cli_Dni, Compra_Fecha, Publicacion_Tipo, Publicacion_Precio
 GO
 
 -- distinta calificacion del mismo producto, por el mismo cliente, en la misma fecha y misma cantidad
@@ -914,13 +914,16 @@ on M.Publicacion_Cod = INC.Publicacion_Cod and M.Cli_Dni = INC.Cli_Dni and M.Com
 GO
  
 -- CALIFICACIONES
-insert into C_R.Calificaciones
+SET IDENTITY_INSERT C_R.Calificaciones ON
+insert into C_R.Calificaciones(Cal_Codigo, Cal_CantEstrellas, Cal_Descripcion, Ven_Codigo)
 select m.Calificacion_Codigo,m.Calificacion_Cant_Estrellas,m.Calificacion_Descripcion,v.Ven_Codigo 
 from gd_esquema.Maestra m inner join C_R.Ventas v
 on m.Publicacion_Cod = v.Pub_Codigo and m.Compra_Fecha = v.Ven_Fecha and m.Compra_Cantidad = v.Ven_Cantidad
 where m.Calificacion_Codigo is not null
 and m.Calificacion_Codigo not in ( select Inc_Calificacion_Codigo from C_R.Inconsistencias_Calificaciones where Inc_Calificacion_Codigo is not null )
 and v.Ven_User_Id = ( select c.Cli_User_Id from C_R.Clientes c where c.Cli_Doc = m.Cli_Dni )
+SET IDENTITY_INSERT C_R.Calificaciones OFF
+GO
 
 -- FORMAS DE PAGO
 insert into C_R.Factura_FormaPago(Factura_FP_Desc) values ('Efectivo')
@@ -1150,8 +1153,7 @@ GO
 
 CREATE VIEW C_R.Calificaciones_Pendientes_VW AS
 SELECT P.Pub_Descripcion Publicacion, V.Ven_Cantidad Cantidad, V.Ven_Monto Monto, 
-V.Ven_Codigo Venta, V.Ven_User_Id Comprador, P.Pub_User_Id Ven_Id, U.User_Name Vendedor, 
-V.Ven_Fecha Fecha
+V.Ven_Codigo Venta, V.Ven_User_Id Comprador, U.User_Name Vendedor, V.Ven_Fecha Fecha
 FROM C_R.Ventas V, C_R.Publicaciones P, C_R.Usuarios U
 WHERE V.Pub_Codigo = P.Pub_Codigo AND U.User_Id = P.Pub_User_Id
 AND NOT EXISTS (SELECT 1 FROM C_R.Calificaciones C WHERE C.Ven_Codigo = V.Ven_Codigo)

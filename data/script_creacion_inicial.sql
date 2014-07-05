@@ -1025,7 +1025,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE C_R.SP_Visibilidad_SAVE(@Codigo int,@Descripcion char(255),@Precio numeric(18,2),@Porc numeric(18,2))
+CREATE PROCEDURE C_R.SP_Visibilidad_SAVE(@Codigo int,@Descripcion char(255),@Precio numeric(18,2),@Porc numeric(18,2),@Estado char(15))
 AS
 BEGIN
   if (@Codigo =-1)
@@ -1037,7 +1037,8 @@ BEGIN
 	 VALUES
 		   (@Descripcion,
 			@Precio,
-		   @Porc)
+		    @Porc,
+		    @Estado )
 	end
 	else
 	begin
@@ -1045,7 +1046,8 @@ BEGIN
 		set 
 			Pub_Visible_Descripcion = @Descripcion ,
 			Pub_Visible_Precio = @Precio,
-			Pub_Visible_Porcentaje = @Porc 
+			Pub_Visible_Porcentaje = @Porc,
+			Pub_Visible_Estado =@Estado 
 		
 		where 
 		Publicaciones_Visibilidad.Pub_Visible_Cod = @Codigo

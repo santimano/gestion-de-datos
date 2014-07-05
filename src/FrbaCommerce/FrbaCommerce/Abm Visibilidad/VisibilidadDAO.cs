@@ -86,7 +86,7 @@ namespace FrbaCommerce.Abm_Visibilidad
 
         }
 
-        public void Productos_Visibilidad_SAVE(int Codigo, string Desc, decimal Precio, decimal Porc)
+        public void Productos_Visibilidad_SAVE(int Codigo, string Desc, decimal Precio, decimal Porc,string Estado)
         {
 
             SqlCommand command = new SqlCommand("C_R.SP_Visibilidad_SAVE", Conexion);
@@ -96,10 +96,13 @@ namespace FrbaCommerce.Abm_Visibilidad
             command.Parameters.Add("@Descripcion", SqlDbType.VarChar, 255);
             command.Parameters.Add("@Precio", SqlDbType.Decimal);
             command.Parameters.Add("@Porc", SqlDbType.Decimal);
+            command.Parameters.Add("@Estado", SqlDbType.VarChar, 15);
             command.Parameters["@Codigo"].Value = Codigo;
             command.Parameters["@Descripcion"].Value = Desc;
             command.Parameters["@Precio"].Value = Precio;
             command.Parameters["@Porc"].Value = Porc;
+            command.Parameters["@Estado"].Value = Estado;
+
 
             try
             {

@@ -35,7 +35,8 @@ namespace FrbaCommerce.Abm_Visibilidad
             TbCodigo.Enabled = false;
             TbDesc.Text = DGVisibilidades.Rows[e.RowIndex].Cells["Pub_Visible_Descripcion"].Value.ToString();
             TbPrecio.Text = DGVisibilidades.Rows[e.RowIndex].Cells["Pub_Visible_Precio"].Value.ToString();
-            TbPorcentaje.Text = DGVisibilidades.Rows[e.RowIndex].Cells["Pub_Visible_Porcentaje"].Value.ToString(); 
+            TbPorcentaje.Text = DGVisibilidades.Rows[e.RowIndex].Cells["Pub_Visible_Porcentaje"].Value.ToString();
+            CbEstado.SelectedItem = DGVisibilidades.Rows[e.RowIndex].Cells["Pub_Visible_Estado"].Value.ToString();
 
           
         }
@@ -70,11 +71,11 @@ namespace FrbaCommerce.Abm_Visibilidad
             {
                 if (TbCodigo.Text.Contains("Nuevo"))
                 {
-                    dao.Productos_Visibilidad_SAVE(-1, TbDesc.Text, Convert.ToDecimal(TbPrecio.Text), Convert.ToDecimal(TbPorcentaje.Text));
+                    dao.Productos_Visibilidad_SAVE(-1, TbDesc.Text, Convert.ToDecimal(TbPrecio.Text), Convert.ToDecimal(TbPorcentaje.Text), CbEstado.SelectedItem.ToString());
                 }
                 else
                 {
-                    dao.Productos_Visibilidad_SAVE(Convert.ToInt32(TbCodigo.Text),TbDesc.Text,Convert.ToDecimal(TbPrecio.Text),Convert.ToDecimal(TbPorcentaje.Text));
+                    dao.Productos_Visibilidad_SAVE(Convert.ToInt32(TbCodigo.Text), TbDesc.Text, Convert.ToDecimal(TbPrecio.Text), Convert.ToDecimal(TbPorcentaje.Text), CbEstado.SelectedItem.ToString());
                 }
                 GbEdicion.Visible = false;
                 Load_Grilla();

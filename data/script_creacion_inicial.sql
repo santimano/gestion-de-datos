@@ -30,6 +30,15 @@ go
 if exists(select * from sys.objects where name ='SP_CLIENTE_SAVE' and type = 'P')
 	drop procedure [C_R].[SP_CLIENTE_SAVE]
 go
+
+if exists(select * from sys.objects where name ='SP_FACTURAR' and type = 'P')
+	drop procedure [C_R].[SP_FACTURAR]
+go
+
+if exists(select * from sys.objects where name like '%PublicacionesTableType%' and type = 'TT')
+	drop type [C_R].[PublicacionesTableType]
+go
+
 if exists(select * from sys.objects where name ='Inconsistencias_Calificaciones' and type = 'u')
 	drop table [C_R].[Inconsistencias_Calificaciones]
 go
@@ -146,6 +155,10 @@ if exists(select * from sys.objects where name='Respondidas_VW' and type ='v')
 	drop view [C_R].[Respondidas_VW]
 go
 
+if exists(select * from sys.objects where name='Ventas_No_Facturadas_VW' and type ='v')
+	drop view [C_R].[Ventas_No_Facturadas_VW]
+go
+
 if exists(select * from sys.schemas where name ='C_R')
 	drop schema [C_R]
 go
@@ -249,10 +262,13 @@ GO
 
 CREATE TABLE [C_R].[Factura]
 ( 
-	[Factura_Nro]       numeric(18)  NOT NULL ,
-	[Factura_FP_ID]     int  NOT NULL ,
-	[Factura_Fecha]     datetime  NOT NULL ,
-	[Factura_Total]     numeric(18,2)  NOT NULL
+	[Factura_Nro]			numeric(18)  NOT NULL IDENTITY(1,1),
+	[Factura_FP_ID]			int  NOT NULL ,
+	[Factura_Fecha]			datetime  NOT NULL DEFAULT GETDATE(),
+	[Factura_Total]			numeric(18,2)  NOT NULL,
+	[Factura_Tarjeta]		numeric(16,0)  NULL,
+	[Factura_Titular]		varchar(255) NULL,
+	[Factura_Vencimiento]   varchar(7) NULL
 	CONSTRAINT [PK_Factura] PRIMARY KEY  CLUSTERED ([Factura_Nro] ASC)
 )
 go
@@ -987,11 +1003,13 @@ insert into C_R.Factura_FormaPago(Factura_FP_Desc) values ('Efectivo')
 insert into C_R.Factura_FormaPago(Factura_FP_Desc) values ('Tarjeta');
 
 -- FACTURAS
+SET IDENTITY_INSERT C_R.Factura on;
 insert into C_R.Factura(Factura_Nro, Factura_Fecha, Factura_Total, Factura_FP_ID)
 select distinct M.Factura_Nro, M.Factura_Fecha, M.Factura_Total, 
 (select Factura_FP_ID from C_R.Factura_FormaPago where Factura_FP_Desc = M.Forma_Pago_Desc) as FP
 from gd_esquema.Maestra M
 where M.Factura_Nro is not null
+SET IDENTITY_INSERT C_R.Factura off;
 
 -- ITEMS
 insert into C_R.Factura_Items(Item_Monto, Item_Cantidad, Factura_Nro, Item_Desc, Pub_Codigo)
@@ -1245,4 +1263,47 @@ FROM C_R.Preguntas P LEFT JOIN C_R.Respuestas R ON R.Pre_Id = P.Pre_Id,
 C_R.Publicaciones Pub, C_R.Publicaciones_Estados P_E
 WHERE Pub.Pub_Codigo = P.Pub_Codigo AND Pub.Pub_Estado_Id = P_E.Pub_Estado_Id
 AND NOT Pub.Pub_Estado_Id = (SELECT Pub_Estado_Id FROM C_R.Publicaciones_Estados WHERE Pub_Estado_Desc = 'borrador')
+GO
+
+CREATE VIEW C_R.Ventas_No_Facturadas_VW AS
+SELECT 
+P.Pub_Descripcion Publicacion,
+MAX(V.Ven_Fecha) Fecha_Finalizacion, SUM(V.Ven_Cantidad) Vendidos, SUM(V.Ven_Monto * V.Ven_Cantidad) Total, 
+V.Ven_Monto Unitario, V.Pub_Codigo, P.Pub_User_Id Vendedor
+FROM C_R.Publicaciones P ,C_R.Ventas V LEFT JOIN C_R.Factura_Items F_I ON V.Pub_Codigo = F_I.Pub_Codigo
+where F_I.Item_Id IS NULL
+AND P.Pub_Codigo = V.Pub_Codigo
+GROUP BY V.Pub_Codigo, P.Pub_User_Id, P.Pub_Descripcion, V.Ven_Monto
+GO
+
+CREATE TYPE C_R.PublicacionesTableType AS TABLE
+(Cantidad numeric(18,0), Unitario numeric(18,2), Publicacion varchar(50),Pub_Codigo numeric(18,0), Total numeric(18,2))
+GO
+
+CREATE PROCEDURE C_R.SP_FACTURAR
+@Publicaciones C_R.PublicacionesTableType READONLY,
+@FormaPago varchar(255),
+@TarjetaTitular varchar(255),
+@TarjetaNumero numeric(16,0),
+@TarjetaVencimiento varchar(6)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+	DECLARE @FormaPagoId int
+	DECLARE @TotalFactura decimal(18,2)
+	DECLARE @FacturaId int
+	
+	SELECT @FormaPagoId = Factura_FP_ID FROM Factura_FormaPago WHERE Factura_FP_Desc = @FormaPago 
+	SELECT @TotalFactura = SUM(Total) FROM @Publicaciones
+	
+	INSERT INTO C_R.Factura(Factura_FP_ID,Factura_Total,Factura_Tarjeta, Factura_Titular, Factura_Vencimiento)
+	VALUES (@FormaPagoId, @TotalFactura, @TarjetaNumero, @TarjetaTitular, @TarjetaVencimiento)
+	
+	SET @FacturaId = SCOPE_IDENTITY()
+	
+	INSERT INTO C_R.Factura_Items(Factura_Nro, Item_Cantidad, Item_Desc, Item_Monto, Pub_Codigo)
+	SELECT @FacturaId, Cantidad, Publicacion, Unitario, Pub_Codigo FROM @Publicaciones
+	
+END
 GO

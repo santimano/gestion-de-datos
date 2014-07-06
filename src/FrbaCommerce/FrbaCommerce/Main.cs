@@ -146,6 +146,14 @@ namespace FrbaCommerce
             this.Show();
         }
 
+        private void facturarPublicacionesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Facturar_Publicaciones.Facturar form = new FrbaCommerce.Facturar_Publicaciones.Facturar(Main.Usuario);
+            form.ShowDialog();
+            this.Show();
+        }
+
        
     }
 }

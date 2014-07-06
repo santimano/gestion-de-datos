@@ -112,12 +112,14 @@
     <Compile Include="Editar Publicacion\EditarPublicacion.Designer.cs">
       <DependentUpon>EditarPublicacion.cs</DependentUpon>
     </Compile>
-    <Compile Include="Facturar Publicaciones\Form1.cs">
+    <Compile Include="Facturar Publicaciones\FacturaDAO.cs" />
+    <Compile Include="Facturar Publicaciones\Facturar.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Facturar Publicaciones\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Facturar Publicaciones\Facturar.Designer.cs">
+      <DependentUpon>Facturar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Facturar Publicaciones\Item.cs" />
     <Compile Include="Generar Publicacion\Publicacion.cs" />
     <Compile Include="Generar Publicacion\PublicacionDAO.cs" />
     <Compile Include="Gestion de Preguntas\Preguntas.cs">
@@ -222,6 +224,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Editar Publicacion\EditarPublicacion.resx">
       <DependentUpon>EditarPublicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Facturar Publicaciones\Facturar.resx">
+      <DependentUpon>Facturar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicacion\GenPublicacion.resx">
       <DependentUpon>GenPublicacion.cs</DependentUpon>

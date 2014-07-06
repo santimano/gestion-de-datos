@@ -45,10 +45,13 @@
             this.LbCodigo = new System.Windows.Forms.Label();
             this.TbDesc = new System.Windows.Forms.TextBox();
             this.TbCodigo = new System.Windows.Forms.TextBox();
+            this.TbDuracion = new System.Windows.Forms.TextBox();
+            this.LbDuracion = new System.Windows.Forms.Label();
             this.Pub_Visible_Cod = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Pub_Visible_Descripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Pub_Visible_Precio = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Pub_Visible_Porcentaje = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Pub_Visible_Duracion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Pub_Visible_Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Editar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.groupBox1.SuspendLayout();
@@ -88,6 +91,7 @@
             this.Pub_Visible_Descripcion,
             this.Pub_Visible_Precio,
             this.Pub_Visible_Porcentaje,
+            this.Pub_Visible_Duracion,
             this.Pub_Visible_Estado,
             this.Editar});
             this.DGVisibilidades.Location = new System.Drawing.Point(6, 19);
@@ -98,6 +102,8 @@
             // 
             // GbEdicion
             // 
+            this.GbEdicion.Controls.Add(this.TbDuracion);
+            this.GbEdicion.Controls.Add(this.LbDuracion);
             this.GbEdicion.Controls.Add(this.CbEstado);
             this.GbEdicion.Controls.Add(this.LbEstado);
             this.GbEdicion.Controls.Add(this.LbError);
@@ -125,10 +131,10 @@
             this.CbEstado.Items.AddRange(new object[] {
             "ACTIVO",
             "INACTIVO"});
-            this.CbEstado.Location = new System.Drawing.Point(535, 52);
+            this.CbEstado.Location = new System.Drawing.Point(543, 52);
             this.CbEstado.Name = "CbEstado";
-            this.CbEstado.Size = new System.Drawing.Size(107, 21);
-            this.CbEstado.TabIndex = 17;
+            this.CbEstado.Size = new System.Drawing.Size(99, 21);
+            this.CbEstado.TabIndex = 11;
             // 
             // LbEstado
             // 
@@ -136,7 +142,7 @@
             this.LbEstado.Location = new System.Drawing.Point(557, 25);
             this.LbEstado.Name = "LbEstado";
             this.LbEstado.Size = new System.Drawing.Size(40, 13);
-            this.LbEstado.TabIndex = 16;
+            this.LbEstado.TabIndex = 10;
             this.LbEstado.Text = "Estado";
             // 
             // LbError
@@ -146,7 +152,7 @@
             this.LbError.Location = new System.Drawing.Point(20, 77);
             this.LbError.Name = "LbError";
             this.LbError.Size = new System.Drawing.Size(0, 16);
-            this.LbError.TabIndex = 15;
+            this.LbError.TabIndex = 14;
             this.LbError.UseCompatibleTextRendering = true;
             // 
             // Btn_Cancelar
@@ -154,31 +160,31 @@
             this.Btn_Cancelar.Location = new System.Drawing.Point(665, 55);
             this.Btn_Cancelar.Name = "Btn_Cancelar";
             this.Btn_Cancelar.Size = new System.Drawing.Size(75, 23);
-            this.Btn_Cancelar.TabIndex = 14;
+            this.Btn_Cancelar.TabIndex = 13;
             this.Btn_Cancelar.Text = "Cancelar";
             this.Btn_Cancelar.UseVisualStyleBackColor = true;
             this.Btn_Cancelar.Click += new System.EventHandler(this.Btn_Cancelar_Click);
             // 
             // TbPorcentaje
             // 
-            this.TbPorcentaje.Location = new System.Drawing.Point(442, 52);
+            this.TbPorcentaje.Location = new System.Drawing.Point(357, 52);
             this.TbPorcentaje.Name = "TbPorcentaje";
             this.TbPorcentaje.Size = new System.Drawing.Size(87, 20);
-            this.TbPorcentaje.TabIndex = 13;
+            this.TbPorcentaje.TabIndex = 7;
             // 
             // TbPrecio
             // 
-            this.TbPrecio.Location = new System.Drawing.Point(339, 52);
+            this.TbPrecio.Location = new System.Drawing.Point(254, 52);
             this.TbPrecio.Name = "TbPrecio";
             this.TbPrecio.Size = new System.Drawing.Size(97, 20);
-            this.TbPrecio.TabIndex = 12;
+            this.TbPrecio.TabIndex = 5;
             // 
             // BtnGuardar
             // 
             this.BtnGuardar.Location = new System.Drawing.Point(665, 20);
             this.BtnGuardar.Name = "BtnGuardar";
             this.BtnGuardar.Size = new System.Drawing.Size(75, 23);
-            this.BtnGuardar.TabIndex = 8;
+            this.BtnGuardar.TabIndex = 12;
             this.BtnGuardar.Text = "Guardar";
             this.BtnGuardar.UseVisualStyleBackColor = true;
             this.BtnGuardar.Click += new System.EventHandler(this.BtnGuardar_Click);
@@ -186,19 +192,19 @@
             // LbPorcentaje
             // 
             this.LbPorcentaje.AutoSize = true;
-            this.LbPorcentaje.Location = new System.Drawing.Point(439, 25);
+            this.LbPorcentaje.Location = new System.Drawing.Point(354, 25);
             this.LbPorcentaje.Name = "LbPorcentaje";
             this.LbPorcentaje.Size = new System.Drawing.Size(58, 13);
-            this.LbPorcentaje.TabIndex = 7;
+            this.LbPorcentaje.TabIndex = 6;
             this.LbPorcentaje.Text = "Porcentaje";
             // 
             // LbPrecio
             // 
             this.LbPrecio.AutoSize = true;
-            this.LbPrecio.Location = new System.Drawing.Point(336, 25);
+            this.LbPrecio.Location = new System.Drawing.Point(251, 25);
             this.LbPrecio.Name = "LbPrecio";
             this.LbPrecio.Size = new System.Drawing.Size(37, 13);
-            this.LbPrecio.TabIndex = 6;
+            this.LbPrecio.TabIndex = 4;
             this.LbPrecio.Text = "Precio";
             // 
             // LbDescripcion
@@ -207,7 +213,7 @@
             this.LbDescripcion.Location = new System.Drawing.Point(110, 25);
             this.LbDescripcion.Name = "LbDescripcion";
             this.LbDescripcion.Size = new System.Drawing.Size(63, 13);
-            this.LbDescripcion.TabIndex = 5;
+            this.LbDescripcion.TabIndex = 2;
             this.LbDescripcion.Text = "Descripción";
             // 
             // LbCodigo
@@ -216,23 +222,40 @@
             this.LbCodigo.Location = new System.Drawing.Point(17, 25);
             this.LbCodigo.Name = "LbCodigo";
             this.LbCodigo.Size = new System.Drawing.Size(40, 13);
-            this.LbCodigo.TabIndex = 4;
+            this.LbCodigo.TabIndex = 0;
             this.LbCodigo.Text = "Código";
             // 
             // TbDesc
             // 
-            this.TbDesc.Location = new System.Drawing.Point(113, 54);
+            this.TbDesc.Location = new System.Drawing.Point(113, 53);
             this.TbDesc.MaxLength = 255;
             this.TbDesc.Name = "TbDesc";
-            this.TbDesc.Size = new System.Drawing.Size(220, 20);
-            this.TbDesc.TabIndex = 1;
+            this.TbDesc.Size = new System.Drawing.Size(134, 20);
+            this.TbDesc.TabIndex = 3;
             // 
             // TbCodigo
             // 
-            this.TbCodigo.Location = new System.Drawing.Point(20, 54);
+            this.TbCodigo.Location = new System.Drawing.Point(20, 53);
             this.TbCodigo.Name = "TbCodigo";
+            this.TbCodigo.ReadOnly = true;
             this.TbCodigo.Size = new System.Drawing.Size(87, 20);
-            this.TbCodigo.TabIndex = 0;
+            this.TbCodigo.TabIndex = 1;
+            // 
+            // TbDuracion
+            // 
+            this.TbDuracion.Location = new System.Drawing.Point(450, 52);
+            this.TbDuracion.Name = "TbDuracion";
+            this.TbDuracion.Size = new System.Drawing.Size(87, 20);
+            this.TbDuracion.TabIndex = 9;
+            // 
+            // LbDuracion
+            // 
+            this.LbDuracion.AutoSize = true;
+            this.LbDuracion.Location = new System.Drawing.Point(447, 25);
+            this.LbDuracion.Name = "LbDuracion";
+            this.LbDuracion.Size = new System.Drawing.Size(50, 13);
+            this.LbDuracion.TabIndex = 8;
+            this.LbDuracion.Text = "Duracion";
             // 
             // Pub_Visible_Cod
             // 
@@ -261,6 +284,12 @@
             this.Pub_Visible_Porcentaje.HeaderText = "Porcentaje";
             this.Pub_Visible_Porcentaje.Name = "Pub_Visible_Porcentaje";
             this.Pub_Visible_Porcentaje.ReadOnly = true;
+            // 
+            // Pub_Visible_Duracion
+            // 
+            this.Pub_Visible_Duracion.DataPropertyName = "Pub_Visible_Duracion";
+            this.Pub_Visible_Duracion.HeaderText = "Duracion";
+            this.Pub_Visible_Duracion.Name = "Pub_Visible_Duracion";
             // 
             // Pub_Visible_Estado
             // 
@@ -312,10 +341,13 @@
         private System.Windows.Forms.Label LbError;
         private System.Windows.Forms.ComboBox CbEstado;
         private System.Windows.Forms.Label LbEstado;
+        private System.Windows.Forms.TextBox TbDuracion;
+        private System.Windows.Forms.Label LbDuracion;
         private System.Windows.Forms.DataGridViewTextBoxColumn Pub_Visible_Cod;
         private System.Windows.Forms.DataGridViewTextBoxColumn Pub_Visible_Descripcion;
         private System.Windows.Forms.DataGridViewTextBoxColumn Pub_Visible_Precio;
         private System.Windows.Forms.DataGridViewTextBoxColumn Pub_Visible_Porcentaje;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Pub_Visible_Duracion;
         private System.Windows.Forms.DataGridViewTextBoxColumn Pub_Visible_Estado;
         private System.Windows.Forms.DataGridViewButtonColumn Editar;
 

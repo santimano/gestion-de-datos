@@ -1193,18 +1193,17 @@ BEGIN
 		update C_R.Usuarios set User_Log_Error = '0', User_Ultimo_Ingreso = @fecha 
 		where User_Name = @nombre
 		
-		IF ( @cambio_pass =	1 )
+		IF ( @cambio_pass = 1 AND @nuevo_password IS NULL )
 		BEGIN
-			IF ( @nuevo_password IS NULL )
-			BEGIN
-				SET @resultado = 10
-				RETURN
-			END
-			
+			SET @resultado = 10
+			RETURN
+		END
+		
+		IF ( @nuevo_password IS NOT NULL )
+		BEGIN
 			update C_R.Usuarios
 			set User_Password = @nuevo_password, User_CambioPass = 0
 			where User_Name = @nombre
-			
 		END
 		
 		SET @resultado = 0

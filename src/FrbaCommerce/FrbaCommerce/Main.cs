@@ -14,6 +14,7 @@ namespace FrbaCommerce
         public static String Rol { get; set; }
         public static DateTime FechaSistema { get; set; }
         public static int Usuario { get; set; }
+        public static String UsuarioNombre { get; set; }
 
         public Main()
         {
@@ -41,10 +42,11 @@ namespace FrbaCommerce
         {
             this.accederToolStripMenuItem.Visible = Rol == null;
             this.salirToolStripMenuItem.Visible = Rol != null;
+            this.cambiarPasswordToolStripMenuItem.Visible = Rol != null;
             this.aBMToolStripMenuItem.Visible = Rol != null && Rol.Equals("Administrativo");
             this.clienteToolStripMenuItem.Visible = Rol != null && Rol.Equals("Cliente");
             this.empresaToolStripMenuItem.Visible = Rol != null && Rol.Equals("Empresa");
-            this.facturarToolStripMenuItem.Visible = Rol != null && Rol.Equals("Administrativo");
+            this.facturarToolStripMenuItem.Visible = Rol != null && Rol.Equals("Administrativo");            
         }
 
         private void rolesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -171,6 +173,10 @@ namespace FrbaCommerce
             this.Show();
         }
 
-       
+        private void cambiarPasswordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new Login.LoginNuevoPass(Main.UsuarioNombre).ShowDialog();
+        }
+
     }
 }

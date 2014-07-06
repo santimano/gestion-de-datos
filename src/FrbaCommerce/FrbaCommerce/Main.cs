@@ -44,6 +44,7 @@ namespace FrbaCommerce
             this.aBMToolStripMenuItem.Visible = Rol != null && Rol.Equals("Administrativo");
             this.clienteToolStripMenuItem.Visible = Rol != null && Rol.Equals("Cliente");
             this.empresaToolStripMenuItem.Visible = Rol != null && Rol.Equals("Empresa");
+            this.facturarToolStripMenuItem.Visible = Rol != null && Rol.Equals("Administrativo");
         }
 
         private void rolesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -157,6 +158,14 @@ namespace FrbaCommerce
         {
             this.Hide();
             Facturar_Publicaciones.Facturar form = new FrbaCommerce.Facturar_Publicaciones.Facturar(Main.Usuario);
+            form.ShowDialog();
+            this.Show();
+        }
+
+        private void facturarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Facturar_Publicaciones.FacturarInhabilitados form = new FrbaCommerce.Facturar_Publicaciones.FacturarInhabilitados();
             form.ShowDialog();
             this.Show();
         }

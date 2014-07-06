@@ -126,6 +126,12 @@
     <Compile Include="Facturar Publicaciones\Facturar.Designer.cs">
       <DependentUpon>Facturar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Facturar Publicaciones\FacturarInhabilitados.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Facturar Publicaciones\FacturarInhabilitados.Designer.cs">
+      <DependentUpon>FacturarInhabilitados.cs</DependentUpon>
+    </Compile>
     <Compile Include="Facturar Publicaciones\Item.cs" />
     <Compile Include="Generar Publicacion\Publicacion.cs" />
     <Compile Include="Generar Publicacion\PublicacionDAO.cs" />
@@ -237,6 +243,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Facturar Publicaciones\Facturar.resx">
       <DependentUpon>Facturar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Facturar Publicaciones\FacturarInhabilitados.resx">
+      <DependentUpon>FacturarInhabilitados.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicacion\GenPublicacion.resx">
       <DependentUpon>GenPublicacion.cs</DependentUpon>

@@ -13,7 +13,7 @@ namespace FrbaCommerce.Facturar_Publicaciones
     {
         private SqlConnection Conexion;
 
-        public FacturaDAO(SqlConnection Conexion) 
+        public FacturaDAO(SqlConnection Conexion)
         {
             this.Conexion = Conexion;
         }
@@ -53,7 +53,7 @@ namespace FrbaCommerce.Facturar_Publicaciones
         {
             SqlCommand command = new SqlCommand("C_R.SP_FACTURAR", this.Conexion);
             command.CommandType = CommandType.StoredProcedure;
-            
+
             command.Parameters.AddWithValue("@Publicaciones", CrearPublicacionesTable(items));
             command.Parameters.AddWithValue("@FormaPago", FormaPago);
             command.Parameters.AddWithValue("@TarjetaTitular", Titular);
@@ -81,7 +81,7 @@ namespace FrbaCommerce.Facturar_Publicaciones
             var tbl = new DataTable();
             tbl.Columns.Add("Cantidad", typeof(decimal));
             tbl.Columns.Add("Unitario", typeof(decimal));
-            tbl.Columns.Add("Publicacion",typeof(string)); 
+            tbl.Columns.Add("Publicacion", typeof(string));
             tbl.Columns.Add("Pub_Codigo", typeof(decimal));
             tbl.Columns.Add("Total", typeof(decimal));
             foreach (var item in items)
@@ -90,6 +90,33 @@ namespace FrbaCommerce.Facturar_Publicaciones
             }
 
             return tbl;
+        }
+
+        public int Usuario_A_Facturar(string usuario)
+        {
+            String query = "SELECT CASE WHEN User_Estado = 'ACTIVO' THEN -1 ELSE User_Id END User_Id ";
+            query += " FROM C_R.Usuarios ";
+            query += " WHERE User_Name = @Usuario and User_Eliminado = 0 ";
+
+            SqlCommand command = new SqlCommand(query, this.Conexion);
+            command.CommandType = CommandType.Text;
+            command.Parameters.AddWithValue("@Usuario", usuario);
+            int userId = -2;
+            try
+            {
+                this.Conexion.Open();
+                object result = command.ExecuteScalar();
+                if (result != null) userId = (int)result;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                this.Conexion.Close();
+            }
+            return userId;
         }
     }
 }

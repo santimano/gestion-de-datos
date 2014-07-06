@@ -660,25 +660,43 @@ CREATE PROCEDURE C_R.SP_CLIENTE_SAVE
 @Cli_Dir_Depto varchar(50),
 @Cli_Dir_Localidad varchar(50),
 @Cli_Telefono varchar(50),
-@User_Estado varchar(10)
+@User_Estado varchar(10),
+@User_Nombre varchar(255),
+@User_Password varchar(255)
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
 	DECLARE @Cli_TipoDoc int
+	DECLARE @User_Id int
 	
 	SELECT @Cli_TipoDoc = Cli_TipoDoc FROM C_R.Tipo_Docs WHERE Des_Corta = @Des_Corta
 	
 	IF (@Cli_Id IS NULL)
 	BEGIN
+	
+		DECLARE @Cambio_Pass int
+		
+		SET @Cambio_Pass = 0
+	
+		IF ( @User_Nombre IS NULL )
+		BEGIN
+			SET @User_Nombre = SUBSTRING(@Cli_Nombre,1,1)+@Cli_Apellido +Convert(varchar,(YEAR(@Cli_Fecha_Nac)))
+			-- hash para password "changeme"
+			SET @User_Password = '057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86'
+			SET @Cambio_Pass = 1
+		END
 		
 		INSERT INTO C_R.Usuarios
 			(User_Name
-			,User_Password) 
+			,User_Password
+			,User_CambioPass) 
 		VALUES
-			(SUBSTRING(@Cli_Nombre,1,1)+@Cli_Apellido +Convert(varchar,(YEAR(@Cli_Fecha_Nac)))
-			-- hash para password "changeme"
-			,'057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86')
+			(@User_Nombre
+			,@User_Password
+			,@Cambio_Pass)
+			
+		SET @User_Id = SCOPE_IDENTITY()
 		
 		INSERT INTO C_R.Clientes 
 			(Cli_TipoDoc
@@ -704,7 +722,7 @@ BEGIN
 			,@Cli_Apellido
 			,@Cli_Fecha_Nac
 			,@Cli_Mail
-			,SCOPE_IDENTITY()
+			,@User_Id
 			,@Cli_Dir_Calle
 			,@Cli_Dir_Nro
 			,@Cli_Dir_Piso
@@ -712,12 +730,20 @@ BEGIN
 			,@Cli_Dir_Depto
 			,@Cli_Dir_Localidad
 			,@Cli_Telefono)
+			
+		IF ( @Cambio_Pass = 0 )
+		BEGIN
+			INSERT INTO C_R.RL_Usuarios_Roles
+				(Rol_Id
+				,User_Id)
+			VALUES
+				((SELECT Rol_Id FROM C_R.Roles WHERE Rol_Descripcion = 'cliente')
+				,@User_Id)
+		END
 		
 		RETURN
 
 	END
-	
-	DECLARE @User_Id int
 	
 	SELECT @User_Id = Cli_User_Id FROM C_R.Clientes where Cli_Id = @Cli_Id
 	
@@ -787,7 +813,7 @@ WHILE @@FETCH_STATUS = 0
 BEGIN   
    SET @Cli_Telefono = 'MIG-' + substring(convert(varchar(50), newID()),1,20)
    SET @Cli_Cuil = SUBSTRING(CAST(@Cli_Doc AS varchar),1,2) + '-' + CAST(@Cli_Doc AS varchar) + '-' + SUBSTRING(CAST(@Cli_Doc AS varchar),3,1)
-   EXEC C_R.SP_CLIENTE_SAVE NULL, @Cli_Nombre, @Cli_Apellido, @Des_Corta, @Cli_Doc, @Cli_Cuil, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad, @Cli_Telefono, NULL
+   EXEC C_R.SP_CLIENTE_SAVE NULL, @Cli_Nombre, @Cli_Apellido, @Des_Corta, @Cli_Doc, @Cli_Cuil, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad, @Cli_Telefono, NULL, NULL, NULL
    FETCH NEXT FROM clientes_cursor INTO @Des_Corta, @Cli_Doc, @Cli_Nombre, @Cli_Apellido, @Cli_Fecha_Nac, @Cli_Mail, @Cli_Dir_Calle, @Cli_Dir_Nro, @Cli_Dir_Piso, @Cli_Dir_CodPostal, @Cli_Dir_Depto, @Cli_Dir_Localidad
    
 END   
@@ -811,21 +837,40 @@ CREATE PROCEDURE C_R.SP_EMPRESA_SAVE
 @Emp_Dir_CodPostal varchar(50),
 @Emp_Dir_Depto varchar(50),
 @Emp_Dir_Localidad varchar(50),
-@User_Estado varchar(10)
+@User_Estado varchar(10),
+@User_Nombre varchar(255),
+@User_Password varchar(255)
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
+	DECLARE @User_Id int
+	
 	IF (@Emp_Id IS NULL)
 	BEGIN
+	
+		DECLARE @Cambio_Pass int
+		
+		SET @Cambio_Pass = 0
+	
+		IF ( @User_Nombre IS NULL )
+		BEGIN
+			SET @User_Nombre = REPLACE(@Emp_Cuit,'-','')
+			-- hash para password "changeme"
+			SET @User_Password = '057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86'
+			SET @Cambio_Pass = 1
+		END
 		
 		INSERT INTO C_R.Usuarios
 			(User_Name
-			,User_Password) 
+			,User_Password
+			,User_CambioPass) 
 		VALUES
-			(REPLACE(@Emp_Cuit,'-','')
-			-- hash para password "changeme"
-			,'057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86')
+			(@User_Nombre
+			,@User_Password
+			,@Cambio_Pass)
+			
+		SET @User_Id = SCOPE_IDENTITY()
 		
 		INSERT INTO C_R.Empresas 
 			(Emp_Fecha_Creacion
@@ -848,7 +893,7 @@ BEGIN
 			,@Emp_Contacto
 			,@Emp_RazonSocial
 			,@Emp_Cuit
-			,SCOPE_IDENTITY()
+			,@User_Id
 			,@Emp_Dir_Ciudad
 			,@Emp_Dir_Calle
 			,@Emp_Dir_Nro
@@ -857,12 +902,20 @@ BEGIN
 			,@Emp_Dir_Depto
 			,@Emp_Dir_Localidad
 			,@Emp_Telefono)
+			
+		IF ( @Cambio_Pass = 0 )
+		BEGIN
+			INSERT INTO C_R.RL_Usuarios_Roles
+				(Rol_Id
+				,User_Id)
+			VALUES
+				((SELECT Rol_Id FROM C_R.Roles WHERE Rol_Descripcion = 'empresa')
+				,@User_Id)
+		END
 		
 		RETURN
 
 	END
-	
-	DECLARE @User_Id int
 	
 	SELECT @User_Id = Emp_User_Id FROM C_R.Empresas where Emp_Id = @Emp_Id
 	
@@ -932,7 +985,7 @@ WHILE @@FETCH_STATUS = 0
 
 BEGIN
    SET @Emp_Telefono = 'MIG-' + substring(convert(varchar(50), newID()),1,20)
-   EXEC C_R.SP_EMPRESA_SAVE NULL, @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Mail, @Emp_Contacto, @Emp_Telefono, @Emp_Dir_Ciudad, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad, NULL
+   EXEC C_R.SP_EMPRESA_SAVE NULL, @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Mail, @Emp_Contacto, @Emp_Telefono, @Emp_Dir_Ciudad, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad, NULL, NULL, NULL
    FETCH NEXT FROM empresas_cursor INTO @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Contacto, @Emp_Mail, @Emp_Dir_Ciudad, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad
    
 END   

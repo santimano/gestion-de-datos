@@ -13,14 +13,18 @@ namespace FrbaCommerce.Abm_Empresa
     public partial class EditarEmpresa : Form
     {
         private EmpresaDAO dao = new EmpresaDAO(BD.Instance.Conexion);
+        private string usuario;
+        private string password;
 
-        public EditarEmpresa(string accion, DataGridViewRow linea)
+        public EditarEmpresa(string accion, DataGridViewRow linea, string user, string pass)
         {
             InitializeComponent();
+            this.usuario = user;
+            this.password = pass;
             if (accion == "modificacion")
                 this.Modificacion(linea);
             else
-                this.Text = "AgregarEmpresa";
+                this.Alta();
         }
 
         private void Modificacion(DataGridViewRow linea)
@@ -40,6 +44,17 @@ namespace FrbaCommerce.Abm_Empresa
             textBoxCodPostal.Text = linea.Cells["Cod_Postal"].Value.ToString();
             textBoxTelefono.Text = linea.Cells["Telefono"].Value.ToString();
             comboBoxEstado.SelectedItem = linea.Cells["Estado"].Value.ToString();
+        }
+
+        private void Alta()
+        {
+            this.Text = "AgregarEmpresa";
+            if (this.usuario != null)
+            {
+                comboBoxEstado.SelectedItem = "ACTIVO";
+                labelEstado.Hide();
+                comboBoxEstado.Hide();
+            }
         }
 
 
@@ -63,22 +78,31 @@ namespace FrbaCommerce.Abm_Empresa
 
         private void buttonAceptar_Click(object sender, EventArgs e)
         {
-            if (dao.GuardarEmpresa(textBoxID.Text,
-                textBoxCuit.Text,
-                textBoxRazonSocial.Text,
-                textBoxFechaCreacion.Text,
-                textBoxMail.Text,
-                textBoxNombreContacto.Text,
-                textBoxTelefono.Text,
-                textBoxCiudad.Text,
-                textBoxCalle.Text,
-                textBoxNumero.Text,
-                textBoxPiso.Text,
-                textBoxCodPostal.Text,
-                textBoxDepto.Text,
-                textBoxLocalidad.Text,
-                comboBoxEstado.SelectedItem.ToString()) == true)
-                this.Close();
+            if (this.validarcampos() == true)
+                if (dao.GuardarEmpresa(textBoxID.Text,
+                    textBoxCuit.Text,
+                    textBoxRazonSocial.Text,
+                    textBoxFechaCreacion.Text,
+                    textBoxMail.Text,
+                    textBoxNombreContacto.Text,
+                    textBoxTelefono.Text,
+                    textBoxCiudad.Text,
+                    textBoxCalle.Text,
+                    textBoxNumero.Text,
+                    textBoxPiso.Text,
+                    textBoxCodPostal.Text,
+                    textBoxDepto.Text,
+                    textBoxLocalidad.Text,
+                    comboBoxEstado.SelectedItem.ToString()
+                    ,this.usuario
+                    ,this.password) == true)
+                    this.Close();
+        }
+
+        private bool validarcampos()
+        {
+            // agregar validaciones
+            return true;
         }
     }
 }

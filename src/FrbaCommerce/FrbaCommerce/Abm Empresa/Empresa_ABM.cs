@@ -49,7 +49,7 @@ namespace FrbaCommerce.Abm_Empresa
         {
             if (e.ColumnIndex == 0)
             {
-                new EditarEmpresa("modificacion", dataGridViewEmpresas.Rows[e.RowIndex]).ShowDialog();
+                new EditarEmpresa("modificacion", dataGridViewEmpresas.Rows[e.RowIndex], null, null).ShowDialog();
                 this.actualizar();
             }
             else if (e.ColumnIndex == 1)
@@ -65,7 +65,7 @@ namespace FrbaCommerce.Abm_Empresa
 
         private void buttonNuevo_Click(object sender, EventArgs e)
         {
-            new EditarEmpresa("alta", null).ShowDialog();
+            new EditarEmpresa("alta", null, null, null).ShowDialog();
             this.actualizar();
         }
 

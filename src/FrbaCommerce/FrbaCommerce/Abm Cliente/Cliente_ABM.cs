@@ -51,7 +51,7 @@ namespace FrbaCommerce.Abm_Cliente
         {
             if (e.ColumnIndex == 0)
             {
-                new EditarCliente("modificacion", dataGridViewClientes.Rows[e.RowIndex]).ShowDialog();
+                new EditarCliente("modificacion", dataGridViewClientes.Rows[e.RowIndex], null, null).ShowDialog();
                 this.actualizar();
             }
             else if (e.ColumnIndex == 1)
@@ -67,7 +67,7 @@ namespace FrbaCommerce.Abm_Cliente
 
         private void buttonNuevo_Click(object sender, EventArgs e)
         {
-            new EditarCliente("alta", null).ShowDialog();
+            new EditarCliente("alta", null, null, null).ShowDialog();
             this.actualizar();
         }
     }

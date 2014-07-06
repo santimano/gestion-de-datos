@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 using FrbaCommerce.Modelo;
 
 namespace FrbaCommerce.Abm_Cliente
@@ -13,20 +14,36 @@ namespace FrbaCommerce.Abm_Cliente
     public partial class EditarCliente : Form
     {
         private ClienteDAO dao = new ClienteDAO(BD.Instance.Conexion);
+        private string usuario;
+        private string password;
 
-        public EditarCliente(string accion, DataGridViewRow linea)
+        public EditarCliente(string accion, DataGridViewRow linea, string user, string pass)
         {
             InitializeComponent();
+            this.usuario = user;
+            this.password = pass;
             comboBoxTipoDocumento.Items.AddRange(dao.TipoDocumento().ToArray());
             if (accion == "modificacion")
                 this.Modificacion(linea);
             else
-                this.Text = "AgregarCliente";
+                this.Alta();
         }
 
         private void buttonCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void Alta()
+        {
+            this.Text = "AgregarCliente";
+            if (this.usuario != null)
+            {
+                comboBoxEstado.SelectedItem = "ACTIVO";
+                labelEstado.Hide();
+                comboBoxEstado.Hide();
+            }
+
         }
 
         private void Modificacion(DataGridViewRow linea)
@@ -64,23 +81,33 @@ namespace FrbaCommerce.Abm_Cliente
 
         private void buttonAceptar_Click(object sender, EventArgs e)
         {
-            if (dao.GuardarCliente(textBoxID.Text,
-                textBoxNombre.Text,
-                textBoxApellido.Text,
-                comboBoxTipoDocumento.SelectedItem.ToString(),
-                textBoxDocumento.Text,
-                textBoxCUIL.Text,
-                textBoxFechaNacimiento.Text,
-                textBoxMail.Text,
-                textBoxCalle.Text,
-                textBoxNumero.Text,
-                textBoxPiso.Text,
-                textBoxCodPostal.Text,
-                textBoxDepto.Text,
-                textBoxLocalidad.Text,
-                textBoxTelefono.Text,
-                comboBoxEstado.SelectedItem.ToString()) == true)
-                this.Close();
+            if (this.validarcampos() == true)
+                if (dao.GuardarCliente(textBoxID.Text,
+                    textBoxNombre.Text,
+                    textBoxApellido.Text,
+                    comboBoxTipoDocumento.SelectedItem.ToString(),
+                    textBoxDocumento.Text,
+                    textBoxCUIL.Text,
+                    textBoxFechaNacimiento.Text,
+                    textBoxMail.Text,
+                    textBoxCalle.Text,
+                    textBoxNumero.Text,
+                    textBoxPiso.Text,
+                    textBoxCodPostal.Text,
+                    textBoxDepto.Text,
+                    textBoxLocalidad.Text,
+                    textBoxTelefono.Text,
+                    comboBoxEstado.SelectedItem.ToString()
+                    ,this.usuario
+                    ,this.password) == true)
+                    this.Close();
         }
+
+        private bool validarcampos()
+        {
+            // agregar validaciones
+            return true;
+        }
+
     }
 }

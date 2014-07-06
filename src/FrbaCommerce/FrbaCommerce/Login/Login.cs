@@ -73,5 +73,12 @@ namespace FrbaCommerce.Login
         {
             this.Close();
         }
+
+        private void buttonRegistrarse_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            new Registrarse().ShowDialog();
+            this.Show();
+        }
     }
 }

@@ -88,7 +88,7 @@ namespace FrbaCommerce.Abm_Empresa
 
         public bool GuardarEmpresa(string id_empresa, string cuit, string razon_social, string fecha_creacion,
             string mail, string contacto, string telefono, string ciudad, string calle, string nro, string piso,
-            string cod_postal, string depto, string localidad, string estado)
+            string cod_postal, string depto, string localidad, string estado, string usuario, string password)
         {
 
             bool resultado = true;
@@ -111,6 +111,8 @@ namespace FrbaCommerce.Abm_Empresa
             command.Parameters.Add("@Emp_Dir_Depto", SqlDbType.VarChar, 50);
             command.Parameters.Add("@Emp_Dir_Localidad", SqlDbType.VarChar, 50);
             command.Parameters.Add("@User_Estado", SqlDbType.VarChar, 10);
+            command.Parameters.Add("@User_Nombre", SqlDbType.VarChar, 255);
+            command.Parameters.Add("@User_Password", SqlDbType.VarChar, 255);
 
             command.Parameters["@Emp_Id"].Value = (id_empresa.Length > 0) ? Convert.ToInt32(id_empresa) : (object)DBNull.Value;
             command.Parameters["@Emp_Cuit"].Value = cuit;
@@ -127,6 +129,8 @@ namespace FrbaCommerce.Abm_Empresa
             command.Parameters["@Emp_Dir_Depto"].Value = depto;
             command.Parameters["@Emp_Dir_Localidad"].Value = localidad;
             command.Parameters["@User_Estado"].Value = estado;
+            command.Parameters["@User_Nombre"].Value = (usuario != null) ? usuario : (object)DBNull.Value;
+            command.Parameters["@User_Password"].Value = (password != null) ? password : (object)DBNull.Value;
 
             try
             {

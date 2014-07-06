@@ -183,6 +183,12 @@
     <Compile Include="Login\LoginNuevoPass.Designer.cs">
       <DependentUpon>LoginNuevoPass.cs</DependentUpon>
     </Compile>
+    <Compile Include="Login\Registrarse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\Registrarse.Designer.cs">
+      <DependentUpon>Registrarse.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\Roles.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -273,6 +279,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Login\LoginNuevoPass.resx">
       <DependentUpon>LoginNuevoPass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\Registrarse.resx">
+      <DependentUpon>Registrarse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Roles.resx">
       <DependentUpon>Roles.cs</DependentUpon>

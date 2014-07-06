@@ -144,7 +144,7 @@ namespace FrbaCommerce.Abm_Cliente
 
         public bool GuardarCliente(string id_cliente, string nombre, string apellido, string tipodoc, string doc, 
             string cuil, string fecha_nac, string mail, string calle, string nro, string piso, string cod_postal, 
-            string depto, string localidad, string telefono, string estado)
+            string depto, string localidad, string telefono, string estado, string usuario, string password)
         {
 
             bool resultado = true;
@@ -168,6 +168,8 @@ namespace FrbaCommerce.Abm_Cliente
             command.Parameters.Add("@Cli_Dir_Localidad", SqlDbType.VarChar, 50);
             command.Parameters.Add("@Cli_Telefono", SqlDbType.VarChar, 50);
             command.Parameters.Add("@User_Estado", SqlDbType.VarChar, 10);
+            command.Parameters.Add("@User_Nombre", SqlDbType.VarChar, 255);
+            command.Parameters.Add("@User_Password", SqlDbType.VarChar, 255);
 
             command.Parameters["@Cli_Id"].Value = (id_cliente.Length > 0) ? Convert.ToInt32(id_cliente) : (object)DBNull.Value;
             command.Parameters["@Cli_Nombre"].Value = nombre;
@@ -185,6 +187,8 @@ namespace FrbaCommerce.Abm_Cliente
             command.Parameters["@Cli_Dir_Localidad"].Value = localidad;
             command.Parameters["@Cli_Telefono"].Value = telefono;
             command.Parameters["@User_Estado"].Value = estado;
+            command.Parameters["@User_Nombre"].Value = (usuario != null) ? usuario : (object)DBNull.Value;
+            command.Parameters["@User_Password"].Value = (password != null) ? password : (object)DBNull.Value;
 
             try
             {

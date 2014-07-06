@@ -18,8 +18,8 @@ namespace FrbaCommerce.Generar_Publicacion
         }
 
         public void Persist(int Codigo, string Descripcion, int Stock, DateTime Fecha
-                , DateTime FechaVenc, decimal Precio, string Visibilidad, string Rubro, string Tipo
-                , string Estado, int Usuario
+                , DateTime FechaVenc, decimal Precio, string Visibilidad, ListBox.SelectedObjectCollection Rubros
+                , string Tipo, string Estado, int Usuario
             )
         {
             String query = "C_R.SP_Publicacion_SAVE";
@@ -33,7 +33,6 @@ namespace FrbaCommerce.Generar_Publicacion
             command.Parameters.Add("@Fecha_Venc", SqlDbType.DateTime);
             command.Parameters.Add("@Precio", SqlDbType.Decimal, 18);
             command.Parameters.Add("@Visibilidad", SqlDbType.NVarChar, 255);
-            command.Parameters.Add("@Rubro", SqlDbType.NVarChar, 255);
             command.Parameters.Add("@Tipo", SqlDbType.NVarChar, 255);
             command.Parameters.Add("@Estado", SqlDbType.NVarChar, 255);
             command.Parameters.Add("@Usuario", SqlDbType.Int);
@@ -45,10 +44,11 @@ namespace FrbaCommerce.Generar_Publicacion
             command.Parameters["@Fecha_Venc"].Value = FechaVenc;
             command.Parameters["@Precio"].Value = Precio;
             command.Parameters["@Visibilidad"].Value = Visibilidad;
-            command.Parameters["@Rubro"].Value = Rubro;
             command.Parameters["@Tipo"].Value = Tipo;
             command.Parameters["@Estado"].Value = Estado;
             command.Parameters["@Usuario"].Value = Usuario;
+
+            command.Parameters.AddWithValue("@Rubros", CrearRubrosTable(Rubros));
 
             try
             {
@@ -69,16 +69,21 @@ namespace FrbaCommerce.Generar_Publicacion
         {
             Publicacion pub = new Publicacion();
             string query = "SELECT P.Pub_Descripcion, P.Pub_Stock, P.Pub_Fecha_Venc, P.Pub_Fecha "
-                + ", P.Pub_Precio, R.Pub_Descripcion as Rubro, V.Pub_Visible_Descripcion "
+                + ", P.Pub_Precio, V.Pub_Visible_Descripcion "
                 + ", T.Pub_Descripcion as Tipo, E.Pub_Estado_Desc "
                 + "FROM C_R.Publicaciones P, C_R.Publicaciones_Estados E "
-                + ", C_R.Publicaciones_Visibilidad V, C_R.Publicaciones_Rubro R "
+                + ", C_R.Publicaciones_Visibilidad V "
                 + ", C_R.Publicaciones_Tipo T "
                 + "WHERE P.Pub_Estado_Id = E.Pub_Estado_Id "
                 + "AND P.Pub_Visible_Cod = V.Pub_Visible_Cod "
-                + "AND R.Pub_RubroId = P.Pub_Rubro_Id "
                 + "AND T.Pub_Tipo = P.Pub_Tipo_Id "
                 + "AND P.Pub_Codigo = @Codigo";
+
+            string queryRubros = "SELECT Pub_Descripcion FROM C_R.Publicaciones_Rubro R, C_R.RL_Publicaciones_Rubros P_R";
+            queryRubros += " WHERE R.Pub_RubroId = P_R.Pub_RubroId ";
+            queryRubros += " AND P_R.Pub_Codigo = @Codigo ";
+
+
             try
             {
                 Conexion.Open();
@@ -97,10 +102,25 @@ namespace FrbaCommerce.Generar_Publicacion
                                 pub.FechaVenc = reader.GetDateTime(2);
                                 pub.Fecha = reader.GetDateTime(3);
                                 pub.Precio = reader.GetDecimal(4);
-                                pub.Rubro = reader.GetString(5);
-                                pub.Visibilidad = reader.GetString(6);
-                                pub.Tipo = reader.GetString(7);
-                                pub.Estado = reader.GetString(8);
+                                pub.Visibilidad = reader.GetString(5);
+                                pub.Tipo = reader.GetString(6);
+                                pub.Estado = reader.GetString(7);
+                                pub.Rubros = new List<string>();
+                            }
+                        }
+                    }
+                }
+                using (SqlCommand command = new SqlCommand(queryRubros, Conexion))
+                {
+                    command.Parameters.Add("@Codigo", SqlDbType.Int, 18);
+                    command.Parameters["@Codigo"].Value = Codigo;
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                pub.Rubros.Add(reader.GetString(0));
                             }
                         }
                     }
@@ -153,6 +173,17 @@ namespace FrbaCommerce.Generar_Publicacion
             }
             return Ds;
 
+        }
+        
+        private DataTable CrearRubrosTable(ListBox.SelectedObjectCollection items)
+        {
+            var tbl = new DataTable();
+            tbl.Columns.Add("Rubro", typeof(string));
+            foreach (var item in items)
+            {
+                tbl.Rows.Add(item.ToString());
+            }
+            return tbl;
         }
     }
 }

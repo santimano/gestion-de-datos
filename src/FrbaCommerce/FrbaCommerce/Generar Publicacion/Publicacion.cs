@@ -12,7 +12,7 @@ namespace FrbaCommerce.Generar_Publicacion
         public DateTime FechaVenc { get; set; }
         public DateTime Fecha { get; set; }
         public decimal Precio { get; set; }
-        public string Rubro { get; set; }
+        public List<string> Rubros { get; set; }
         public string Visibilidad { get; set; }
         public string Tipo { get; set; }
         public string Estado { get; set; }

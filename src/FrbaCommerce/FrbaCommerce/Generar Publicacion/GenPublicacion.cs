@@ -95,7 +95,7 @@ namespace FrbaCommerce.Generar_Publicacion
 
             publicacionDao.Persist(codigo, tbDescripcion.Text, int.Parse(tbStock.Text), dtpInicio.Value
                 , dtpVencimiento.Value, decimal.Parse(tbPrecio.Text), cbVisibilidad.Text
-                , lbRubros.Text, cbTipo.Text, Estado, Main.Usuario);
+                , lbRubros.SelectedItems, cbTipo.Text, Estado, Main.Usuario);
 
             return true;
         }
@@ -216,7 +216,11 @@ namespace FrbaCommerce.Generar_Publicacion
             dtpVencimiento.Value = pub.FechaVenc;
             dtpInicio.Value = pub.Fecha;
             tbPrecio.Text = pub.Precio.ToString();
-            lbRubros.Text = pub.Rubro;
+            lbRubros.SelectedItems.Clear();
+            foreach (string rubro in pub.Rubros) 
+            {
+                lbRubros.SelectedItems.Add(rubro);
+            }
             cbVisibilidad.Text = pub.Visibilidad;
             cbTipo.Text = pub.Tipo;
         }

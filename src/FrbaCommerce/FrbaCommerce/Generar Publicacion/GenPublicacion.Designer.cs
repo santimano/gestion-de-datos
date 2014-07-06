@@ -189,6 +189,7 @@
             this.lbRubros.FormattingEnabled = true;
             this.lbRubros.Location = new System.Drawing.Point(105, 156);
             this.lbRubros.Name = "lbRubros";
+            this.lbRubros.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.lbRubros.Size = new System.Drawing.Size(120, 95);
             this.lbRubros.TabIndex = 16;
             // 

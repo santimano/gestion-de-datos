@@ -39,6 +39,10 @@ if exists(select * from sys.objects where name like '%PublicacionesTableType%' a
 	drop type [C_R].[PublicacionesTableType]
 go
 
+if exists(select * from sys.objects where name like '%RubrosTableType%' and type = 'TT')
+	drop type [C_R].[RubrosTableType]
+go
+
 if exists(select * from sys.objects where name ='Inconsistencias_Calificaciones' and type = 'u')
 	drop table [C_R].[Inconsistencias_Calificaciones]
 go
@@ -73,6 +77,10 @@ go
 
 if exists(select * from sys.objects where name='Preguntas' and type ='u')
 	drop table [C_R].[Preguntas]
+go
+
+if exists (select * from sys.objects where name = 'RL_Publicaciones_Rubros' and type = 'u')
+    drop table [C_R].[RL_Publicaciones_Rubros]
 go
 
 if exists (select * from sys.objects where name = 'Publicaciones' and type = 'u')
@@ -278,10 +286,9 @@ CREATE TABLE [C_R].[Publicaciones]
 	[Pub_Fecha_Venc]     date  NOT NULL ,
 	[Pub_Precio]         numeric(18,2)  NOT NULL ,
 	[Pub_Visible_Cod]    numeric(18)  NOT NULL ,
-	[Pub_Rubro_Id]       int  NOT NULL ,
 	[Pub_Tipo_Id]        int  NOT NULL ,
 	[Pub_Estado_Id]      int  NOT NULL ,
-	[Pub_User_Id]            int  NULL 
+	[Pub_User_Id]        int  NULL 
 	CONSTRAINT [PK_Publicaciones] PRIMARY KEY  CLUSTERED ([Pub_Codigo] ASC)
 )
 go
@@ -333,6 +340,20 @@ CREATE TABLE [C_R].[Publicaciones_Rubro]
 	[Pub_RubroId]        int  NOT NULL  IDENTITY ( 1,1 ) ,
 	[Pub_Descripcion]    nvarchar(255) NULL 
 	CONSTRAINT [PK_Publicaciones_Rubro] PRIMARY KEY  CLUSTERED ([Pub_RubroId] ASC)
+)
+go
+
+CREATE TABLE [C_R].[RL_Publicaciones_Rubros]
+( 
+	[Pub_RubroId]        int			NOT NULL,
+	[Pub_Codigo]		 numeric(18)	NOT NULL
+	CONSTRAINT [PK_RL_Publicaciones_Rubros] PRIMARY KEY  CLUSTERED ([Pub_RubroId] ASC, [Pub_Codigo] ASC)
+	CONSTRAINT [FK_RL_Rubros_Publicaciones] FOREIGN KEY ([Pub_RubroId]) REFERENCES [C_R].[Publicaciones_Rubro]([Pub_RubroId])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION,
+	CONSTRAINT [FK_RL_Publicaciones_Rubros] FOREIGN KEY ([Pub_Codigo]) REFERENCES [C_R].[Publicaciones]([Pub_Codigo])
+		ON DELETE NO ACTION
+		ON UPDATE NO ACTION
 )
 go
 
@@ -460,16 +481,6 @@ go
 
 ALTER TABLE [C_R].[Publicaciones]
 	  WITH CHECK CHECK CONSTRAINT [FK_Publicaciones_Publicaciones_Visibilidad]
-go
-
-ALTER TABLE [C_R].[Publicaciones] WITH CHECK 
-	ADD CONSTRAINT [FK_Publicaciones_Publicaciones_Rubro] FOREIGN KEY ([Pub_Rubro_Id]) REFERENCES [C_R].[Publicaciones_Rubro]([Pub_RubroId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
-
-ALTER TABLE [C_R].[Publicaciones]
-	  WITH CHECK CHECK CONSTRAINT [FK_Publicaciones_Publicaciones_Rubro]
 go
 
 ALTER TABLE [C_R].[Publicaciones] WITH CHECK 
@@ -981,7 +992,7 @@ GO
 
 --Publicaciones Clientes
 SET IDENTITY_INSERT C_R.Publicaciones on; 
-INSERT INTO C_R.Publicaciones(Pub_Codigo, Pub_Descripcion, Pub_Stock, Pub_Fecha, Pub_Fecha_Venc, Pub_Precio, Pub_Visible_Cod, Pub_Rubro_Id, Pub_Tipo_Id, Pub_Estado_Id, Pub_User_Id) 
+INSERT INTO C_R.Publicaciones(Pub_Codigo, Pub_Descripcion, Pub_Stock, Pub_Fecha, Pub_Fecha_Venc, Pub_Precio, Pub_Visible_Cod, Pub_Tipo_Id, Pub_Estado_Id, Pub_User_Id) 
 SELECT  Publicacion_Cod,
 		Publicacion_Descripcion,
 		Publicacion_Stock,
@@ -989,7 +1000,6 @@ SELECT  Publicacion_Cod,
 		Publicacion_Fecha_Venc,
 		Publicacion_Precio,
 		(SELECT C_R.Publicaciones_Visibilidad.Pub_Visible_Cod  FROM C_R.Publicaciones_Visibilidad WHERE C_R.Publicaciones_Visibilidad.Pub_Visible_Descripcion = gd_esquema.Maestra.Publicacion_Visibilidad_Desc),  
-		(SELECT C_R.Publicaciones_Rubro.Pub_RubroId FROM C_R.Publicaciones_Rubro WHERE C_R.Publicaciones_Rubro.Pub_Descripcion = gd_esquema.Maestra.Publicacion_Rubro_Descripcion ) IDRUBRO,
 		(SELECT C_R.Publicaciones_Tipo.Pub_Tipo FROM C_R.Publicaciones_Tipo where C_R.Publicaciones_Tipo.Pub_Descripcion = gd_esquema.Maestra.Publicacion_Tipo ) TIPO,
 		 CASE WHEN (SELECT isnull(sum(M2.Compra_Cantidad),0) FROM gd_esquema.Maestra M2 WHERE M2.Publicacion_Cod = gd_esquema.Maestra.Publicacion_Cod and M2.Calificacion_Codigo is not null) < gd_esquema.Maestra.Publicacion_Stock THEN 2--'ACTIVA'
 			  WHEN (SELECT isnull(sum(M2.Compra_Cantidad),0) FROM gd_esquema.Maestra M2 WHERE M2.Publicacion_Cod = gd_esquema.Maestra.Publicacion_Cod and M2.Calificacion_Codigo is not null) = gd_esquema.Maestra.Publicacion_Stock THEN 4 --'FINALIZADA'
@@ -1007,7 +1017,7 @@ GO
 
 --Publicaciones empresas
 SET IDENTITY_INSERT C_R.Publicaciones on;
-INSERT INTO C_R.Publicaciones(Pub_Codigo, Pub_Descripcion, Pub_Stock, Pub_Fecha, Pub_Fecha_Venc, Pub_Precio, Pub_Visible_Cod, Pub_Rubro_Id, Pub_Tipo_Id, Pub_Estado_Id, Pub_User_Id)
+INSERT INTO C_R.Publicaciones(Pub_Codigo, Pub_Descripcion, Pub_Stock, Pub_Fecha, Pub_Fecha_Venc, Pub_Precio, Pub_Visible_Cod, Pub_Tipo_Id, Pub_Estado_Id, Pub_User_Id)
 SELECT  Publicacion_Cod,
 		Publicacion_Descripcion,
 		Publicacion_Stock,
@@ -1015,7 +1025,6 @@ SELECT  Publicacion_Cod,
 		Publicacion_Fecha_Venc,
 		Publicacion_Precio,
 		(SELECT C_R.Publicaciones_Visibilidad.Pub_Visible_Cod  FROM C_R.Publicaciones_Visibilidad WHERE C_R.Publicaciones_Visibilidad.Pub_Visible_Descripcion = gd_esquema.Maestra.Publicacion_Visibilidad_Desc),  
-		(SELECT C_R.Publicaciones_Rubro.Pub_RubroId FROM C_R.Publicaciones_Rubro WHERE C_R.Publicaciones_Rubro.Pub_Descripcion = gd_esquema.Maestra.Publicacion_Rubro_Descripcion ) IDRUBRO,
 		(SELECT C_R.Publicaciones_Tipo.Pub_Tipo FROM C_R.Publicaciones_Tipo WHERE C_R.Publicaciones_Tipo.Pub_Descripcion = gd_esquema.Maestra.Publicacion_Tipo ) TIPO,
 		 CASE WHEN (select isnull(sum(M2.Compra_Cantidad),0) FROM gd_esquema.Maestra M2 WHERE M2.Publicacion_Cod = gd_esquema.Maestra.Publicacion_Cod and M2.Calificacion_Codigo is not null) < gd_esquema.Maestra.Publicacion_Stock THEN 2 --'ACTIVA'
 			  WHEN (select isnull(sum(M2.Compra_Cantidad),0) FROM gd_esquema.Maestra M2 WHERE M2.Publicacion_Cod = gd_esquema.Maestra.Publicacion_Cod and M2.Calificacion_Codigo is not null) = gd_esquema.Maestra.Publicacion_Stock THEN 4 --'FINALIZADA'
@@ -1028,6 +1037,12 @@ SELECT  Publicacion_Cod,
  FROM gd_esquema.Maestra
 WHERE Compra_Fecha is null and Oferta_Fecha is null  and Publ_Empresa_Cuit  is not null and Factura_Nro is null 
 SET IDENTITY_INSERT C_R.Publicaciones off;
+GO
+
+INSERT INTO C_R.RL_Publicaciones_Rubros(Pub_Codigo, Pub_RubroId)
+SELECT Publicacion_Cod, R.Pub_RubroId from gd_esquema.Maestra, C_R.Publicaciones_Rubro R
+WHERE Publicacion_Rubro_Descripcion = R.Pub_Descripcion
+GROUP BY Publicacion_Cod, R.Pub_RubroId
 GO
 
 INSERT INTO C_R.Ofertas ( Pub_Codigo, Ofe_User_Id, Ofe_Fecha, Ope_Monto ) 
@@ -1236,10 +1251,14 @@ BEGIN
 END
 GO
 
+CREATE TYPE C_R.RubrosTableType AS TABLE
+(Rubro varchar(255))
+GO
+
 CREATE PROCEDURE C_R.SP_Publicacion_SAVE(@Codigo int, @Descripcion nvarchar(255)
 			, @Stock numeric(18), @Fecha datetime
 			, @Fecha_Venc datetime, @Precio numeric(18,2)
-			, @Visibilidad nvarchar(255), @Rubro nvarchar(255)
+			, @Visibilidad nvarchar(255), @Rubros C_R.RubrosTableType READONLY
 			, @Tipo nvarchar(255), @Estado nvarchar(255), @Usuario int
 			)
 AS
@@ -1254,16 +1273,22 @@ BEGIN
 				   ,Pub_Fecha_Venc
 				   ,Pub_Precio
 				   ,Pub_Visible_Cod
-				   ,Pub_Rubro_Id
 				   ,Pub_Tipo_Id
 				   ,Pub_Estado_Id
 				   ,Pub_User_Id)
 			SELECT @Descripcion, @Stock, @Fecha, @Fecha_Venc, @Precio
 				,(SELECT Pub_Visible_Cod FROM C_R.Publicaciones_Visibilidad where Pub_Visible_Descripcion = @Visibilidad)
-				,(SELECT Pub_RubroId FROM C_R.Publicaciones_Rubro where Pub_Descripcion = @Rubro)
 				,(SELECT Pub_Tipo FROM C_R.Publicaciones_Tipo where Pub_Descripcion = @Tipo)
 				,(SELECT Pub_Estado_Id FROM C_R.Publicaciones_Estados where Pub_Estado_Desc = @Estado)
 				, @Usuario
+				
+			DECLARE @Pub_Codigo numeric(18,0)	
+			
+			SET @Pub_Codigo = SCOPE_IDENTITY()
+				
+			INSERT INTO C_R.RL_Publicaciones_Rubros(Pub_Codigo, Pub_RubroId)
+			SELECT @Pub_Codigo, Pub_RubroId FROM C_R.Publicaciones_Rubro P_R, @Rubros R where P_R.Pub_Descripcion = R.Rubro
+				
 		END
 	ELSE
 		BEGIN
@@ -1274,11 +1299,16 @@ BEGIN
 				   ,Pub_Fecha_Venc = @Fecha_Venc
 				   ,Pub_Precio = @Precio
 				   ,Pub_Visible_Cod = (SELECT Pub_Visible_Cod FROM C_R.Publicaciones_Visibilidad where Pub_Visible_Descripcion = @Visibilidad)
-				   ,Pub_Rubro_Id = (SELECT Pub_RubroId FROM C_R.Publicaciones_Rubro where Pub_Descripcion = @Rubro)
 				   ,Pub_Tipo_Id = (SELECT Pub_Tipo FROM C_R.Publicaciones_Tipo where Pub_Descripcion = @Tipo)
 				   ,Pub_Estado_Id = (SELECT Pub_Estado_Id FROM C_R.Publicaciones_Estados where Pub_Estado_Desc = @Estado)
 				   ,Pub_User_Id = @Usuario
-			WHERE Pub_Codigo = @Codigo	
+			WHERE Pub_Codigo = @Codigo
+			
+			DELETE C_R.RL_Publicaciones_Rubros WHERE Pub_Codigo = @Codigo
+			
+			INSERT INTO C_R.RL_Publicaciones_Rubros(Pub_Codigo, Pub_RubroId)
+			SELECT @Codigo, Pub_RubroId FROM C_R.Publicaciones_Rubro P_R, @Rubros R where P_R.Pub_Descripcion = R.Rubro
+				
 		END		       
 END
 GO

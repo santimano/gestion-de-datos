@@ -39,6 +39,10 @@ if exists(select * from sys.objects where name ='SP_FACTURAR' and type = 'P')
 	drop procedure [C_R].[SP_FACTURAR]
 go
 
+if exists(select * from sys.objects where name='Contador_Visibilidad_VW' and type ='v')
+	drop view [C_R].[Contador_Visibilidad_VW]
+go
+
 if exists(select * from sys.objects where name like '%PublicacionesTableType%' and type = 'TT')
 	drop type [C_R].[PublicacionesTableType]
 go
@@ -244,13 +248,13 @@ go
 
 CREATE TABLE [C_R].[Factura]
 ( 
-	[Factura_Nro]			numeric(18)  NOT NULL IDENTITY(1,1),
-	[Factura_FP_ID]			int  NOT NULL ,
-	[Factura_Fecha]			datetime  NOT NULL DEFAULT GETDATE(),
-	[Factura_Total]			numeric(18,2)  NOT NULL,
-	[Factura_Tarjeta]		numeric(16,0)  NULL,
-	[Factura_Titular]		varchar(255) NULL,
-	[Factura_Vencimiento]   varchar(7) NULL
+	[Factura_Nro]				 numeric(18)  NOT NULL IDENTITY(1,1),
+	[Factura_FP_ID]				 int  NOT NULL ,
+	[Factura_Fecha]				 datetime  NOT NULL DEFAULT GETDATE(),
+	[Factura_Total]				 numeric(18,2)  NOT NULL,
+	[Factura_Tarjeta]			 numeric(16,0)  NULL,
+	[Factura_Titular]			 varchar(255) NULL,
+	[Factura_Vencimiento_Tarj]   varchar(7) NULL
 	CONSTRAINT [PK_Factura] PRIMARY KEY  CLUSTERED ([Factura_Nro] ASC)
 )
 go
@@ -1494,6 +1498,14 @@ AND P.Pub_Codigo = V.Pub_Codigo
 GROUP BY V.Pub_Codigo, P.Pub_User_Id, P.Pub_Descripcion, V.Ven_Monto, P.Pub_Visible_Cod
 GO
 
+CREATE VIEW C_R.Contador_Visibilidad_VW AS
+SELECT P.Pub_User_Id, V.Pub_Visible_Cod, COUNT(P.Pub_Codigo) % 10 AS Facturadas from C_R.Factura_Items F, C_R.Publicaciones P, C_R.Publicaciones_Visibilidad V
+WHERE F.Pub_Codigo = P.Pub_Codigo AND P.Pub_Visible_Cod = V.Pub_Visible_Cod
+AND V.Pub_Visible_Porcentaje > 0
+GROUP BY P.Pub_User_Id, V.Pub_Visible_Cod
+--order by P.Pub_User_Id, V.Pub_Visible_Cod
+GO
+
 CREATE TYPE C_R.PublicacionesTableType AS TABLE
 (Cantidad numeric(18,0), Unitario numeric(18,2), Publicacion varchar(50),Pub_Codigo numeric(18,0), Total numeric(18,2), Visibilidad int)
 GO
@@ -1503,7 +1515,8 @@ CREATE PROCEDURE C_R.SP_FACTURAR
 @FormaPago varchar(255),
 @TarjetaTitular varchar(255),
 @TarjetaNumero numeric(16,0),
-@TarjetaVencimiento varchar(6)
+@TarjetaVencimiento varchar(6),
+@Usuario numeric(18,0)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -1513,10 +1526,30 @@ BEGIN
 	DECLARE @FacturaId int
 	
 	SELECT @FormaPagoId = Factura_FP_ID FROM Factura_FormaPago WHERE Factura_FP_Desc = @FormaPago 
-	SELECT @TotalFactura = SUM(CAST(ROUND(Total * V.Pub_Visible_Porcentaje,2) AS decimal(18,2)) + V.Pub_Visible_Precio) FROM @Publicaciones P, C_R.Publicaciones_Visibilidad V
-	WHERE P.Visibilidad = V.Pub_Visible_Cod
 	
-	INSERT INTO C_R.Factura(Factura_FP_ID,Factura_Total,Factura_Tarjeta, Factura_Titular, Factura_Vencimiento)
+	DECLARE @CantidadFacturadas int, @Total numeric(18,2), @Vis_Porc numeric(18,2)
+			, @Vis_Precio numeric(18,2), @Vis_Id numeric(18,0)
+	
+	DECLARE pub_cursor CURSOR FOR  
+	SELECT P.Total, V.Pub_Visible_Porcentaje, V.Pub_Visible_Precio, P.Visibilidad FROM @Publicaciones P, C_R.Publicaciones_Visibilidad V
+	WHERE P.Visibilidad = V.Pub_Visible_Cod
+	SET @TotalFactura = 0
+	OPEN pub_cursor		
+		FETCH NEXT FROM pub_cursor INTO @Total, @Vis_Porc, @Vis_Precio, @Vis_Id
+		WHILE @@FETCH_STATUS = 0   
+			BEGIN
+				SET @CantidadFacturadas = NULL   
+				SELECT @CantidadFacturadas = Facturadas FROM C_R.Contador_Visibilidad_VW WHERE Pub_User_Id = @Usuario AND Pub_Visible_Cod = @Vis_Id;
+				IF @CantidadFacturadas IS NULL OR @CantidadFacturadas < 9
+				BEGIN
+					SET	@TotalFactura = @TotalFactura + CAST(ROUND(@Total * @Vis_Porc,2) AS decimal(18,2)) + @Vis_Precio				
+				END
+				FETCH NEXT FROM pub_cursor INTO @Total, @Vis_Porc, @Vis_Precio, @Vis_Id
+			END
+	CLOSE pub_cursor   
+	DEALLOCATE pub_cursor
+	
+	INSERT INTO C_R.Factura(Factura_FP_ID,Factura_Total,Factura_Tarjeta, Factura_Titular, Factura_Vencimiento_Tarj)
 	VALUES (@FormaPagoId, @TotalFactura, @TarjetaNumero, @TarjetaTitular, @TarjetaVencimiento)
 	
 	SET @FacturaId = SCOPE_IDENTITY()

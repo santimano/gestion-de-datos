@@ -49,16 +49,17 @@ namespace FrbaCommerce.Facturar_Publicaciones
             return Ds;
         }
 
-        public void Facturar(List<Item> items, string FormaPago, string Titular, long Numero, string Vencimiento)
+        public void Facturar(List<Item> items, string FormaPago, string Titular, long Numero, string Vencimiento, int Usuario)
         {
             SqlCommand command = new SqlCommand("C_R.SP_FACTURAR", this.Conexion);
             command.CommandType = CommandType.StoredProcedure;
 
             command.Parameters.AddWithValue("@Publicaciones", CrearPublicacionesTable(items));
             command.Parameters.AddWithValue("@FormaPago", FormaPago);
-            command.Parameters.AddWithValue("@TarjetaTitular", Titular);
-            command.Parameters.AddWithValue("@TarjetaNumero", Numero);
-            command.Parameters.AddWithValue("@TarjetaVencimiento", Vencimiento);
+            command.Parameters.AddWithValue("@TarjetaTitular", Titular == null ? (object)DBNull.Value : Titular);
+            command.Parameters.AddWithValue("@TarjetaNumero", Numero == 0 ? (object) DBNull.Value : Numero);
+            command.Parameters.AddWithValue("@TarjetaVencimiento", Vencimiento == null ? (object) DBNull.Value : Vencimiento);
+            command.Parameters.AddWithValue("@Usuario", Usuario);
 
             try
             {

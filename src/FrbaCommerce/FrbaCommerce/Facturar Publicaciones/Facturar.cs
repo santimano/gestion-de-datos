@@ -87,8 +87,15 @@ namespace FrbaCommerce.Facturar_Publicaciones
             {
                 items.Add(toItem(dataGridView1.Rows[i].Cells));
             }
-
-            dao.Facturar(items, cbFormaPago.Text, tbTitular.Text, long.Parse(tarjeta), tbVencimiento.Text);
+            if (cbFormaPago.Text == "Tarjeta")
+            {
+                dao.Facturar(items, cbFormaPago.Text, tbTitular.Text, long.Parse(tarjeta), tbVencimiento.Text, usuario);
+            }
+            else 
+            {
+                dao.Facturar(items, cbFormaPago.Text, null, 0, null, usuario);
+            }
+            
             buscar();
         }
 

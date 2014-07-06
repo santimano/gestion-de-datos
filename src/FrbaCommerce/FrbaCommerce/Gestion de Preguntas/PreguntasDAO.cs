@@ -54,14 +54,23 @@ namespace FrbaCommerce.Gestion_de_Preguntas
 
         public void Guardar_Respuesta(int pregunta, string respuesta)
         {
-            String query = "INSERT INTO C_R.Respuestas(Pre_Id, Res_Texto) VALUES (@Pregunta, @Respuesta)";
+            String query = "INSERT INTO C_R.Respuestas(Pre_Id, Res_Texto, Res_Fecha) VALUES (@Pregunta, @Respuesta, @Fecha)";
+
+            DateTime fecha = new DateTime(Main.FechaSistema.Year,
+                            Main.FechaSistema.Month,
+                            Main.FechaSistema.Day,
+                            DateTime.Now.Hour,
+                            DateTime.Now.Minute,
+                            DateTime.Now.Second);
 
             SqlCommand command = new SqlCommand(query, Conexion);
             command.CommandType = CommandType.Text;
             command.Parameters.Add("@Pregunta", SqlDbType.Int);
             command.Parameters.Add("@Respuesta", SqlDbType.VarChar, 255);
+            command.Parameters.Add("@Fecha", SqlDbType.DateTime);
             command.Parameters["@Pregunta"].Value = pregunta;
             command.Parameters["@Respuesta"].Value = respuesta;
+            command.Parameters["@Fecha"].Value = fecha;
 
             try
             {

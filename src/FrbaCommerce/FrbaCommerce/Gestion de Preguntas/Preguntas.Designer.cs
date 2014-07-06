@@ -101,6 +101,8 @@
             this.Responder.HeaderText = "Responder";
             this.Responder.Name = "Responder";
             this.Responder.ReadOnly = true;
+            this.Responder.Text = "Responder";
+            this.Responder.UseColumnTextForButtonValue = true;
             // 
             // Preguntas
             // 

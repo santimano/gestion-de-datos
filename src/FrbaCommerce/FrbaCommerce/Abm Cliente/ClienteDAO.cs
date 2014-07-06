@@ -19,8 +19,6 @@ namespace FrbaCommerce.Abm_Cliente
 
         public DataSet ClientesGrilla(string nombre, string apellido, string mail, string documento, string tipo_doc)
         {
-            List<String> clientes = new List<String>();
-
             String query = "SELECT C.Cli_Id"
                         + ",C.Cli_Nombre"
                         + ",C.Cli_Apellido"
@@ -38,20 +36,20 @@ namespace FrbaCommerce.Abm_Cliente
                         + ",C.Cli_Telefono "
                         + ",U.User_Estado "
                         + "FROM C_R.Clientes C "
-                        + "inner join C_R.Tipo_Docs D on C.Cli_TipoDoc = D.Cli_TipoDoc "
-                        + "inner join C_R.Usuarios U on C.Cli_User_Id = U.User_Id "
-                        + "where U.User_Eliminado = 0 ";
+                        + "INNER JOIN C_R.Tipo_Docs D on C.Cli_TipoDoc = D.Cli_TipoDoc "
+                        + "INNER JOIN C_R.Usuarios U on C.Cli_User_Id = U.User_Id "
+                        + "WHERE U.User_Eliminado = 0 ";
 
             if (nombre.Length > 0)
-                query += "and C.Cli_Nombre = @nombre ";
+                query += "AND C.Cli_Nombre = @nombre ";
             if (apellido.Length > 0)
-                query += "and C.Cli_Apellido like '%'+@apellido+'%' ";
+                query += "AND C.Cli_Apellido like '%'+@apellido+'%' ";
             if (mail.Length > 0)
-                query += "and C.Cli_Mail like '%'+@mail+'%' ";
+                query += "AND C.Cli_Mail like '%'+@mail+'%' ";
             if (tipo_doc.Length > 0)
-                query += "and D.Des_Corta = @tipo_doc ";
+                query += "AND D.Des_Corta = @tipo_doc ";
             if (documento.Length > 0)
-                query += "and C.Cli_Doc = @documento ";
+                query += "AND C.Cli_Doc = @documento ";
 
             SqlCommand command = new SqlCommand(query, Conexion);
             command.CommandType = CommandType.Text;

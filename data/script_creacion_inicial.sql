@@ -202,11 +202,13 @@ go
 CREATE TABLE [C_R].[Empresas]
 ( 
 	[Emp_Id]             int  NOT NULL  IDENTITY ( 1,1 ) ,
-	[Emp_Fecha_Creacion] datetime		NULL ,
+	[Emp_Fecha_Creacion] datetime		NOT NULL ,
 	[Emp_Mail]           varchar(255)   NOT NULL ,
+	[Emp_Contacto]       varchar(255)   NOT NULL ,
 	[Emp_Telefono]		 varchar(50)	NOT NULL default 'MIG-' +substring(convert(varchar(50), newID()),1,20),
 	[Emp_RazonSocial]    varchar(255)	NOT NULL ,
 	[Emp_User_Id]        int			NOT NULL ,
+	[Emp_Dir_Ciudad]	 varchar(255)   NOT NULL ,
 	[Emp_Dir_Calle]      varchar(255)   NOT NULL ,
 	[Emp_Dir_Nro]        numeric(18)    NOT NULL ,
 	[Emp_Dir_Piso]       numeric(18)    NULL ,
@@ -226,6 +228,8 @@ CREATE PROCEDURE C_R.SP_ALTA_EMPRESA
 @Emp_RazonSocial varchar(255),
 @Emp_Fecha_Creacion datetime,
 @Emp_Mail varchar(255),
+@Emp_Contacto varchar(255),
+@Emp_Dir_Ciudad varchar(255),
 @Emp_Dir_Calle varchar(255),
 @Emp_Dir_Nro numeric(18),
 @Emp_Dir_Piso numeric(18),
@@ -240,8 +244,8 @@ BEGIN
 	INSERT INTO C_R.Usuarios(User_Name, User_Password) values
 	(REPLACE(@Emp_Cuit,'-',''),'057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86')
 	
-	INSERT INTO C_R.Empresas ( Emp_Fecha_Creacion, Emp_Mail, Emp_RazonSocial, Emp_Cuit, Emp_User_Id, Emp_Dir_Calle, Emp_Dir_Nro, Emp_Dir_Piso, Emp_Dir_CodPostal, Emp_Dir_Depto, Emp_Dir_Localidad) values
-	(@Emp_Fecha_Creacion, @Emp_Mail, @Emp_RazonSocial, @Emp_Cuit, SCOPE_IDENTITY(),@Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad)
+	INSERT INTO C_R.Empresas ( Emp_Fecha_Creacion, Emp_Mail, Emp_Contacto, Emp_RazonSocial, Emp_Cuit, Emp_User_Id, Emp_Dir_Ciudad, Emp_Dir_Calle, Emp_Dir_Nro, Emp_Dir_Piso, Emp_Dir_CodPostal, Emp_Dir_Depto, Emp_Dir_Localidad) values
+	(@Emp_Fecha_Creacion, @Emp_Mail, @Emp_Contacto, @Emp_RazonSocial, @Emp_Cuit, SCOPE_IDENTITY(), @Emp_Dir_Ciudad, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad)
 	
 END
 GO
@@ -796,7 +800,9 @@ GO
 DECLARE @Emp_Cuit varchar(50),
 		@Emp_RazonSocial varchar(255),
 		@Emp_Fecha_Creacion datetime,
+		@Emp_Contacto varchar(255),
 		@Emp_Mail varchar(255),
+		@Emp_Dir_Ciudad varchar(255),
 		@Emp_Dir_Calle varchar(255),
 		@Emp_Dir_Nro numeric(18),
 		@Emp_Dir_Piso numeric(18),
@@ -809,7 +815,9 @@ select DISTINCT
 Publ_Empresa_Cuit,
 Publ_Empresa_Razon_Social,
 Publ_Empresa_Fecha_Creacion,
+'CONTACTO No asignado',
 Publ_Empresa_Mail,
+'CIUDAD No asignada',
 Publ_Empresa_Dom_Calle, 
 Publ_Empresa_Nro_Calle, 
 Publ_Empresa_Piso,  
@@ -821,11 +829,11 @@ where  Publ_Empresa_Cuit is not null or Publ_Empresa_Razon_Social is not null
 order by 1,2,3
 
 OPEN empresas_cursor		
-FETCH NEXT FROM empresas_cursor INTO @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Mail, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad
+FETCH NEXT FROM empresas_cursor INTO @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Contacto, @Emp_Mail, @Emp_Dir_Ciudad, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad
 WHILE @@FETCH_STATUS = 0   
 BEGIN   
-   EXEC C_R.SP_ALTA_EMPRESA @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Mail, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad
-   FETCH NEXT FROM empresas_cursor INTO @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Mail, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad
+   EXEC C_R.SP_ALTA_EMPRESA @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Mail, @Emp_Contacto, @Emp_Dir_Ciudad, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad
+   FETCH NEXT FROM empresas_cursor INTO @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Contacto, @Emp_Mail, @Emp_Dir_Ciudad, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad
    
 END   
 

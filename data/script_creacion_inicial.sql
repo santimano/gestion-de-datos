@@ -1383,7 +1383,7 @@ BEGIN
 				   ,Pub_Estado_Id
 				   ,Pub_Fecha_Venc
 				   ,Pub_User_Id)
-			SELECT @Descripcion, @Stock, @Fecha, @Fecha_Venc, @Precio
+			SELECT @Descripcion, @Stock, @Fecha, @Precio
 				,(SELECT Pub_Visible_Cod FROM C_R.Publicaciones_Visibilidad where Pub_Visible_Descripcion = @Visibilidad)
 				,(SELECT Pub_Tipo FROM C_R.Publicaciones_Tipo where Pub_Descripcion = @Tipo)
 				,(SELECT Pub_Estado_Id FROM C_R.Publicaciones_Estados where Pub_Estado_Desc = @Estado)

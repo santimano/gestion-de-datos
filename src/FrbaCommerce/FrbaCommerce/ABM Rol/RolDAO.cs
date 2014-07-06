@@ -49,7 +49,7 @@ namespace FrbaCommerce.ABM_Rol
 
         }
 
-        public void guardar(int Codigo, string Desc, string Estado)
+        public void guardar(int Codigo, string Desc, string Estado, ListBox.SelectedObjectCollection Funciones)
         {
 
             SqlCommand command = new SqlCommand("C_R.SP_Rol_SAVE", Conexion);
@@ -61,6 +61,7 @@ namespace FrbaCommerce.ABM_Rol
             command.Parameters["@Codigo"].Value = Codigo;
             command.Parameters["@Descripcion"].Value = Desc;
             command.Parameters["@Estado"].Value = Estado;
+            command.Parameters.AddWithValue("@Funciones", CrearFuncionesTable(Funciones));
 
             try
             {
@@ -78,12 +79,23 @@ namespace FrbaCommerce.ABM_Rol
             }
         }
 
+        private DataTable CrearFuncionesTable(ListBox.SelectedObjectCollection items)
+        {
+            var tbl = new DataTable();
+            tbl.Columns.Add("Funcion", typeof(string));
+            foreach (var item in items)
+            {
+                tbl.Rows.Add(item.ToString());
+            }
+            return tbl;
+        }
+
         public void borrar(int id)
         {
 
             SqlCommand command = new SqlCommand("UPDATE C_R.Roles SET Rol_Estado = 'INACTIVO'"
             + "WHERE Rol_Id = @Rol_Id", Conexion);
-            
+
             command.CommandType = CommandType.Text;
             command.Parameters.Add("@Rol_Id", SqlDbType.Int);
             command.Parameters["@Rol_Id"].Value = id;
@@ -104,6 +116,72 @@ namespace FrbaCommerce.ABM_Rol
             }
         }
 
+
+        public List<string> Funcionalidades()
+        {
+            List<string> funcionalidades = new List<string>();
+            try
+            {
+                string query = "SELECT Sis_Fun_Des FROM C_R.Sis_Funciones";
+                Conexion.Open();
+                using (SqlCommand command = new SqlCommand(query, Conexion))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                funcionalidades.Add(reader.GetString(0));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+            return funcionalidades;
+        }
+
+        public List<string> Funcionalidades(int rolId)
+        {
+            List<string> funcionalidades = new List<string>();
+            try
+            {
+                string query = "SELECT Sis_Fun_Des FROM C_R.Sis_Funciones F, C_R.RL_Roles_Funciones RL ";
+                query += " WHERE RL.Rol_Id = @RolId AND F.Sis_Fun_Id = RL.Sis_Fun_Id";
+                Conexion.Open();
+                using (SqlCommand command = new SqlCommand(query, Conexion))
+                {
+                    command.Parameters.AddWithValue("@RolId", rolId);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                funcionalidades.Add(reader.GetString(0));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+            return funcionalidades;
+        }
     }
 
 }

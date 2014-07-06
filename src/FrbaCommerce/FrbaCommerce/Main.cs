@@ -178,5 +178,20 @@ namespace FrbaCommerce
             new Login.LoginNuevoPass(Main.UsuarioNombre).ShowDialog();
         }
 
+        private void facturarPublicacionesToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            facturarPublicacionesToolStripMenuItem_Click(sender, e);
+        }
+
+        private void nuevaToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            nuevaToolStripMenuItem_Click(sender, e);
+        }
+
+        private void editarToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            editarToolStripMenuItem_Click(sender, e);
+        }
+
     }
 }

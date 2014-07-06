@@ -34,18 +34,20 @@
             this.btBorrar = new System.Windows.Forms.Button();
             this.btCrear = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.cbEstado = new System.Windows.Forms.ComboBox();
+            this.tbDesc = new System.Windows.Forms.TextBox();
+            this.tbCodigo = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.tbCodigo = new System.Windows.Forms.TextBox();
-            this.tbDesc = new System.Windows.Forms.TextBox();
-            this.cbEstado = new System.Windows.Forms.ComboBox();
+            this.btNuevo = new System.Windows.Forms.Button();
+            this.btLimpiar = new System.Windows.Forms.Button();
+            this.lbFuncionalidades = new System.Windows.Forms.ListBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Descripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Editar = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.btNuevo = new System.Windows.Forms.Button();
-            this.btLimpiar = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -112,6 +114,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label4);
+            this.groupBox3.Controls.Add(this.lbFuncionalidades);
             this.groupBox3.Controls.Add(this.btActualizar);
             this.groupBox3.Controls.Add(this.cbEstado);
             this.groupBox3.Controls.Add(this.btBorrar);
@@ -123,10 +127,35 @@
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Location = new System.Drawing.Point(13, 245);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(522, 132);
+            this.groupBox3.Size = new System.Drawing.Size(522, 250);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Rol";
+            // 
+            // cbEstado
+            // 
+            this.cbEstado.FormattingEnabled = true;
+            this.cbEstado.Items.AddRange(new object[] {
+            "ACTIVO",
+            "INACTIVO"});
+            this.cbEstado.Location = new System.Drawing.Point(121, 96);
+            this.cbEstado.Name = "cbEstado";
+            this.cbEstado.Size = new System.Drawing.Size(121, 21);
+            this.cbEstado.TabIndex = 5;
+            // 
+            // tbDesc
+            // 
+            this.tbDesc.Location = new System.Drawing.Point(121, 60);
+            this.tbDesc.Name = "tbDesc";
+            this.tbDesc.Size = new System.Drawing.Size(100, 20);
+            this.tbDesc.TabIndex = 4;
+            // 
+            // tbCodigo
+            // 
+            this.tbCodigo.Location = new System.Drawing.Point(121, 26);
+            this.tbCodigo.Name = "tbCodigo";
+            this.tbCodigo.Size = new System.Drawing.Size(100, 20);
+            this.tbCodigo.TabIndex = 3;
             // 
             // label3
             // 
@@ -155,30 +184,43 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Codigo";
             // 
-            // tbCodigo
+            // btNuevo
             // 
-            this.tbCodigo.Location = new System.Drawing.Point(121, 26);
-            this.tbCodigo.Name = "tbCodigo";
-            this.tbCodigo.Size = new System.Drawing.Size(100, 20);
-            this.tbCodigo.TabIndex = 3;
+            this.btNuevo.Location = new System.Drawing.Point(13, 214);
+            this.btNuevo.Name = "btNuevo";
+            this.btNuevo.Size = new System.Drawing.Size(75, 23);
+            this.btNuevo.TabIndex = 3;
+            this.btNuevo.Text = "Nuevo";
+            this.btNuevo.UseVisualStyleBackColor = true;
+            this.btNuevo.Click += new System.EventHandler(this.btNuevo_Click);
             // 
-            // tbDesc
+            // btLimpiar
             // 
-            this.tbDesc.Location = new System.Drawing.Point(121, 60);
-            this.tbDesc.Name = "tbDesc";
-            this.tbDesc.Size = new System.Drawing.Size(100, 20);
-            this.tbDesc.TabIndex = 4;
+            this.btLimpiar.Location = new System.Drawing.Point(94, 214);
+            this.btLimpiar.Name = "btLimpiar";
+            this.btLimpiar.Size = new System.Drawing.Size(81, 23);
+            this.btLimpiar.TabIndex = 4;
+            this.btLimpiar.Text = "Limpiar";
+            this.btLimpiar.UseVisualStyleBackColor = true;
+            this.btLimpiar.Click += new System.EventHandler(this.btLimpiar_Click);
             // 
-            // cbEstado
+            // lbFuncionalidades
             // 
-            this.cbEstado.FormattingEnabled = true;
-            this.cbEstado.Items.AddRange(new object[] {
-            "ACTIVO",
-            "INACTIVO"});
-            this.cbEstado.Location = new System.Drawing.Point(121, 96);
-            this.cbEstado.Name = "cbEstado";
-            this.cbEstado.Size = new System.Drawing.Size(121, 21);
-            this.cbEstado.TabIndex = 5;
+            this.lbFuncionalidades.FormattingEnabled = true;
+            this.lbFuncionalidades.Location = new System.Drawing.Point(121, 139);
+            this.lbFuncionalidades.Name = "lbFuncionalidades";
+            this.lbFuncionalidades.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.lbFuncionalidades.Size = new System.Drawing.Size(263, 95);
+            this.lbFuncionalidades.TabIndex = 6;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(31, 153);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(84, 13);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "Funcionalidades";
             // 
             // Codigo
             // 
@@ -207,31 +249,11 @@
             this.Editar.Name = "Editar";
             this.Editar.ReadOnly = true;
             // 
-            // btNuevo
-            // 
-            this.btNuevo.Location = new System.Drawing.Point(13, 214);
-            this.btNuevo.Name = "btNuevo";
-            this.btNuevo.Size = new System.Drawing.Size(75, 23);
-            this.btNuevo.TabIndex = 3;
-            this.btNuevo.Text = "Nuevo";
-            this.btNuevo.UseVisualStyleBackColor = true;
-            this.btNuevo.Click += new System.EventHandler(this.btNuevo_Click);
-            // 
-            // btLimpiar
-            // 
-            this.btLimpiar.Location = new System.Drawing.Point(94, 214);
-            this.btLimpiar.Name = "btLimpiar";
-            this.btLimpiar.Size = new System.Drawing.Size(81, 23);
-            this.btLimpiar.TabIndex = 4;
-            this.btLimpiar.Text = "Limpiar";
-            this.btLimpiar.UseVisualStyleBackColor = true;
-            this.btLimpiar.Click += new System.EventHandler(this.btLimpiar_Click);
-            // 
             // Rol_ABM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(553, 389);
+            this.ClientSize = new System.Drawing.Size(552, 507);
             this.Controls.Add(this.btLimpiar);
             this.Controls.Add(this.btNuevo);
             this.Controls.Add(this.groupBox3);
@@ -260,11 +282,13 @@
         private System.Windows.Forms.TextBox tbCodigo;
         private System.Windows.Forms.TextBox tbDesc;
         private System.Windows.Forms.ComboBox cbEstado;
+        private System.Windows.Forms.Button btNuevo;
+        private System.Windows.Forms.Button btLimpiar;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ListBox lbFuncionalidades;
         private System.Windows.Forms.DataGridViewTextBoxColumn Codigo;
         private System.Windows.Forms.DataGridViewTextBoxColumn Descripcion;
         private System.Windows.Forms.DataGridViewTextBoxColumn Estado;
         private System.Windows.Forms.DataGridViewButtonColumn Editar;
-        private System.Windows.Forms.Button btNuevo;
-        private System.Windows.Forms.Button btLimpiar;
     }
 }

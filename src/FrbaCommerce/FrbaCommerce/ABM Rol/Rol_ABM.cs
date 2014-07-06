@@ -17,6 +17,7 @@ namespace FrbaCommerce.ABM_Rol
         public Rol_ABM()
         {
             InitializeComponent();
+            lbFuncionalidades.Items.AddRange(dao.Funcionalidades().ToArray());
             actualizar();
         }
 
@@ -39,6 +40,12 @@ namespace FrbaCommerce.ABM_Rol
             tbCodigo.Text = dataGridView1.Rows[e.RowIndex].Cells["Codigo"].Value.ToString();
             tbDesc.Text = dataGridView1.Rows[e.RowIndex].Cells["Descripcion"].Value.ToString();
             cbEstado.SelectedItem = dataGridView1.Rows[e.RowIndex].Cells["Estado"].Value.ToString();
+            List<string> fun = dao.Funcionalidades((int)dataGridView1.Rows[e.RowIndex].Cells["Codigo"].Value);
+            lbFuncionalidades.SelectedItems.Clear();
+            foreach (string f in fun)
+            {
+                lbFuncionalidades.SelectedItems.Add(f);   
+            }
             btActualizar.Enabled = true;
             btBorrar.Enabled = true;
             tbDesc.Enabled = true;
@@ -47,7 +54,7 @@ namespace FrbaCommerce.ABM_Rol
 
         private void btCrear_Click(object sender, EventArgs e)
         {
-            dao.guardar(-1, tbDesc.Text, cbEstado.Text);
+            dao.guardar(-1, tbDesc.Text, cbEstado.Text, lbFuncionalidades.SelectedItems);
             MessageBox.Show("Creado");
             actualizar();
         }
@@ -81,7 +88,7 @@ namespace FrbaCommerce.ABM_Rol
 
         private void btActualizar_Click(object sender, EventArgs e)
         {
-            dao.guardar(int.Parse(tbCodigo.Text), tbDesc.Text, cbEstado.Text);
+            dao.guardar(int.Parse(tbCodigo.Text), tbDesc.Text, cbEstado.Text, lbFuncionalidades.SelectedItems);
             MessageBox.Show("Actualizado");
             actualizar();
         }

@@ -23,6 +23,10 @@ if exists(select * from sys.objects where name ='SP_Rol_SAVE' and type = 'P')
 	drop procedure [C_R].[SP_Rol_SAVE]
 go
 
+if exists(select * from sys.objects where name like '%FuncionesTableType%' and type = 'TT')
+	drop type [C_R].[FuncionesTableType]
+go
+
 if exists(select * from sys.objects where name ='SP_CLIENTE_SAVE' and type = 'P')
 	drop procedure [C_R].[SP_CLIENTE_SAVE]
 go
@@ -611,7 +615,38 @@ VALUES(2,'Administrativo','ACTIVO')
 INSERT INTO C_R.Roles(Rol_Id, Rol_Descripcion, Rol_Estado)
 VALUES(3,'Cliente','ACTIVO')
 SET IDENTITY_INSERT C_R.Roles off;
-Go
+GO
+-- FUNCIONALIDADES
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('ABM Roles');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('ABM Clientes');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('ABM Empresas');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('ABM Rubro');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('ABM Visibilidad');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Cliente Publicacion Nueva');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Cliente Publicacion Editar');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Cliente Historial Ofertas');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Cliente Historial Compras');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Cliente Historial Calificaciones');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Cliente Calificar Vendedor');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Cliente Preguntas Recibidas');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Cliente Preguntas Hechas');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Cliente Facturar Publicaciones');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Empresa Publicacion Nueva');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Empresa Publicacion Editar');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Empresa Historial Calificaciones');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Empresa Preguntas Recibidas');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Empresa Facturar Publicaciones');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Admin Facturar Publicaciones');
+
+INSERT INTO C_R.RL_Roles_Funciones(Rol_Id, Sis_Fun_Id, Estado)
+SELECT CASE
+		WHEN Sis_Fun_Des LIKE 'ABM%' THEN 2 -- Administrativo  
+		WHEN Sis_Fun_Des LIKE 'Cliente%' THEN 3 -- Cliente
+		WHEN Sis_Fun_Des LIKE 'Empresa%' THEN 1 -- Empresa
+		WHEN Sis_Fun_Des LIKE 'Admin%' THEN 2 -- Administrativo
+	   END,
+	  Sis_Fun_Id, 'ACTIVO'
+FROM C_R.Sis_Funciones;
 
 INSERT INTO C_R.Tipo_Docs
 VALUES ('Documento Nacional de Identidad','DNI')
@@ -1262,7 +1297,11 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE C_R.SP_Rol_SAVE(@Codigo int,@Descripcion nvarchar(50),@Estado varchar(50))
+CREATE TYPE C_R.FuncionesTableType AS TABLE
+(Funcion varchar(255))
+GO
+
+CREATE PROCEDURE C_R.SP_Rol_SAVE(@Codigo int,@Descripcion nvarchar(50),@Estado varchar(50), @Funciones C_R.FuncionesTableType READONLY)
 AS
 BEGIN
   if (@Codigo =-1)
@@ -1273,6 +1312,14 @@ BEGIN
 	 VALUES
 		   (@Descripcion,
 			@Estado)
+	
+	DECLARE @RolId int
+	SET @RolId = SCOPE_IDENTITY()
+	
+	INSERT INTO C_R.RL_Roles_Funciones(Rol_Id,Sis_Fun_Id,Estado)
+	SELECT @RolId, Sis_Fun_Id, 'ACTIVO' FROM C_R.Sis_Funciones F, @Funciones Fun
+	WHERE Fun.Funcion = F.Sis_Fun_Des		
+	
 	end
 	else
 	begin
@@ -1282,6 +1329,13 @@ BEGIN
 			Rol_Estado = @Estado
 		where 
 		Rol_Id = @Codigo
+		
+		DELETE C_R.RL_Roles_Funciones WHERE Rol_Id = @Codigo
+		
+		INSERT INTO C_R.RL_Roles_Funciones(Rol_Id,Sis_Fun_Id,Estado)
+		SELECT @Codigo, Sis_Fun_Id, 'ACTIVO' FROM C_R.Sis_Funciones F, @Funciones Fun
+		WHERE Fun.Funcion = F.Sis_Fun_Des		
+		
 	end
 END
 GO

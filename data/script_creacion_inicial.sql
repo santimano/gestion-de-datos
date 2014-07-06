@@ -703,6 +703,7 @@ CREATE PROCEDURE C_R.SP_CLIENTE_SAVE
 AS
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 	
 	DECLARE @Cli_TipoDoc int
 	DECLARE @User_Id int
@@ -715,7 +716,7 @@ BEGIN
 		DECLARE @Cambio_Pass int
 		
 		SET @Cambio_Pass = 0
-	
+		
 		IF ( @User_Nombre IS NULL )
 		BEGIN
 			SET @User_Nombre = SUBSTRING(@Cli_Nombre,1,1)+@Cli_Apellido +Convert(varchar,(YEAR(@Cli_Fecha_Nac)))
@@ -723,6 +724,8 @@ BEGIN
 			SET @User_Password = '057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86'
 			SET @Cambio_Pass = 1
 		END
+		
+		BEGIN TRANSACTION TR_CLIENTE
 		
 		INSERT INTO C_R.Usuarios
 			(User_Name
@@ -775,6 +778,8 @@ BEGIN
 		VALUES
 			((SELECT Rol_Id FROM C_R.Roles WHERE Rol_Descripcion = 'cliente')
 			,@User_Id)
+			
+		COMMIT TRANSACTION TR_CLIENTE
 		
 		RETURN
 
@@ -878,6 +883,7 @@ CREATE PROCEDURE C_R.SP_EMPRESA_SAVE
 AS
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 	
 	DECLARE @User_Id int
 	
@@ -895,6 +901,8 @@ BEGIN
 			SET @User_Password = '057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86'
 			SET @Cambio_Pass = 1
 		END
+		
+		BEGIN TRANSACTION TR_EMPRESA
 		
 		INSERT INTO C_R.Usuarios
 			(User_Name
@@ -944,6 +952,8 @@ BEGIN
 		VALUES
 			((SELECT Rol_Id FROM C_R.Roles WHERE Rol_Descripcion = 'empresa')
 			,@User_Id)
+		
+		COMMIT TRANSACTION TR_EMPRESA
 		
 		RETURN
 

@@ -43,6 +43,8 @@ namespace FrbaCommerce.Abm_Cliente
                 labelEstado.Hide();
                 comboBoxEstado.Hide();
             }
+            labelID.Hide();
+            textBoxID.Hide();
 
         }
 

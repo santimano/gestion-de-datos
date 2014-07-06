@@ -56,6 +56,8 @@ namespace FrbaCommerce.Abm_Empresa
                 labelEstado.Hide();
                 comboBoxEstado.Hide();
             }
+            labelID.Hide();
+            textBoxID.Hide();
         }
 
 

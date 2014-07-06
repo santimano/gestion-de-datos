@@ -79,7 +79,7 @@
             this.labelRol.Location = new System.Drawing.Point(21, 110);
             this.labelRol.Name = "labelRol";
             this.labelRol.Size = new System.Drawing.Size(23, 13);
-            this.labelRol.TabIndex = 4;
+            this.labelRol.TabIndex = 6;
             this.labelRol.Text = "Rol";
             // 
             // comboBoxRol
@@ -91,14 +91,14 @@
             this.comboBoxRol.Location = new System.Drawing.Point(137, 106);
             this.comboBoxRol.Name = "comboBoxRol";
             this.comboBoxRol.Size = new System.Drawing.Size(96, 21);
-            this.comboBoxRol.TabIndex = 5;
+            this.comboBoxRol.TabIndex = 7;
             // 
             // buttonContinuar
             // 
             this.buttonContinuar.Location = new System.Drawing.Point(49, 146);
             this.buttonContinuar.Name = "buttonContinuar";
             this.buttonContinuar.Size = new System.Drawing.Size(73, 22);
-            this.buttonContinuar.TabIndex = 6;
+            this.buttonContinuar.TabIndex = 8;
             this.buttonContinuar.Text = "Continuar";
             this.buttonContinuar.UseVisualStyleBackColor = true;
             this.buttonContinuar.Click += new System.EventHandler(this.buttonContinuar_Click);
@@ -108,7 +108,7 @@
             this.buttonCancelar.Location = new System.Drawing.Point(142, 146);
             this.buttonCancelar.Name = "buttonCancelar";
             this.buttonCancelar.Size = new System.Drawing.Size(81, 21);
-            this.buttonCancelar.TabIndex = 7;
+            this.buttonCancelar.TabIndex = 9;
             this.buttonCancelar.Text = "Cancelar";
             this.buttonCancelar.UseVisualStyleBackColor = true;
             this.buttonCancelar.Click += new System.EventHandler(this.buttonCancelar_Click);
@@ -119,7 +119,7 @@
             this.textBoxConfirmaPassword.Name = "textBoxConfirmaPassword";
             this.textBoxConfirmaPassword.PasswordChar = '*';
             this.textBoxConfirmaPassword.Size = new System.Drawing.Size(96, 20);
-            this.textBoxConfirmaPassword.TabIndex = 9;
+            this.textBoxConfirmaPassword.TabIndex = 5;
             // 
             // labelConfirmaPassword
             // 
@@ -127,7 +127,7 @@
             this.labelConfirmaPassword.Location = new System.Drawing.Point(21, 82);
             this.labelConfirmaPassword.Name = "labelConfirmaPassword";
             this.labelConfirmaPassword.Size = new System.Drawing.Size(97, 13);
-            this.labelConfirmaPassword.TabIndex = 8;
+            this.labelConfirmaPassword.TabIndex = 4;
             this.labelConfirmaPassword.Text = "Confirma Password";
             // 
             // Registrarse

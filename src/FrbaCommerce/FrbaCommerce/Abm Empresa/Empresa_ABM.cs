@@ -61,6 +61,9 @@ namespace FrbaCommerce.Abm_Empresa
                 }
                 this.actualizar();
             }
+            else if (e.ColumnIndex == 2)
+                new EmpresaNuevoPass(dataGridViewEmpresas.Rows[e.RowIndex].Cells["ID"].Value.ToString()).ShowDialog();
+
         }
 
         private void buttonNuevo_Click(object sender, EventArgs e)

@@ -57,6 +57,7 @@
             this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Editar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Eliminar = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Cambiar_Pass = new System.Windows.Forms.DataGridViewButtonColumn();
             this.groupBoxFiltros.SuspendLayout();
             this.groupBoxEmpresas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEmpresas)).BeginInit();
@@ -187,7 +188,8 @@
             this.Telefono,
             this.Estado,
             this.Editar,
-            this.Eliminar});
+            this.Eliminar,
+            this.Cambiar_Pass});
             this.dataGridViewEmpresas.Location = new System.Drawing.Point(14, 26);
             this.dataGridViewEmpresas.Name = "dataGridViewEmpresas";
             this.dataGridViewEmpresas.ReadOnly = true;
@@ -316,6 +318,14 @@
             this.Eliminar.Text = "Eliminar";
             this.Eliminar.UseColumnTextForButtonValue = true;
             // 
+            // Cambiar_Pass
+            // 
+            this.Cambiar_Pass.HeaderText = "Cambiar_Pass";
+            this.Cambiar_Pass.Name = "Cambiar_Pass";
+            this.Cambiar_Pass.ReadOnly = true;
+            this.Cambiar_Pass.Text = "Cambiar_Pass";
+            this.Cambiar_Pass.UseColumnTextForButtonValue = true;
+            // 
             // Empresa_ABM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -367,5 +377,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Estado;
         private System.Windows.Forms.DataGridViewButtonColumn Editar;
         private System.Windows.Forms.DataGridViewButtonColumn Eliminar;
+        private System.Windows.Forms.DataGridViewButtonColumn Cambiar_Pass;
     }
 }

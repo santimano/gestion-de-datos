@@ -8,11 +8,11 @@ using System.Text;
 using System.Windows.Forms;
 using FrbaCommerce.Modelo;
 
-namespace FrbaCommerce.Login
+namespace FrbaCommerce.Registro_de_Usuario
 {
     public partial class Registrarse : Form
     {
-        private LoginDAO dao = new LoginDAO(BD.Instance.Conexion);
+        private RegistroDAO dao = new RegistroDAO(BD.Instance.Conexion);
 
         public Registrarse()
         {
@@ -31,6 +31,8 @@ namespace FrbaCommerce.Login
                 MessageBox.Show(null, "El usuario no puede ser vacio.", "Error");
             else if (textBoxPassword.Text.Length < 1)
                 MessageBox.Show(null, "El password no puede ser vacio.", "Error");
+            else if (textBoxPassword.Text != textBoxConfirmaPassword.Text)
+                MessageBox.Show(null, "El password no coincide.", "Error");
             else if (comboBoxRol.SelectedItem == null)
                 MessageBox.Show(null, "Por favor seleccione un rol antes de continuar.", "Error");
             else
@@ -41,9 +43,9 @@ namespace FrbaCommerce.Login
                 {
                     this.Hide();
                     if (comboBoxRol.SelectedItem.ToString() == "CLIENTE")
-                        new Abm_Cliente.EditarCliente("alta", null, textBoxUsuario.Text, Encripcion.CalcularHash(textBoxPassword.Text)).ShowDialog();
+                        new Abm_Cliente.EditarCliente("alta", null, textBoxUsuario.Text, Login.Encripcion.CalcularHash(textBoxPassword.Text)).ShowDialog();
                     else
-                        new Abm_Empresa.EditarEmpresa("alta", null, textBoxUsuario.Text, Encripcion.CalcularHash(textBoxPassword.Text)).ShowDialog();
+                        new Abm_Empresa.EditarEmpresa("alta", null, textBoxUsuario.Text, Login.Encripcion.CalcularHash(textBoxPassword.Text)).ShowDialog();
                     this.Close();
                 }
             }

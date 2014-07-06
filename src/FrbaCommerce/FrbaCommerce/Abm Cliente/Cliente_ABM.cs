@@ -63,6 +63,8 @@ namespace FrbaCommerce.Abm_Cliente
                 }
                 this.actualizar();
             }
+            else if (e.ColumnIndex == 2)
+                new ClienteNuevoPass(dataGridViewClientes.Rows[e.RowIndex].Cells["ID"].Value.ToString()).ShowDialog();
         }
 
         private void buttonNuevo_Click(object sender, EventArgs e)

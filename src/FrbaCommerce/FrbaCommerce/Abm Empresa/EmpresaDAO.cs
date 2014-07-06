@@ -188,5 +188,39 @@ namespace FrbaCommerce.Abm_Empresa
 
         }
 
+        public void CambiarPassword(string id_empresa, string password, bool cambio_pass)
+        {
+            string query = "UPDATE C_R.Usuarios "
+             + "SET User_Password = @User_Password, User_CambioPass = @User_CambioPass "
+             + "WHERE User_Id = (SELECT Emp_User_Id FROM C_R.Empresas WHERE Emp_Id = @Emp_Id)";
+
+            SqlCommand command = new SqlCommand(query, Conexion);
+
+            command.CommandType = CommandType.Text;
+            command.Parameters.Add("@User_Password", SqlDbType.VarChar, 255);
+            command.Parameters["@User_Password"].Value = Login.Encripcion.CalcularHash(password);
+            command.Parameters.Add("@User_CambioPass", SqlDbType.VarChar, 255);
+            command.Parameters["@User_CambioPass"].Value = (cambio_pass == true) ? 1 : 0;
+            command.Parameters.Add("@Emp_Id", SqlDbType.Int);
+            command.Parameters["@Emp_Id"].Value = Convert.ToInt32(id_empresa);
+
+            try
+            {
+                Conexion.Open();
+                command.ExecuteNonQuery();
+                MessageBox.Show(null, "El password fue actualizado con exito.", "Informacion");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+        }
+
+
     }
 }

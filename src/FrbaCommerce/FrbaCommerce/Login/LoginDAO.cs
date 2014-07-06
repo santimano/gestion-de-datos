@@ -180,6 +180,5 @@ namespace FrbaCommerce.Login
             }
             return funcionalidades;
         }
-
     }
 }

@@ -62,6 +62,7 @@
             this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Editar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Eliminar = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Cambiar_Pass = new System.Windows.Forms.DataGridViewButtonColumn();
             this.groupBoxFiltros.SuspendLayout();
             this.groupBoxClientes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClientes)).BeginInit();
@@ -230,7 +231,8 @@
             this.Telefono,
             this.Estado,
             this.Editar,
-            this.Eliminar});
+            this.Eliminar,
+            this.Cambiar_Pass});
             this.dataGridViewClientes.Location = new System.Drawing.Point(14, 29);
             this.dataGridViewClientes.Name = "dataGridViewClientes";
             this.dataGridViewClientes.ReadOnly = true;
@@ -367,6 +369,16 @@
             this.Eliminar.Text = "Eliminar";
             this.Eliminar.UseColumnTextForButtonValue = true;
             // 
+            // Cambiar_Pass
+            // 
+            this.Cambiar_Pass.HeaderText = "Cambiar_Pass";
+            this.Cambiar_Pass.Name = "Cambiar_Pass";
+            this.Cambiar_Pass.ReadOnly = true;
+            this.Cambiar_Pass.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Cambiar_Pass.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Cambiar_Pass.Text = "Cambiar_Pass";
+            this.Cambiar_Pass.UseColumnTextForButtonValue = true;
+            // 
             // Cliente_ABM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -423,5 +435,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Estado;
         private System.Windows.Forms.DataGridViewButtonColumn Editar;
         private System.Windows.Forms.DataGridViewButtonColumn Eliminar;
+        private System.Windows.Forms.DataGridViewButtonColumn Cambiar_Pass;
     }
 }

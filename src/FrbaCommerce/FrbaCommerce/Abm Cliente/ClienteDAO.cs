@@ -98,7 +98,7 @@ namespace FrbaCommerce.Abm_Cliente
             {
                 Conexion.Close();
             }
-            
+
             return Ds;
 
         }
@@ -142,8 +142,8 @@ namespace FrbaCommerce.Abm_Cliente
 
         }
 
-        public bool GuardarCliente(string id_cliente, string nombre, string apellido, string tipodoc, string doc, 
-            string cuil, string fecha_nac, string mail, string calle, string nro, string piso, string cod_postal, 
+        public bool GuardarCliente(string id_cliente, string nombre, string apellido, string tipodoc, string doc,
+            string cuil, string fecha_nac, string mail, string calle, string nro, string piso, string cod_postal,
             string depto, string localidad, string telefono, string estado, string usuario, string password)
         {
 
@@ -153,7 +153,7 @@ namespace FrbaCommerce.Abm_Cliente
             command.CommandType = CommandType.StoredProcedure;
 
             command.Parameters.Add("@Cli_Id", SqlDbType.Int);
-            command.Parameters.Add("@Cli_Nombre", SqlDbType.VarChar,255);
+            command.Parameters.Add("@Cli_Nombre", SqlDbType.VarChar, 255);
             command.Parameters.Add("@Cli_Apellido", SqlDbType.VarChar, 255);
             command.Parameters.Add("@Des_Corta", SqlDbType.VarChar, 10);
             command.Parameters.Add("@Cli_Doc", SqlDbType.Int);
@@ -204,7 +204,7 @@ namespace FrbaCommerce.Abm_Cliente
                     MessageBox.Show(null, "El tipo y numero de documento ingresado ya corresponde a un cliente.", "Error");
                 else if (ex.Message.ToUpper().Contains("UQ_CLIENTE_CUIL"))
                     MessageBox.Show(null, "El numero de CUIL ingresado ya corresponde a un cliente.", "Error");
-                else 
+                else
                     MessageBox.Show(null, ex.Message, "Error");
                 resultado = false;
             }
@@ -245,6 +245,42 @@ namespace FrbaCommerce.Abm_Cliente
             }
 
         }
+
+        public void CambiarPassword(string id_cliente, string password, bool cambio_pass)
+        {
+            string query = "UPDATE C_R.Usuarios "
+             + "SET User_Password = @User_Password, User_CambioPass = @User_CambioPass "
+             + "WHERE User_Id = (SELECT Cli_User_Id FROM C_R.Clientes WHERE Cli_Id = @Cli_Id)";
+
+            SqlCommand command = new SqlCommand(query, Conexion);
+
+            command.CommandType = CommandType.Text;
+            command.Parameters.Add("@User_Password", SqlDbType.VarChar, 255);
+            command.Parameters["@User_Password"].Value = Login.Encripcion.CalcularHash(password);
+            command.Parameters.Add("@User_CambioPass", SqlDbType.VarChar, 255);
+            command.Parameters["@User_CambioPass"].Value = (cambio_pass == true) ? 1 : 0;
+            command.Parameters.Add("@Cli_Id", SqlDbType.Int);
+            command.Parameters["@Cli_Id"].Value = Convert.ToInt32(id_cliente);
+
+            try
+            {
+                Conexion.Open();
+                command.ExecuteNonQuery();
+                MessageBox.Show(null, "El password fue actualizado con exito.", "Informacion");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+        }
+
+
+
 
     }
 }

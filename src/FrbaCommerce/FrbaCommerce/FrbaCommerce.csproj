@@ -49,6 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abm Cliente\ClienteDAO.cs" />
+    <Compile Include="Abm Cliente\ClienteNuevoPass.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Cliente\ClienteNuevoPass.Designer.cs">
+      <DependentUpon>ClienteNuevoPass.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm Cliente\Cliente_ABM.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,6 +74,12 @@
       <DependentUpon>EditarEmpresa.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm Empresa\EmpresaDAO.cs" />
+    <Compile Include="Abm Empresa\EmpresaNuevoPass.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Empresa\EmpresaNuevoPass.Designer.cs">
+      <DependentUpon>EmpresaNuevoPass.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm Empresa\Empresa_ABM.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -183,10 +195,10 @@
     <Compile Include="Login\LoginNuevoPass.Designer.cs">
       <DependentUpon>LoginNuevoPass.cs</DependentUpon>
     </Compile>
-    <Compile Include="Login\Registrarse.cs">
+    <Compile Include="Registro de Usuario\Registrarse.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Login\Registrarse.Designer.cs">
+    <Compile Include="Registro de Usuario\Registrarse.Designer.cs">
       <DependentUpon>Registrarse.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\Roles.cs">
@@ -223,11 +235,17 @@
     <Compile Include="Modelo\TipoPublicacionDAO.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Abm Cliente\ClienteNuevoPass.resx">
+      <DependentUpon>ClienteNuevoPass.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Abm Cliente\Cliente_ABM.resx">
       <DependentUpon>Cliente_ABM.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Cliente\EditarCliente.resx">
       <DependentUpon>EditarCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Empresa\EmpresaNuevoPass.resx">
+      <DependentUpon>EmpresaNuevoPass.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Abm Empresa\Empresa_ABM.resx">
       <DependentUpon>Empresa_ABM.cs</DependentUpon>
@@ -280,7 +298,7 @@
     <EmbeddedResource Include="Login\LoginNuevoPass.resx">
       <DependentUpon>LoginNuevoPass.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Login\Registrarse.resx">
+    <EmbeddedResource Include="Registro de Usuario\Registrarse.resx">
       <DependentUpon>Registrarse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Roles.resx">
@@ -309,12 +327,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Registro de Usuario\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Registro de Usuario\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Registro de Usuario\RegistroDAO.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

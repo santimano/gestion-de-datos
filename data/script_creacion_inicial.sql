@@ -334,7 +334,8 @@ CREATE TABLE [C_R].[Publicaciones_Visibilidad]
 	[Pub_Visible_Porcentaje] numeric(18,2)  NOT NULL,
 	[Pub_Visible_Estado] nvarchar(10) DEFAULT 'ACTIVO' NOT NULL,
 	[Pub_Visible_Duracion] int NOT NULL,
-	CONSTRAINT [PK_Publicaciones_Visibilidad] PRIMARY KEY  CLUSTERED ([Pub_Visible_Cod] ASC)
+	CONSTRAINT [PK_Publicaciones_Visibilidad] PRIMARY KEY  CLUSTERED ([Pub_Visible_Cod] ASC),
+	CONSTRAINT [UQ_Publicaciones_Visibilidad_Descripcion] UNIQUE ([Pub_Visible_Descripcion] ASC)
 )
 go
 

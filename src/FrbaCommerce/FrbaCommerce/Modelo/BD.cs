@@ -67,38 +67,6 @@ namespace FrbaCommerce.Modelo
                 + "Password=" + pass;
         }
 
-         public DataSet Productos_Visibilidad_Grilla()
-         {
-             List<String> roles = new List<String>();
-
-             String query = "SELECT * "
-            + "FROM C_R.Publicaciones_Visibilidad";
-
-
-             SqlCommand command = new SqlCommand(query, Conexion);
-             command.CommandType = CommandType.Text;
-             DataSet Ds = new DataSet();
-             try
-             {
-                 Conexion.Open();
-
-                 // Conexion Abierta
-                 SqlDataAdapter sDa = new SqlDataAdapter(command);
-                 sDa.Fill(Ds);
-
-             }
-             catch (Exception ex)
-             {
-                 MessageBox.Show(null, ex.Message, "Error");
-             }
-             finally
-             {
-                 Conexion.Close();
-             }
-             return Ds;
-
-         }
-
          public int FindUsuario(string username)
          {
              SqlCommand command = new SqlCommand("SELECT User_Id FROM C_R.Usuarios WHERE User_Name = @Usuario", Conexion);

@@ -329,6 +329,7 @@ CREATE TABLE [C_R].[Publicaciones_Visibilidad]
 	[Pub_Visible_Precio] numeric(18,2)  NOT NULL ,
 	[Pub_Visible_Porcentaje] numeric(18,2)  NOT NULL,
 	[Pub_Visible_Estado] nvarchar(10) DEFAULT 'ACTIVO' NOT NULL,
+	[Pub_Visible_Duracion] int NOT NULL,
 	CONSTRAINT [PK_Publicaciones_Visibilidad] PRIMARY KEY  CLUSTERED ([Pub_Visible_Cod] ASC)
 )
 go
@@ -1063,11 +1064,17 @@ INSERT INTO C_R.Publicaciones_Tipo
   INSERT INTO C_R.Publicaciones_Estados (Pub_Estado_Id,Pub_Estado_Desc )
  Values (4,'Finalizada')
  Go
+ 
  --  Insercion de Visibilidad
-INSERT INTO C_R.Publicaciones_Visibilidad (Pub_Visible_Descripcion,Pub_Visible_Precio,Pub_Visible_Porcentaje)
-SELECT gd_esquema.Maestra.Publicacion_Visibilidad_Desc ,Publicacion_Visibilidad_Precio,Publicacion_Visibilidad_Porcentaje 
+INSERT INTO C_R.Publicaciones_Visibilidad (Pub_Visible_Descripcion,Pub_Visible_Precio,Pub_Visible_Porcentaje,Pub_Visible_Duracion)
+SELECT gd_esquema.Maestra.Publicacion_Visibilidad_Desc
+      ,Publicacion_Visibilidad_Precio
+      ,Publicacion_Visibilidad_Porcentaje
+      ,CASE WHEN Publicacion_Visibilidad_Precio = 0 THEN 7
+       ELSE CAST(Publicacion_Visibilidad_Precio / 5 AS INT)
+       END 
 FROM gd_esquema.Maestra
-GROUP BY gd_esquema.Maestra.Publicacion_Visibilidad_Desc ,Publicacion_Visibilidad_Precio,Publicacion_Visibilidad_Porcentaje 
+GROUP BY gd_esquema.Maestra.Publicacion_Visibilidad_Desc ,Publicacion_Visibilidad_Precio,Publicacion_Visibilidad_Porcentaje
 GO
 
 --Publicaciones Clientes
@@ -1274,7 +1281,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE C_R.SP_Visibilidad_SAVE(@Codigo int,@Descripcion char(255),@Precio numeric(18,2),@Porc numeric(18,2),@Estado char(15))
+CREATE PROCEDURE C_R.SP_Visibilidad_SAVE(@Codigo int,@Descripcion varchar(255),@Precio numeric(18,2),@Porc numeric(18,2),@Estado varchar(15),@Duracion int)
 AS
 BEGIN
   if (@Codigo =-1)
@@ -1283,22 +1290,24 @@ BEGIN
 		   ([Pub_Visible_Descripcion]
 		   ,[Pub_Visible_Precio]
 		   ,[Pub_Visible_Porcentaje]
-		   ,[Pub_Visible_Estado])
+		   ,[Pub_Visible_Estado]
+		   ,[Pub_Visible_Duracion])
 	 VALUES
 		   (@Descripcion,
 			@Precio,
 		    @Porc,
-		    @Estado )
+		    @Estado,
+		    @Duracion)
 	end
 	else
 	begin
 		UPDATE Publicaciones_Visibilidad
 		set 
-			Pub_Visible_Descripcion = @Descripcion ,
+			Pub_Visible_Descripcion = @Descripcion,
 			Pub_Visible_Precio = @Precio,
 			Pub_Visible_Porcentaje = @Porc,
-			Pub_Visible_Estado =@Estado 
-		
+			Pub_Visible_Estado = @Estado,
+			Pub_Visible_Duracion = @Duracion
 		where 
 		Publicaciones_Visibilidad.Pub_Visible_Cod = @Codigo
 	end

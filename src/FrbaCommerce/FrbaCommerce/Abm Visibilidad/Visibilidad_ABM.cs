@@ -17,15 +17,14 @@ namespace FrbaCommerce.Abm_Visibilidad
         public Visibilidad_ABM()
         {
             InitializeComponent();
-            DGVisibilidades.DataSource = BD.Instance.Productos_Visibilidad_Grilla().Tables[0];
-            DGVisibilidades.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);   
-           
+            Load_Grilla();
         }
+
         protected void Load_Grilla()
         {
-            
-            DGVisibilidades.DataSource = BD.Instance.Productos_Visibilidad_Grilla();
-            DGVisibilidades.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);           
+
+            DGVisibilidades.DataSource = dao.Productos_Visibilidad_Grilla().Tables[0];
+            DGVisibilidades.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
 
         private void DGVisibilidades_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -37,8 +36,6 @@ namespace FrbaCommerce.Abm_Visibilidad
             TbPrecio.Text = DGVisibilidades.Rows[e.RowIndex].Cells["Pub_Visible_Precio"].Value.ToString();
             TbPorcentaje.Text = DGVisibilidades.Rows[e.RowIndex].Cells["Pub_Visible_Porcentaje"].Value.ToString();
             CbEstado.SelectedItem = DGVisibilidades.Rows[e.RowIndex].Cells["Pub_Visible_Estado"].Value.ToString();
-
-          
         }
 
         private void BtnNuevo_Click(object sender, EventArgs e)
@@ -95,14 +92,15 @@ namespace FrbaCommerce.Abm_Visibilidad
             {
                 Convert.ToDecimal(TbPorcentaje.Text);
             }
-            catch{
+            catch
+            {
                 LbError.Text = LbError.Text + " * El Campo Pocentaje no es de tipo decimal" + "\r\n";
                 RTA = false;
             }
 
             try
             {
-                Convert.ToDecimal( TbPrecio.Text  );
+                Convert.ToDecimal(TbPrecio.Text);
             }
             catch
             {
@@ -112,14 +110,14 @@ namespace FrbaCommerce.Abm_Visibilidad
             return RTA;
         }
 
-    
 
-       
 
-     
-    
-        
 
-     
+
+
+
+
+
+
     }
 }

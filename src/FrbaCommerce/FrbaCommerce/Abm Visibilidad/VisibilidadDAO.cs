@@ -56,8 +56,6 @@ namespace FrbaCommerce.Abm_Visibilidad
 
         public DataSet Productos_Visibilidad_Grilla()
         {
-            List<String> roles = new List<String>();
-
             String query = "SELECT * "
            + "FROM C_R.Publicaciones_Visibilidad";
 

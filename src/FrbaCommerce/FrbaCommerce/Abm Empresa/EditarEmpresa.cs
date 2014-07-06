@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 using FrbaCommerce.Modelo;
 
 namespace FrbaCommerce.Abm_Empresa
@@ -101,7 +102,72 @@ namespace FrbaCommerce.Abm_Empresa
 
         private bool validarcampos()
         {
-            // agregar validaciones
+            if (Regex.Match(textBoxRazonSocial.Text, @"[a-zA-Z0-9]+", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "La razon social no es valida.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxNombreContacto.Text, @"^[a-zA-Z]+", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "El nombre de contacto no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxCuit.Text, @"^[0-9]+-[0-9]+-[0-9]+$", RegexOptions.Compiled).Success == false)
+            {
+                MessageBox.Show(null, "El CUIT no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxMail.Text, @"^[0-9a-zA-Z]+([0-9a-zA-Z]*[-._+])*[0-9a-zA-Z]+@[0-9a-zA-Z]+([-.][0-9a-zA-Z]+)*([0-9a-zA-Z]*[.])[a-zA-Z]{2,6}$", RegexOptions.Compiled).Success == false)
+            {
+                MessageBox.Show(null, "El mail no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxCiudad.Text, @"[a-zA-Z0-9]+$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "La ciudad no es valida.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxCalle.Text, @"[a-zA-Z0-9]+$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "La calle no es valida.", "Error");
+                return false;
+            }
+            if (comboBoxEstado.SelectedItem == null)
+            {
+                MessageBox.Show(null, "Debe elegir un estado para el cliente.", "Error");
+                return false;
+            }
+            if (textBoxFechaCreacion.Text.Length < 1)
+            {
+                MessageBox.Show(null, "Debe seleccionar una fecha de creacion.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxNumero.Text, @"^[0-9]+$", RegexOptions.Compiled).Success == false)
+            {
+                MessageBox.Show(null, "El numero no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxCodPostal.Text, @"^[a-zA-Z0-9]+$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "El codigo postal no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxPiso.Text, @"^[0-9]*$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "El piso no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxDepto.Text, @"^[a-zA-Z]*$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "El depto no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxTelefono.Text, @"^[a-zA-Z0-9-\.]+$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "El telefono no es valido.", "Error");
+                return false;
+            }
+
             return true;
         }
     }

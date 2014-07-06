@@ -124,10 +124,10 @@ namespace FrbaCommerce.Abm_Empresa
             command.Parameters["@Emp_Dir_Ciudad"].Value = ciudad;
             command.Parameters["@Emp_Dir_Calle"].Value = calle;
             command.Parameters["@Emp_Dir_Nro"].Value = Convert.ToInt32(nro);
-            command.Parameters["@Emp_Dir_Piso"].Value = Convert.ToInt32(piso);
+            command.Parameters["@Emp_Dir_Piso"].Value = (piso.Length > 0) ? Convert.ToInt32(piso) : (object)DBNull.Value;
             command.Parameters["@Emp_Dir_CodPostal"].Value = cod_postal;
-            command.Parameters["@Emp_Dir_Depto"].Value = depto;
-            command.Parameters["@Emp_Dir_Localidad"].Value = localidad;
+            command.Parameters["@Emp_Dir_Depto"].Value = (depto.Length > 0) ? depto : (object)DBNull.Value;
+            command.Parameters["@Emp_Dir_Localidad"].Value = (localidad.Length > 0) ? localidad : (object)DBNull.Value;
             command.Parameters["@User_Estado"].Value = estado;
             command.Parameters["@User_Nombre"].Value = (usuario != null) ? usuario : (object)DBNull.Value;
             command.Parameters["@User_Password"].Value = (password != null) ? password : (object)DBNull.Value;

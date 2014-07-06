@@ -98,14 +98,84 @@ namespace FrbaCommerce.Abm_Cliente
                     textBoxLocalidad.Text,
                     textBoxTelefono.Text,
                     comboBoxEstado.SelectedItem.ToString()
-                    ,this.usuario
-                    ,this.password) == true)
+                    , this.usuario
+                    , this.password) == true)
                     this.Close();
         }
 
         private bool validarcampos()
         {
-            // agregar validaciones
+            if (Regex.Match(textBoxNombre.Text, @"^[a-zA-Z]+", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "El nombre no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxApellido.Text, @"^[a-zA-Z]+", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "El apellido no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxCUIL.Text, @"^[0-9]+-[0-9]+-[0-9]+$", RegexOptions.Compiled).Success == false)
+            {
+                MessageBox.Show(null, "El CUIL no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxDocumento.Text, @"^[0-9]+$", RegexOptions.Compiled).Success == false)
+            {
+                MessageBox.Show(null, "El documento no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxMail.Text, @"^[0-9a-zA-Z]+([0-9a-zA-Z]*[-._+])*[0-9a-zA-Z]+@[0-9a-zA-Z]+([-.][0-9a-zA-Z]+)*([0-9a-zA-Z]*[.])[a-zA-Z]{2,6}$", RegexOptions.Compiled).Success == false)
+            {
+                MessageBox.Show(null, "El mail no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxCalle.Text, @"[a-zA-Z0-9]+$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "La calle no es valida.", "Error");
+                return false;
+            }
+            if (comboBoxEstado.SelectedItem == null)
+            {
+                MessageBox.Show(null, "Debe elegir un estado para el cliente.", "Error");
+                return false;
+            }
+            if (comboBoxTipoDocumento.SelectedItem == null)
+            {
+                MessageBox.Show(null, "Debe elegir un tipo de documento.", "Error");
+                return false;
+            }
+            if (textBoxFechaNacimiento.Text.Length < 1 )
+            {
+                MessageBox.Show(null, "Debe seleccionar una fecha de nacimiento.", "Error");
+                return false;
+            } 
+            if (Regex.Match(textBoxNumero.Text, @"^[0-9]+$", RegexOptions.Compiled).Success == false)
+            {
+                MessageBox.Show(null, "El numero no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxCodPostal.Text, @"^[a-zA-Z0-9]+$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "El codigo postal no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxPiso.Text, @"^[0-9]*$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "El piso no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxDepto.Text, @"^[a-zA-Z]*$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "El depto no es valido.", "Error");
+                return false;
+            }
+            if (Regex.Match(textBoxTelefono.Text, @"^[a-zA-Z0-9-\.]+$", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace).Success == false)
+            {
+                MessageBox.Show(null, "El telefono no es valido.", "Error");
+                return false;
+            }
+
             return true;
         }
 

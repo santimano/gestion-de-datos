@@ -1358,16 +1358,17 @@ BEGIN
 				   (Pub_Descripcion
 				   ,Pub_Stock
 				   ,Pub_Fecha
-				   ,Pub_Fecha_Venc
 				   ,Pub_Precio
 				   ,Pub_Visible_Cod
 				   ,Pub_Tipo_Id
 				   ,Pub_Estado_Id
+				   ,Pub_Fecha_Venc
 				   ,Pub_User_Id)
 			SELECT @Descripcion, @Stock, @Fecha, @Fecha_Venc, @Precio
 				,(SELECT Pub_Visible_Cod FROM C_R.Publicaciones_Visibilidad where Pub_Visible_Descripcion = @Visibilidad)
 				,(SELECT Pub_Tipo FROM C_R.Publicaciones_Tipo where Pub_Descripcion = @Tipo)
 				,(SELECT Pub_Estado_Id FROM C_R.Publicaciones_Estados where Pub_Estado_Desc = @Estado)
+				,(SELECT DATEADD(DAY, Pub_Visible_Duracion,@Fecha) FROM C_R.Publicaciones_Visibilidad where Pub_Visible_Descripcion = @Visibilidad)
 				, @Usuario
 				
 			DECLARE @Pub_Codigo numeric(18,0)	
@@ -1384,7 +1385,6 @@ BEGIN
 				Pub_Descripcion = @Descripcion
 				,Pub_Stock = @Stock
 				   ,Pub_Fecha = @Fecha
-				   ,Pub_Fecha_Venc = @Fecha_Venc
 				   ,Pub_Precio = @Precio
 				   ,Pub_Visible_Cod = (SELECT Pub_Visible_Cod FROM C_R.Publicaciones_Visibilidad where Pub_Visible_Descripcion = @Visibilidad)
 				   ,Pub_Tipo_Id = (SELECT Pub_Tipo FROM C_R.Publicaciones_Tipo where Pub_Descripcion = @Tipo)

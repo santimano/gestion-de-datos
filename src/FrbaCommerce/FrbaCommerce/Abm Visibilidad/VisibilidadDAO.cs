@@ -121,5 +121,31 @@ namespace FrbaCommerce.Abm_Visibilidad
 
         }
 
+
+        public int Duracion(string visibilidad)
+        {
+            SqlCommand command = new SqlCommand("SELECT Pub_Visible_Duracion FROM C_R.Publicaciones_Visibilidad WHERE Pub_Visible_Descripcion = @Visibilidad", Conexion);
+            command.CommandType = CommandType.Text;
+
+            command.Parameters.AddWithValue("@Visibilidad", visibilidad);
+
+            int duracion = 0;
+
+            try
+            {
+                Conexion.Open();
+                duracion = (int)command.ExecuteScalar();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+            return duracion;
+        }
     }
 }

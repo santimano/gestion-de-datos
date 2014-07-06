@@ -19,6 +19,8 @@ namespace FrbaCommerce.Generar_Publicacion
         private PublicacionDAO publicacionDao = new PublicacionDAO(BD.Instance.Conexion);
         private RubroDAO rubroDao = new RubroDAO(BD.Instance.Conexion);
         private int codigo = -1;
+        private decimal cantidadAnterior;
+        private bool editando;
 
         public GenPublicacion()
         {
@@ -29,13 +31,14 @@ namespace FrbaCommerce.Generar_Publicacion
             cbTipo.Items.AddRange(tipoPublicacionDao.FindAll().ToArray());
             lbRubros.Items.AddRange(rubroDao.FindAll().ToArray());
             cargarAcciones("Borrador");
+            editando = false;
         }
 
         public GenPublicacion(int codigo)
             : this()
         {
             this.codigo = codigo;
-
+            editando = true;
             Publicacion pub = publicacionDao.FindById(codigo);
             cargarCampos(pub);
             cargarAcciones(pub.Estado);
@@ -59,11 +62,6 @@ namespace FrbaCommerce.Generar_Publicacion
                 return false;
             }
             if (dtpInicio.Value == null || dtpInicio.Text == "" || dtpInicio.Value < Main.FechaSistema)
-            {
-                MessageBox.Show("Fecha inicio debe ser mayor a " + Main.FechaSistema.ToString());
-                return false;
-            }
-            if (dtpVencimiento.Value == null || dtpVencimiento.Text == "" || dtpVencimiento.Value < Main.FechaSistema)
             {
                 MessageBox.Show("Fecha inicio debe ser mayor a " + Main.FechaSistema.ToString());
                 return false;
@@ -92,9 +90,24 @@ namespace FrbaCommerce.Generar_Publicacion
                 MessageBox.Show("Debe seleccionar un tipo");
                 return false;
             }
-
+            if (cbVisibilidad.Text == "Gratis")
+            {
+                int gratuitas = publicacionDao.CantidadPublicacionesGratuitas();
+                if (gratuitas >= 3)
+                {
+                    MessageBox.Show("Ya tiene " + gratuitas + " publicaciones gratuitas, solo se puede tener 3");
+                    return false;
+                }
+            }
+            if (Estado == "Activa" && decimal.Parse(tbStock.Text) < cantidadAnterior)
+            {
+                MessageBox.Show("No se puede disminuir el stock");
+                return false;
+            }
+            double duracion = visibilidadDao.Duracion(cbVisibilidad.Text);
+            DateTime vencimiento = dtpInicio.Value.AddDays(duracion);
             publicacionDao.Persist(codigo, tbDescripcion.Text, int.Parse(tbStock.Text), dtpInicio.Value
-                , dtpVencimiento.Value, decimal.Parse(tbPrecio.Text), cbVisibilidad.Text
+                , vencimiento, decimal.Parse(tbPrecio.Text), cbVisibilidad.Text
                 , lbRubros.SelectedItems, cbTipo.Text, Estado, Main.Usuario);
 
             return true;
@@ -170,7 +183,6 @@ namespace FrbaCommerce.Generar_Publicacion
             btPausada.Text = "Guardar";
             tbDescripcion.Enabled = false;
             tbStock.Enabled = false;
-            dtpVencimiento.Enabled = false;
             dtpInicio.Enabled = false;
             tbPrecio.Enabled = false;
             lbRubros.Enabled = false;
@@ -187,7 +199,6 @@ namespace FrbaCommerce.Generar_Publicacion
             btFinalizada.Text = "Salir";
             tbDescripcion.Enabled = false;
             tbStock.Enabled = false;
-            dtpVencimiento.Enabled = false;
             dtpInicio.Enabled = false;
             tbPrecio.Enabled = false;
             lbRubros.Enabled = false;
@@ -200,29 +211,50 @@ namespace FrbaCommerce.Generar_Publicacion
         {
             btBorrador.Enabled = false;
             btActiva.Text = "Guardar";
-            dtpVencimiento.Enabled = false;
             dtpInicio.Enabled = false;
             tbPrecio.Enabled = false;
             lbRubros.Enabled = false;
             cbVisibilidad.Enabled = false;
             cbTipo.Enabled = false;
             cbPreguntas.Enabled = false;
+            tbStock.Enabled = cbTipo.Text != "Subasta";
         }
 
         private void cargarCampos(Publicacion pub)
         {
             tbDescripcion.Text = pub.Descripcion;
+            cantidadAnterior = pub.Stock;
             tbStock.Text = pub.Stock.ToString();
-            dtpVencimiento.Value = pub.FechaVenc;
             dtpInicio.Value = pub.Fecha;
+            tbVencimiento.Text = pub.FechaVenc.ToString();
             tbPrecio.Text = pub.Precio.ToString();
             lbRubros.SelectedItems.Clear();
-            foreach (string rubro in pub.Rubros) 
+            foreach (string rubro in pub.Rubros)
             {
                 lbRubros.SelectedItems.Add(rubro);
             }
             cbVisibilidad.Text = pub.Visibilidad;
             cbTipo.Text = pub.Tipo;
+        }
+
+        private void cbVisibilidad_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            calcularVencimiento();
+        }
+
+        private void calcularVencimiento()
+        {
+            if (!editando && cbVisibilidad.Text != "")
+            {
+                double duracion = visibilidadDao.Duracion(cbVisibilidad.Text);
+                DateTime vencimiento = dtpInicio.Value.AddDays(duracion);
+                tbVencimiento.Text = vencimiento.ToString();
+            }
+        }
+
+        private void dtpInicio_ValueChanged(object sender, EventArgs e)
+        {
+            calcularVencimiento();
         }
 
     }

@@ -6,12 +6,13 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using FrbaCommerce.Login;
 
 namespace FrbaCommerce
 {
     public partial class Main : Form
     {
-        public static String Rol { get; set; }
+        public static Rol Rol { get; set; }
         public static DateTime FechaSistema { get; set; }
         public static int Usuario { get; set; }
         public static String UsuarioNombre { get; set; }
@@ -43,10 +44,38 @@ namespace FrbaCommerce
             this.accederToolStripMenuItem.Visible = Rol == null;
             this.salirToolStripMenuItem.Visible = Rol != null;
             this.cambiarPasswordToolStripMenuItem.Visible = Rol != null;
-            this.aBMToolStripMenuItem.Visible = Rol != null && Rol.Equals("Administrativo");
-            this.clienteToolStripMenuItem.Visible = Rol != null && Rol.Equals("Cliente");
-            this.empresaToolStripMenuItem.Visible = Rol != null && Rol.Equals("Empresa");
-            this.facturarToolStripMenuItem.Visible = Rol != null && Rol.Equals("Administrativo");            
+            this.aBMToolStripMenuItem.Visible = Rol != null && Rol.Name.Equals("Administrativo");
+            this.clienteToolStripMenuItem.Visible = Rol != null && Rol.Name.Equals("Cliente");
+            this.empresaToolStripMenuItem.Visible = Rol != null && Rol.Name.Equals("Empresa");
+            this.adminFacturar.Visible = Rol != null && Rol.Name.Equals("Administrativo");
+            actualizarSubMenus();
+        }
+
+        private void actualizarSubMenus()
+        {
+            this.abmClientes.Visible = Rol != null && Rol.Funciones.Contains("ABM Clientes");
+            this.abmEmpresas.Visible = Rol != null && Rol.Funciones.Contains("ABM Empresas");
+            this.abmRoles.Visible = Rol != null && Rol.Funciones.Contains("ABM Roles");
+            this.abmVisibilidad.Visible = Rol != null && Rol.Funciones.Contains("ABM Visibilidad");
+
+            this.nuevaPubCli.Visible = Rol != null && Rol.Funciones.Contains("Cliente Publicacion Nueva");
+            this.editarPubCli.Visible = Rol != null && Rol.Funciones.Contains("Cliente Publicacion Editar");
+            this.ofertasCli.Visible = Rol != null && Rol.Funciones.Contains("Cliente Historial Ofertas");
+            this.comprasCli.Visible = Rol != null && Rol.Funciones.Contains("Cliente Historial Compras");
+            this.califCli.Visible = Rol != null && Rol.Funciones.Contains("Cliente Historial Calificaciones");
+            this.califVen.Visible = Rol != null && Rol.Funciones.Contains("Cliente Calificar Vendedor");
+            this.cliPregRec.Visible = Rol != null && Rol.Funciones.Contains("Cliente Preguntas Recibidas");
+            this.cliPregHechas.Visible = Rol != null && Rol.Funciones.Contains("Cliente Preguntas Hechas");
+            this.cliFacturar.Visible = Rol != null && Rol.Funciones.Contains("Cliente Facturar Publicaciones");
+
+            this.nuevaPubEmp.Visible = Rol != null && Rol.Funciones.Contains("Empresa Publicacion Nueva");
+            this.editarPubEmp.Visible = Rol != null && Rol.Funciones.Contains("Empresa Publicacion Editar");
+            this.califEmp.Visible = Rol != null && Rol.Funciones.Contains("Empresa Historial Calificaciones");
+            this.empPregRec.Visible = Rol != null && Rol.Funciones.Contains("Empresa Preguntas Recibidas");
+            this.empFacturar.Visible = Rol != null && Rol.Funciones.Contains("Empresa Facturar Publicaciones");
+
+            this.adminFacturar.Visible = Rol != null && Rol.Funciones.Contains("Admin Facturar Publicaciones");
+
         }
 
         private void rolesToolStripMenuItem_Click(object sender, EventArgs e)

@@ -620,7 +620,6 @@ GO
 INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('ABM Roles');
 INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('ABM Clientes');
 INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('ABM Empresas');
-INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('ABM Rubro');
 INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('ABM Visibilidad');
 INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Cliente Publicacion Nueva');
 INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Cliente Publicacion Editar');

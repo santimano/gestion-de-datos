@@ -5,6 +5,7 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 using System.Windows.Forms;
+using FrbaCommerce.ABM_Rol;
 
 namespace FrbaCommerce.Login
 {
@@ -59,11 +60,11 @@ namespace FrbaCommerce.Login
 
         }
 
-        public List<String> Roles(String usuario)
+        public List<Rol> Roles(String usuario)
         {
-            List<String> roles = new List<String>();
+            List<Rol> roles = new List<Rol>();
 
-            String query = "SELECT R.Rol_Descripcion "
+            String query = "SELECT R.Rol_Descripcion, R.Rol_Id "
              + "FROM C_R.Roles R "
              + "INNER JOIN C_R.RL_Usuarios_Roles UR ON R.Rol_Id = UR.Rol_Id "
              + "INNER JOIN C_R.Usuarios U ON UR.User_Id = U.User_Id "
@@ -85,7 +86,10 @@ namespace FrbaCommerce.Login
                 {
                     while (datareader.Read())
                     {
-                        roles.Add(datareader.GetString(0));
+                        Rol rol = new Rol();
+                        rol.Name = datareader.GetString(0);
+                        rol.Id = datareader.GetInt32(1);
+                        roles.Add(rol);
                     }
 
                 }
@@ -98,7 +102,10 @@ namespace FrbaCommerce.Login
             {
                 Conexion.Close();
             }
-
+            foreach (Rol rol in roles)
+            {
+                rol.Funciones = Funcionalidades(rol.Id);
+            }
             return roles;
 
         }
@@ -135,8 +142,43 @@ namespace FrbaCommerce.Login
             {
                 Conexion.Close();
             }
-            
+
             return rc;
+        }
+
+        public List<string> Funcionalidades(int rolId)
+        {
+            List<string> funcionalidades = new List<string>();
+            Conexion.Open();
+            try
+            {
+                string query = "SELECT Sis_Fun_Des FROM C_R.Sis_Funciones F, C_R.RL_Roles_Funciones RL ";
+                query += " WHERE RL.Rol_Id = @RolId AND F.Sis_Fun_Id = RL.Sis_Fun_Id";
+
+                using (SqlCommand command = new SqlCommand(query, Conexion))
+                {
+                    command.Parameters.AddWithValue("@RolId", rolId);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                funcionalidades.Add(reader.GetString(0));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+            return funcionalidades;
         }
 
     }

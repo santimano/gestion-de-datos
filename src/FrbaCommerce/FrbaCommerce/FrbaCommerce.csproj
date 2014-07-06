@@ -189,6 +189,7 @@
     <Compile Include="Login\Registrarse.Designer.cs">
       <DependentUpon>Registrarse.cs</DependentUpon>
     </Compile>
+    <Compile Include="Login\Rol.cs" />
     <Compile Include="Login\Roles.cs">
       <SubType>Form</SubType>
     </Compile>

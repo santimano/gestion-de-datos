@@ -30,6 +30,7 @@ namespace FrbaCommerce.ABM_Rol
             DataSet Ds = new DataSet();
             try
             {
+
                 Conexion.Open();
 
                 // Conexion Abierta

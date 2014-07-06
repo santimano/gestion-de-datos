@@ -48,7 +48,7 @@ namespace FrbaCommerce.Login
                     return;
             }
 
-            List<String> roles = dao.Roles(this.textBoxUsuario.Text);
+            List<Rol> roles = dao.Roles(this.textBoxUsuario.Text);
 
             if (roles.Count > 1)
             {
@@ -65,7 +65,7 @@ namespace FrbaCommerce.Login
             }
             else
             {// no se encontraron roles
-                Main.Rol = "N/A";
+                Main.Rol = null;
             }
             this.Close();
 

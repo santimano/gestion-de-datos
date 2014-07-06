@@ -11,7 +11,7 @@ namespace FrbaCommerce.Login
 {
     public partial class Roles : Form
     {
-        public Roles(List<String> roles)
+        public Roles(List<Rol> roles)
         {
             InitializeComponent();
             comboBoxRoles.Items.AddRange(roles.ToArray());
@@ -28,7 +28,7 @@ namespace FrbaCommerce.Login
                 MessageBox.Show(null, "No se ha seleccionado opcion. Por favor elija una opcion de las disponibles.", "Error");
             else
             {
-                Main.Rol = comboBoxRoles.SelectedItem.ToString();
+                Main.Rol = (Rol) comboBoxRoles.SelectedItem;
                 this.Close();
             }
         }

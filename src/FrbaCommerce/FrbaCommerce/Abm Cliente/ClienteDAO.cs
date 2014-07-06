@@ -216,14 +216,14 @@ namespace FrbaCommerce.Abm_Cliente
         public void EliminarCliente(string id_cliente)
         {
             string query = "UPDATE C_R.Usuarios "
-                        + "SET User_Eliminado = 1 "
-                        + "WHERE User_Id = (SELECT Cli_User_Id FROM C_R.Clientes WHERE Cli_User_Id = @Cli_User_Id)";
+                         + "SET User_Eliminado = 1 "
+                         + "WHERE User_Id = (SELECT Cli_User_Id FROM C_R.Clientes WHERE Cli_Id = @Cli_Id)";
 
             SqlCommand command = new SqlCommand(query, Conexion);
 
             command.CommandType = CommandType.Text;
-            command.Parameters.Add("@Cli_User_Id", SqlDbType.Int);
-            command.Parameters["@Cli_User_Id"].Value = Convert.ToInt32(id_cliente);
+            command.Parameters.Add("@Cli_Id", SqlDbType.Int);
+            command.Parameters["@Cli_Id"].Value = Convert.ToInt32(id_cliente);
 
             try
             {

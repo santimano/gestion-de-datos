@@ -23,12 +23,12 @@ if exists(select * from sys.objects where name ='SP_Rol_SAVE' and type = 'P')
 	drop procedure [C_R].[SP_Rol_SAVE]
 go
 
-if exists(select * from sys.objects where name ='SP_ALTA_EMPRESA' and type = 'P')
-	drop procedure [C_R].[SP_ALTA_EMPRESA]
-go
-
 if exists(select * from sys.objects where name ='SP_CLIENTE_SAVE' and type = 'P')
 	drop procedure [C_R].[SP_CLIENTE_SAVE]
+go
+
+if exists(select * from sys.objects where name ='SP_EMPRESA_SAVE' and type = 'P')
+	drop procedure [C_R].[SP_EMPRESA_SAVE]
 go
 
 if exists(select * from sys.objects where name ='SP_FACTURAR' and type = 'P')
@@ -218,7 +218,7 @@ CREATE TABLE [C_R].[Empresas]
 	[Emp_Fecha_Creacion] datetime		NOT NULL ,
 	[Emp_Mail]           varchar(255)   NOT NULL ,
 	[Emp_Contacto]       varchar(255)   NOT NULL ,
-	[Emp_Telefono]		 varchar(50)	NOT NULL default 'MIG-' +substring(convert(varchar(50), newID()),1,20),
+	[Emp_Telefono]		 varchar(50)	NOT NULL ,
 	[Emp_RazonSocial]    varchar(255)	NOT NULL ,
 	[Emp_User_Id]        int			NOT NULL ,
 	[Emp_Dir_Ciudad]	 varchar(255)   NOT NULL ,
@@ -235,34 +235,6 @@ CREATE TABLE [C_R].[Empresas]
 	CONSTRAINT [UQ_Empresa_RazonSocial] UNIQUE ([Emp_RazonSocial] ASC)
 )
 go
-
-CREATE PROCEDURE C_R.SP_ALTA_EMPRESA
-@Emp_Cuit varchar(50),
-@Emp_RazonSocial varchar(255),
-@Emp_Fecha_Creacion datetime,
-@Emp_Mail varchar(255),
-@Emp_Contacto varchar(255),
-@Emp_Dir_Ciudad varchar(255),
-@Emp_Dir_Calle varchar(255),
-@Emp_Dir_Nro numeric(18),
-@Emp_Dir_Piso numeric(18),
-@Emp_Dir_CodPostal varchar(50),
-@Emp_Dir_Depto varchar(50),
-@Emp_Dir_Localidad varchar(50)
-AS
-BEGIN
-	SET NOCOUNT ON;
-	
-	-- hash para password "changeme"
-	INSERT INTO C_R.Usuarios(User_Name, User_Password) values
-	(REPLACE(@Emp_Cuit,'-',''),'057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86')
-	
-	INSERT INTO C_R.Empresas ( Emp_Fecha_Creacion, Emp_Mail, Emp_Contacto, Emp_RazonSocial, Emp_Cuit, Emp_User_Id, Emp_Dir_Ciudad, Emp_Dir_Calle, Emp_Dir_Nro, Emp_Dir_Piso, Emp_Dir_CodPostal, Emp_Dir_Depto, Emp_Dir_Localidad) values
-	(@Emp_Fecha_Creacion, @Emp_Mail, @Emp_Contacto, @Emp_RazonSocial, @Emp_Cuit, SCOPE_IDENTITY(), @Emp_Dir_Ciudad, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad)
-	
-END
-GO
-
 
 CREATE TABLE [C_R].[Factura]
 ( 
@@ -812,12 +784,111 @@ END
 CLOSE clientes_cursor   
 DEALLOCATE clientes_cursor
 GO
+
+CREATE PROCEDURE C_R.SP_EMPRESA_SAVE
+@Emp_Id int,
+@Emp_Cuit varchar(50),
+@Emp_RazonSocial varchar(255),
+@Emp_Fecha_Creacion datetime,
+@Emp_Mail varchar(255),
+@Emp_Contacto varchar(255),
+@Emp_Telefono varchar(50),
+@Emp_Dir_Ciudad varchar(255),
+@Emp_Dir_Calle varchar(255),
+@Emp_Dir_Nro numeric(18),
+@Emp_Dir_Piso numeric(18),
+@Emp_Dir_CodPostal varchar(50),
+@Emp_Dir_Depto varchar(50),
+@Emp_Dir_Localidad varchar(50),
+@User_Estado varchar(10)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+	IF (@Emp_Id IS NULL)
+	BEGIN
+		
+		INSERT INTO C_R.Usuarios
+			(User_Name
+			,User_Password) 
+		VALUES
+			(REPLACE(@Emp_Cuit,'-','')
+			-- hash para password "changeme"
+			,'057ba03d6c44104863dc7361fe4578965d1887360f90a0895882e58a6248fc86')
+		
+		INSERT INTO C_R.Empresas 
+			(Emp_Fecha_Creacion
+			,Emp_Mail
+			,Emp_Contacto
+			,Emp_RazonSocial
+			,Emp_Cuit
+			,Emp_User_Id
+			,Emp_Dir_Ciudad
+			,Emp_Dir_Calle
+			,Emp_Dir_Nro
+			,Emp_Dir_Piso
+			,Emp_Dir_CodPostal
+			,Emp_Dir_Depto
+			,Emp_Dir_Localidad
+			,Emp_Telefono)
+		VALUES
+			(@Emp_Fecha_Creacion
+			,@Emp_Mail
+			,@Emp_Contacto
+			,@Emp_RazonSocial
+			,@Emp_Cuit
+			,SCOPE_IDENTITY()
+			,@Emp_Dir_Ciudad
+			,@Emp_Dir_Calle
+			,@Emp_Dir_Nro
+			,@Emp_Dir_Piso
+			,@Emp_Dir_CodPostal
+			,@Emp_Dir_Depto
+			,@Emp_Dir_Localidad
+			,@Emp_Telefono)
+		
+		RETURN
+
+	END
+	
+	DECLARE @User_Id int
+	
+	SELECT @User_Id = Emp_User_Id FROM C_R.Empresas where Emp_Id = @Emp_Id
+	
+	UPDATE C_R.Empresas
+	SET
+		Emp_Fecha_Creacion = @Emp_Fecha_Creacion,
+		Emp_Mail = @Emp_Mail,
+		Emp_Contacto = @Emp_Contacto,
+		Emp_RazonSocial = @Emp_RazonSocial,
+		Emp_Cuit = @Emp_Cuit,
+		Emp_Dir_Ciudad = @Emp_Dir_Ciudad,
+		Emp_Dir_Calle = @Emp_Dir_Calle,
+		Emp_Dir_Nro = @Emp_Dir_Nro,
+		Emp_Dir_Piso = @Emp_Dir_Piso,
+		Emp_Dir_CodPostal = @Emp_Dir_CodPostal,
+		Emp_Dir_Depto = @Emp_Dir_Depto,
+		Emp_Dir_Localidad = @Emp_Dir_Localidad,
+		Emp_Telefono = @Emp_Telefono
+	WHERE
+		Emp_Id = @Emp_Id
+		
+	UPDATE C_R.Usuarios
+	SET
+		User_Estado = @User_Estado
+	WHERE
+		User_Id = @User_Id
+	
+END
+GO
+
 -- Insert de Empresas
 DECLARE @Emp_Cuit varchar(50),
 		@Emp_RazonSocial varchar(255),
 		@Emp_Fecha_Creacion datetime,
 		@Emp_Contacto varchar(255),
 		@Emp_Mail varchar(255),
+		@Emp_Telefono varchar(50),
 		@Emp_Dir_Ciudad varchar(255),
 		@Emp_Dir_Calle varchar(255),
 		@Emp_Dir_Nro numeric(18),
@@ -832,7 +903,7 @@ Publ_Empresa_Cuit,
 Publ_Empresa_Razon_Social,
 Publ_Empresa_Fecha_Creacion,
 'CONTACTO No asignado',
-Publ_Empresa_Mail,
+REPLACE(REPLACE(Publ_Empresa_Mail,' ','_'),'º:',''),
 'CIUDAD No asignada',
 Publ_Empresa_Dom_Calle, 
 Publ_Empresa_Nro_Calle, 
@@ -847,8 +918,10 @@ order by 1,2,3
 OPEN empresas_cursor		
 FETCH NEXT FROM empresas_cursor INTO @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Contacto, @Emp_Mail, @Emp_Dir_Ciudad, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad
 WHILE @@FETCH_STATUS = 0   
-BEGIN   
-   EXEC C_R.SP_ALTA_EMPRESA @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Mail, @Emp_Contacto, @Emp_Dir_Ciudad, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad
+
+BEGIN
+   SET @Emp_Telefono = 'MIG-' + substring(convert(varchar(50), newID()),1,20)
+   EXEC C_R.SP_EMPRESA_SAVE NULL, @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Mail, @Emp_Contacto, @Emp_Telefono, @Emp_Dir_Ciudad, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad, NULL
    FETCH NEXT FROM empresas_cursor INTO @Emp_Cuit, @Emp_RazonSocial, @Emp_Fecha_Creacion, @Emp_Contacto, @Emp_Mail, @Emp_Dir_Ciudad, @Emp_Dir_Calle, @Emp_Dir_Nro, @Emp_Dir_Piso, @Emp_Dir_CodPostal, @Emp_Dir_Depto, @Emp_Dir_Localidad
    
 END   

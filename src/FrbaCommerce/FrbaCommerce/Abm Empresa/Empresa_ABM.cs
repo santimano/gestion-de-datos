@@ -45,5 +45,29 @@ namespace FrbaCommerce.Abm_Empresa
             this.actualizar();
         }
 
+        private void dataGridViewEmpresas_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                new EditarEmpresa("modificacion", dataGridViewEmpresas.Rows[e.RowIndex]).ShowDialog();
+                this.actualizar();
+            }
+            else if (e.ColumnIndex == 1)
+            {
+                DialogResult resultado = MessageBox.Show("Esta seguro que desea eliminar la empresa ?", "Eliminar", MessageBoxButtons.YesNo);
+                if (resultado == DialogResult.Yes)
+                {
+                    dao.EliminarEmpresa(dataGridViewEmpresas.Rows[e.RowIndex].Cells["ID"].Value.ToString());
+                }
+                this.actualizar();
+            }
+        }
+
+        private void buttonNuevo_Click(object sender, EventArgs e)
+        {
+            new EditarEmpresa("alta", null).ShowDialog();
+            this.actualizar();
+        }
+
     }
 }

@@ -91,7 +91,7 @@
             this.textBoxDocumento.Location = new System.Drawing.Point(375, 51);
             this.textBoxDocumento.Name = "textBoxDocumento";
             this.textBoxDocumento.Size = new System.Drawing.Size(101, 20);
-            this.textBoxDocumento.TabIndex = 9;
+            this.textBoxDocumento.TabIndex = 7;
             // 
             // labelDocumento
             // 
@@ -99,7 +99,7 @@
             this.labelDocumento.Location = new System.Drawing.Point(263, 54);
             this.labelDocumento.Name = "labelDocumento";
             this.labelDocumento.Size = new System.Drawing.Size(104, 13);
-            this.labelDocumento.TabIndex = 8;
+            this.labelDocumento.TabIndex = 6;
             this.labelDocumento.Text = "Documento (Exacto)";
             // 
             // textBoxMail
@@ -107,7 +107,7 @@
             this.textBoxMail.Location = new System.Drawing.Point(128, 83);
             this.textBoxMail.Name = "textBoxMail";
             this.textBoxMail.Size = new System.Drawing.Size(101, 20);
-            this.textBoxMail.TabIndex = 7;
+            this.textBoxMail.TabIndex = 9;
             // 
             // label1
             // 
@@ -115,7 +115,7 @@
             this.label1.Location = new System.Drawing.Point(14, 86);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(77, 13);
-            this.label1.TabIndex = 6;
+            this.label1.TabIndex = 8;
             this.label1.Text = "Mail (Contiene)";
             // 
             // comboBoxTipoDocumento
@@ -124,7 +124,7 @@
             this.comboBoxTipoDocumento.Location = new System.Drawing.Point(375, 18);
             this.comboBoxTipoDocumento.Name = "comboBoxTipoDocumento";
             this.comboBoxTipoDocumento.Size = new System.Drawing.Size(102, 21);
-            this.comboBoxTipoDocumento.TabIndex = 5;
+            this.comboBoxTipoDocumento.TabIndex = 3;
             // 
             // labelTipoDocumento
             // 
@@ -132,7 +132,7 @@
             this.labelTipoDocumento.Location = new System.Drawing.Point(263, 21);
             this.labelTipoDocumento.Name = "labelTipoDocumento";
             this.labelTipoDocumento.Size = new System.Drawing.Size(86, 13);
-            this.labelTipoDocumento.TabIndex = 4;
+            this.labelTipoDocumento.TabIndex = 2;
             this.labelTipoDocumento.Text = "Tipo Documento";
             // 
             // textBoxApellido
@@ -140,7 +140,7 @@
             this.textBoxApellido.Location = new System.Drawing.Point(128, 51);
             this.textBoxApellido.Name = "textBoxApellido";
             this.textBoxApellido.Size = new System.Drawing.Size(101, 20);
-            this.textBoxApellido.TabIndex = 3;
+            this.textBoxApellido.TabIndex = 5;
             // 
             // labelApellido
             // 
@@ -148,7 +148,7 @@
             this.labelApellido.Location = new System.Drawing.Point(14, 56);
             this.labelApellido.Name = "labelApellido";
             this.labelApellido.Size = new System.Drawing.Size(95, 13);
-            this.labelApellido.TabIndex = 2;
+            this.labelApellido.TabIndex = 4;
             this.labelApellido.Text = "Apellido (Contiene)";
             // 
             // textBoxNombre
@@ -169,7 +169,7 @@
             // 
             // buttonNuevo
             // 
-            this.buttonNuevo.Location = new System.Drawing.Point(28, 140);
+            this.buttonNuevo.Location = new System.Drawing.Point(28, 145);
             this.buttonNuevo.Name = "buttonNuevo";
             this.buttonNuevo.Size = new System.Drawing.Size(76, 22);
             this.buttonNuevo.TabIndex = 1;
@@ -179,7 +179,7 @@
             // 
             // buttonLimpiar
             // 
-            this.buttonLimpiar.Location = new System.Drawing.Point(119, 140);
+            this.buttonLimpiar.Location = new System.Drawing.Point(119, 145);
             this.buttonLimpiar.Name = "buttonLimpiar";
             this.buttonLimpiar.Size = new System.Drawing.Size(75, 22);
             this.buttonLimpiar.TabIndex = 2;
@@ -189,7 +189,7 @@
             // 
             // buttonBuscar
             // 
-            this.buttonBuscar.Location = new System.Drawing.Point(212, 140);
+            this.buttonBuscar.Location = new System.Drawing.Point(212, 145);
             this.buttonBuscar.Name = "buttonBuscar";
             this.buttonBuscar.Size = new System.Drawing.Size(75, 22);
             this.buttonBuscar.TabIndex = 3;

@@ -127,7 +127,7 @@
             // 
             // buttonBuscar
             // 
-            this.buttonBuscar.Location = new System.Drawing.Point(214, 126);
+            this.buttonBuscar.Location = new System.Drawing.Point(214, 132);
             this.buttonBuscar.Name = "buttonBuscar";
             this.buttonBuscar.Size = new System.Drawing.Size(75, 22);
             this.buttonBuscar.TabIndex = 6;
@@ -137,7 +137,7 @@
             // 
             // buttonLimpiar
             // 
-            this.buttonLimpiar.Location = new System.Drawing.Point(121, 126);
+            this.buttonLimpiar.Location = new System.Drawing.Point(121, 132);
             this.buttonLimpiar.Name = "buttonLimpiar";
             this.buttonLimpiar.Size = new System.Drawing.Size(75, 22);
             this.buttonLimpiar.TabIndex = 5;
@@ -147,12 +147,13 @@
             // 
             // buttonNuevo
             // 
-            this.buttonNuevo.Location = new System.Drawing.Point(30, 126);
+            this.buttonNuevo.Location = new System.Drawing.Point(30, 132);
             this.buttonNuevo.Name = "buttonNuevo";
             this.buttonNuevo.Size = new System.Drawing.Size(76, 22);
             this.buttonNuevo.TabIndex = 4;
             this.buttonNuevo.Text = "Nuevo";
             this.buttonNuevo.UseVisualStyleBackColor = true;
+            this.buttonNuevo.Click += new System.EventHandler(this.buttonNuevo_Click);
             // 
             // groupBoxEmpresas
             // 
@@ -192,6 +193,7 @@
             this.dataGridViewEmpresas.ReadOnly = true;
             this.dataGridViewEmpresas.Size = new System.Drawing.Size(458, 241);
             this.dataGridViewEmpresas.TabIndex = 0;
+            this.dataGridViewEmpresas.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEmpresas_CellContentClick);
             // 
             // ID
             // 

@@ -54,7 +54,7 @@ namespace FrbaCommerce.Abm_Cliente
                 new EditarCliente("modificacion", dataGridViewClientes.Rows[e.RowIndex]).ShowDialog();
                 this.actualizar();
             }
-            if (e.ColumnIndex == 1)
+            else if (e.ColumnIndex == 1)
             {
                 DialogResult resultado = MessageBox.Show("Esta seguro que desea eliminar el cliente ?", "Eliminar", MessageBoxButtons.YesNo);
                 if (resultado == DialogResult.Yes)

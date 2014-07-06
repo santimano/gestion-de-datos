@@ -13,14 +13,12 @@ namespace FrbaCommerce.Abm_Cliente
     public partial class EditarCliente : Form
     {
         private ClienteDAO dao = new ClienteDAO(BD.Instance.Conexion);
-        private string accion;
 
-        public EditarCliente(string a, DataGridViewRow linea)
+        public EditarCliente(string accion, DataGridViewRow linea)
         {
             InitializeComponent();
-            this.accion = a;
             comboBoxTipoDocumento.Items.AddRange(dao.TipoDocumento().ToArray());
-            if (this.accion == "modificacion")
+            if (accion == "modificacion")
                 this.Modificacion(linea);
             else
                 this.Text = "AgregarCliente";

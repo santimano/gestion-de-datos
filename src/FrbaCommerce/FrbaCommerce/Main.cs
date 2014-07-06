@@ -152,6 +152,7 @@ namespace FrbaCommerce
             this.Hide();
             Abm_Empresa.Empresa_ABM abmEmpresaForm = new Abm_Empresa.Empresa_ABM();
             abmEmpresaForm.ShowDialog();
+            this.Show();
 		}
 		
         private void facturarPublicacionesToolStripMenuItem_Click(object sender, EventArgs e)

@@ -41,7 +41,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.cbPreguntas = new System.Windows.Forms.CheckBox();
-            this.dtpVencimiento = new System.Windows.Forms.DateTimePicker();
             this.dtpInicio = new System.Windows.Forms.DateTimePicker();
             this.lbRubros = new System.Windows.Forms.ListBox();
             this.cbTipo = new System.Windows.Forms.ComboBox();
@@ -52,6 +51,7 @@
             this.btPausada = new System.Windows.Forms.Button();
             this.btActiva = new System.Windows.Forms.Button();
             this.btBorrador = new System.Windows.Forms.Button();
+            this.tbVencimiento = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -93,7 +93,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 74);
+            this.label3.Location = new System.Drawing.Point(6, 97);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(65, 13);
             this.label3.TabIndex = 4;
@@ -128,7 +128,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 103);
+            this.label6.Location = new System.Drawing.Point(6, 69);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(32, 13);
             this.label6.TabIndex = 9;
@@ -170,19 +170,13 @@
             this.cbPreguntas.TabIndex = 13;
             this.cbPreguntas.UseVisualStyleBackColor = true;
             // 
-            // dtpVencimiento
-            // 
-            this.dtpVencimiento.Location = new System.Drawing.Point(105, 68);
-            this.dtpVencimiento.Name = "dtpVencimiento";
-            this.dtpVencimiento.Size = new System.Drawing.Size(200, 20);
-            this.dtpVencimiento.TabIndex = 14;
-            // 
             // dtpInicio
             // 
-            this.dtpInicio.Location = new System.Drawing.Point(105, 97);
+            this.dtpInicio.Location = new System.Drawing.Point(104, 69);
             this.dtpInicio.Name = "dtpInicio";
             this.dtpInicio.Size = new System.Drawing.Size(200, 20);
             this.dtpInicio.TabIndex = 15;
+            this.dtpInicio.ValueChanged += new System.EventHandler(this.dtpInicio_ValueChanged);
             // 
             // lbRubros
             // 
@@ -208,9 +202,11 @@
             this.cbVisibilidad.Name = "cbVisibilidad";
             this.cbVisibilidad.Size = new System.Drawing.Size(121, 21);
             this.cbVisibilidad.TabIndex = 18;
+            this.cbVisibilidad.SelectedIndexChanged += new System.EventHandler(this.cbVisibilidad_SelectedIndexChanged);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.tbVencimiento);
             this.groupBox1.Controls.Add(this.tbDescripcion);
             this.groupBox1.Controls.Add(this.cbPreguntas);
             this.groupBox1.Controls.Add(this.cbTipo);
@@ -225,7 +221,6 @@
             this.groupBox1.Controls.Add(this.dtpInicio);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.dtpVencimiento);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.tbPrecio);
@@ -289,6 +284,14 @@
             this.btBorrador.UseVisualStyleBackColor = true;
             this.btBorrador.Click += new System.EventHandler(this.btBorrador_Click);
             // 
+            // tbVencimiento
+            // 
+            this.tbVencimiento.Enabled = false;
+            this.tbVencimiento.Location = new System.Drawing.Point(105, 94);
+            this.tbVencimiento.Name = "tbVencimiento";
+            this.tbVencimiento.Size = new System.Drawing.Size(100, 20);
+            this.tbVencimiento.TabIndex = 19;
+            // 
             // GenPublicacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -320,7 +323,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.CheckBox cbPreguntas;
-        private System.Windows.Forms.DateTimePicker dtpVencimiento;
         private System.Windows.Forms.DateTimePicker dtpInicio;
         private System.Windows.Forms.ListBox lbRubros;
         private System.Windows.Forms.ComboBox cbTipo;
@@ -331,5 +333,6 @@
         private System.Windows.Forms.Button btActiva;
         private System.Windows.Forms.Button btPausada;
         private System.Windows.Forms.Button btFinalizada;
+        private System.Windows.Forms.TextBox tbVencimiento;
     }
 }

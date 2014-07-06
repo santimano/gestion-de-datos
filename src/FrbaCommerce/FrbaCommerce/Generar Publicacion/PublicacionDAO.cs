@@ -174,7 +174,7 @@ namespace FrbaCommerce.Generar_Publicacion
             return Ds;
 
         }
-        
+
         private DataTable CrearRubrosTable(ListBox.SelectedObjectCollection items)
         {
             var tbl = new DataTable();
@@ -184,6 +184,32 @@ namespace FrbaCommerce.Generar_Publicacion
                 tbl.Rows.Add(item.ToString());
             }
             return tbl;
+        }
+
+        public int CantidadPublicacionesGratuitas()
+        {
+            String query = "select COUNT(1) from C_R.Publicaciones P, C_R.Publicaciones_Estados E";
+            query += " WHERE P.Pub_Estado_Id = E.Pub_Estado_Id ";
+            query += " AND E.Pub_Estado_Desc = 'Activa' ";
+            query += " AND P.Pub_User_Id = @Usuario ";
+            SqlCommand command = new SqlCommand(query, Conexion);
+            command.CommandType = CommandType.Text;
+            command.Parameters.AddWithValue("@Usuario", Main.Usuario);
+            int cantidad = 0;
+            try
+            {
+                Conexion.Open();
+                cantidad = (int)command.ExecuteScalar();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+            return cantidad;
         }
     }
 }

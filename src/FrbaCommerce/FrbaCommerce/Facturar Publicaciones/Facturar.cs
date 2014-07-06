@@ -105,7 +105,8 @@ namespace FrbaCommerce.Facturar_Publicaciones
             decimal unitario = (decimal)cells[3].Value;
             decimal total = (decimal)cells[4].Value;
             decimal pubCodigo = (decimal)cells[5].Value;
-            Item item = new Item(publicacion, fecha, vendidos, unitario, total, pubCodigo);
+            decimal visibilidad = (decimal)cells[6].Value;
+            Item item = new Item(publicacion, fecha, vendidos, unitario, total, pubCodigo, visibilidad);
             return item;
         }
 

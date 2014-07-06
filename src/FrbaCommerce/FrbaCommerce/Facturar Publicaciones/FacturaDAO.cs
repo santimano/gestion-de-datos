@@ -84,9 +84,10 @@ namespace FrbaCommerce.Facturar_Publicaciones
             tbl.Columns.Add("Publicacion", typeof(string));
             tbl.Columns.Add("Pub_Codigo", typeof(decimal));
             tbl.Columns.Add("Total", typeof(decimal));
+            tbl.Columns.Add("Visibilidad", typeof(int));
             foreach (var item in items)
             {
-                tbl.Rows.Add(item.Vendidos, item.Unitario, item.Publicacion, item.PubCodigo, item.Total);
+                tbl.Rows.Add(item.Vendidos, item.Unitario, item.Publicacion, item.PubCodigo, item.Total, item.Visibilidad);
             }
 
             return tbl;

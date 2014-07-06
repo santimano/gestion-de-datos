@@ -30,12 +30,6 @@
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Publicacion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Fecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Vendidos = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Unitario = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Total = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Pub_Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.cbFormaPago = new System.Windows.Forms.ComboBox();
@@ -51,6 +45,13 @@
             this.label6 = new System.Windows.Forms.Label();
             this.tbTotalAFact = new System.Windows.Forms.TextBox();
             this.btCalcular = new System.Windows.Forms.Button();
+            this.Publicacion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Fecha = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Vendidos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Unitario = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Total = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Pub_Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Visibilidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.gbDatosTarjeta.SuspendLayout();
@@ -77,55 +78,13 @@
             this.Vendidos,
             this.Unitario,
             this.Total,
-            this.Pub_Codigo});
+            this.Pub_Codigo,
+            this.Visibilidad});
             this.dataGridView1.Location = new System.Drawing.Point(7, 20);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.Size = new System.Drawing.Size(732, 269);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // Publicacion
-            // 
-            this.Publicacion.DataPropertyName = "Publicacion";
-            this.Publicacion.HeaderText = "Publicacion";
-            this.Publicacion.Name = "Publicacion";
-            this.Publicacion.ReadOnly = true;
-            // 
-            // Fecha
-            // 
-            this.Fecha.DataPropertyName = "Fecha_Finalizacion";
-            this.Fecha.HeaderText = "Fecha";
-            this.Fecha.Name = "Fecha";
-            this.Fecha.ReadOnly = true;
-            // 
-            // Vendidos
-            // 
-            this.Vendidos.DataPropertyName = "Vendidos";
-            this.Vendidos.HeaderText = "Vendidos";
-            this.Vendidos.Name = "Vendidos";
-            this.Vendidos.ReadOnly = true;
-            // 
-            // Unitario
-            // 
-            this.Unitario.DataPropertyName = "Unitario";
-            this.Unitario.HeaderText = "Unitario";
-            this.Unitario.Name = "Unitario";
-            this.Unitario.ReadOnly = true;
-            // 
-            // Total
-            // 
-            this.Total.DataPropertyName = "Total";
-            this.Total.HeaderText = "Total";
-            this.Total.Name = "Total";
-            this.Total.ReadOnly = true;
-            // 
-            // Pub_Codigo
-            // 
-            this.Pub_Codigo.DataPropertyName = "Pub_Codigo";
-            this.Pub_Codigo.HeaderText = "Pub_Codigo";
-            this.Pub_Codigo.Name = "Pub_Codigo";
-            this.Pub_Codigo.ReadOnly = true;
-            this.Pub_Codigo.Visible = false;
             // 
             // button1
             // 
@@ -269,6 +228,57 @@
             this.btCalcular.UseVisualStyleBackColor = true;
             this.btCalcular.Click += new System.EventHandler(this.btCalcular_Click);
             // 
+            // Publicacion
+            // 
+            this.Publicacion.DataPropertyName = "Publicacion";
+            this.Publicacion.HeaderText = "Publicacion";
+            this.Publicacion.Name = "Publicacion";
+            this.Publicacion.ReadOnly = true;
+            // 
+            // Fecha
+            // 
+            this.Fecha.DataPropertyName = "Fecha_Finalizacion";
+            this.Fecha.HeaderText = "Fecha";
+            this.Fecha.Name = "Fecha";
+            this.Fecha.ReadOnly = true;
+            // 
+            // Vendidos
+            // 
+            this.Vendidos.DataPropertyName = "Vendidos";
+            this.Vendidos.HeaderText = "Vendidos";
+            this.Vendidos.Name = "Vendidos";
+            this.Vendidos.ReadOnly = true;
+            // 
+            // Unitario
+            // 
+            this.Unitario.DataPropertyName = "Unitario";
+            this.Unitario.HeaderText = "Unitario";
+            this.Unitario.Name = "Unitario";
+            this.Unitario.ReadOnly = true;
+            // 
+            // Total
+            // 
+            this.Total.DataPropertyName = "Total";
+            this.Total.HeaderText = "Total";
+            this.Total.Name = "Total";
+            this.Total.ReadOnly = true;
+            // 
+            // Pub_Codigo
+            // 
+            this.Pub_Codigo.DataPropertyName = "Pub_Codigo";
+            this.Pub_Codigo.HeaderText = "Pub_Codigo";
+            this.Pub_Codigo.Name = "Pub_Codigo";
+            this.Pub_Codigo.ReadOnly = true;
+            this.Pub_Codigo.Visible = false;
+            // 
+            // Visibilidad
+            // 
+            this.Visibilidad.DataPropertyName = "Visibilidad";
+            this.Visibilidad.HeaderText = "Visibilidad";
+            this.Visibilidad.Name = "Visibilidad";
+            this.Visibilidad.ReadOnly = true;
+            this.Visibilidad.Visible = false;
+            // 
             // Facturar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -302,12 +312,6 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbFormaPago;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Publicacion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Fecha;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Vendidos;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Unitario;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Total;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Pub_Codigo;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox gbDatosTarjeta;
         private System.Windows.Forms.Label label3;
@@ -320,5 +324,12 @@
         private System.Windows.Forms.TextBox tbTotalAFact;
         private System.Windows.Forms.Button btCalcular;
         private System.Windows.Forms.MaskedTextBox tbTarjeta;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Publicacion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Fecha;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Vendidos;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Unitario;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Total;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Pub_Codigo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Visibilidad;
     }
 }

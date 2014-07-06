@@ -13,8 +13,9 @@ namespace FrbaCommerce.Facturar_Publicaciones
         public decimal Unitario { get; set; }
         public decimal Total { get; set; }
         public decimal PubCodigo { get; set; }
+        public decimal Visibilidad { get; set; }
 
-        public Item(string Publicacion, DateTime Fecha, decimal Vendidos, decimal Unitario, decimal Total, decimal PubCodigo)
+        public Item(string Publicacion, DateTime Fecha, decimal Vendidos, decimal Unitario, decimal Total, decimal PubCodigo, decimal Visibilidad)
         {
             this.Publicacion = Publicacion;
             this.Fecha = Fecha;
@@ -22,6 +23,7 @@ namespace FrbaCommerce.Facturar_Publicaciones
             this.Unitario = Unitario;
             this.Total = Total;
             this.PubCodigo = PubCodigo;
+            this.Visibilidad = Visibilidad;
         }
     }
 }

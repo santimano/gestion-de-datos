@@ -1380,15 +1380,15 @@ CREATE VIEW C_R.Ventas_No_Facturadas_VW AS
 SELECT 
 P.Pub_Descripcion Publicacion,
 MAX(V.Ven_Fecha) Fecha_Finalizacion, SUM(V.Ven_Cantidad) Vendidos, SUM(V.Ven_Monto * V.Ven_Cantidad) Total, 
-V.Ven_Monto Unitario, V.Pub_Codigo, P.Pub_User_Id Vendedor
+V.Ven_Monto Unitario, V.Pub_Codigo, P.Pub_User_Id Vendedor, P.Pub_Visible_Cod Visibilidad
 FROM C_R.Publicaciones P ,C_R.Ventas V LEFT JOIN C_R.Factura_Items F_I ON V.Pub_Codigo = F_I.Pub_Codigo
 where F_I.Item_Id IS NULL
 AND P.Pub_Codigo = V.Pub_Codigo
-GROUP BY V.Pub_Codigo, P.Pub_User_Id, P.Pub_Descripcion, V.Ven_Monto
+GROUP BY V.Pub_Codigo, P.Pub_User_Id, P.Pub_Descripcion, V.Ven_Monto, P.Pub_Visible_Cod
 GO
 
 CREATE TYPE C_R.PublicacionesTableType AS TABLE
-(Cantidad numeric(18,0), Unitario numeric(18,2), Publicacion varchar(50),Pub_Codigo numeric(18,0), Total numeric(18,2))
+(Cantidad numeric(18,0), Unitario numeric(18,2), Publicacion varchar(50),Pub_Codigo numeric(18,0), Total numeric(18,2), Visibilidad int)
 GO
 
 CREATE PROCEDURE C_R.SP_FACTURAR
@@ -1406,7 +1406,8 @@ BEGIN
 	DECLARE @FacturaId int
 	
 	SELECT @FormaPagoId = Factura_FP_ID FROM Factura_FormaPago WHERE Factura_FP_Desc = @FormaPago 
-	SELECT @TotalFactura = SUM(Total) FROM @Publicaciones
+	SELECT @TotalFactura = SUM(CAST(ROUND(Total * V.Pub_Visible_Porcentaje,2) AS decimal(18,2)) + V.Pub_Visible_Precio) FROM @Publicaciones P, C_R.Publicaciones_Visibilidad V
+	WHERE P.Visibilidad = V.Pub_Visible_Cod
 	
 	INSERT INTO C_R.Factura(Factura_FP_ID,Factura_Total,Factura_Tarjeta, Factura_Titular, Factura_Vencimiento)
 	VALUES (@FormaPagoId, @TotalFactura, @TarjetaNumero, @TarjetaTitular, @TarjetaVencimiento)

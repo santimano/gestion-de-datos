@@ -189,12 +189,6 @@ CREATE TABLE [C_R].[Usuarios]
 )
 go
 
--- hash para password "w23a"
-INSERT INTO C_R.Usuarios(User_Name, User_Password, User_CambioPass) values
-	('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0)
-GO
-	
-
 CREATE TABLE [C_R].[Clientes]
 ( 
 	[Cli_Id]             int  NOT NULL  IDENTITY ( 1,1 ) ,
@@ -644,6 +638,15 @@ INSERT INTO C_R.Tipo_Docs
 VALUES ('Otro','OT')
 GO
 
+-- creacion usuario admin
+-- hash para password "w23a"
+INSERT INTO C_R.Usuarios(User_Name, User_Password, User_CambioPass) values
+	('admin','e6b87050bfcb8143fcb8db0170a4dc9ed00d904ddd3e2a4ad1b1e8dc0fdc9be7', 0)
+GO
+
+INSERT INTO C_R.RL_Usuarios_Roles(Rol_Id, User_Id) VALUES (2,1)
+GO
+
 CREATE PROCEDURE C_R.SP_CLIENTE_SAVE
 @Cli_Id int,
 @Cli_Nombre varchar(255),
@@ -731,15 +734,13 @@ BEGIN
 			,@Cli_Dir_Localidad
 			,@Cli_Telefono)
 			
-		IF ( @Cambio_Pass = 0 )
-		BEGIN
-			INSERT INTO C_R.RL_Usuarios_Roles
-				(Rol_Id
-				,User_Id)
-			VALUES
-				((SELECT Rol_Id FROM C_R.Roles WHERE Rol_Descripcion = 'cliente')
-				,@User_Id)
-		END
+
+		INSERT INTO C_R.RL_Usuarios_Roles
+			(Rol_Id
+			,User_Id)
+		VALUES
+			((SELECT Rol_Id FROM C_R.Roles WHERE Rol_Descripcion = 'cliente')
+			,@User_Id)
 		
 		RETURN
 
@@ -903,15 +904,12 @@ BEGIN
 			,@Emp_Dir_Localidad
 			,@Emp_Telefono)
 			
-		IF ( @Cambio_Pass = 0 )
-		BEGIN
-			INSERT INTO C_R.RL_Usuarios_Roles
-				(Rol_Id
-				,User_Id)
-			VALUES
-				((SELECT Rol_Id FROM C_R.Roles WHERE Rol_Descripcion = 'empresa')
-				,@User_Id)
-		END
+		INSERT INTO C_R.RL_Usuarios_Roles
+			(Rol_Id
+			,User_Id)
+		VALUES
+			((SELECT Rol_Id FROM C_R.Roles WHERE Rol_Descripcion = 'empresa')
+			,@User_Id)
 		
 		RETURN
 
@@ -992,21 +990,6 @@ END
 
 CLOSE empresas_cursor   
 DEALLOCATE empresas_cursor
-GO
-
--- Relacional de  Usuarios - ROLES
-
-INSERT INTO C_R.RL_Usuarios_Roles
-SELECT 3, U.User_Id
-FROM C_R.Usuarios U INNER JOIN C_R.Clientes C on U.User_Id = C.Cli_User_Id
-GO
-
-INSERT INTO C_R.RL_Usuarios_Roles
-SELECT 1, U.User_Id
-FROM C_R.Usuarios U INNER JOIN C_R.Empresas E on U.User_Id = E.Emp_User_Id
-GO
-
-INSERT INTO C_R.RL_Usuarios_Roles(Rol_Id, User_Id) VALUES (2,1)
 GO
 
 -- Insercion de rubros publicaciones

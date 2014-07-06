@@ -31,12 +31,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.BtnNuevo = new System.Windows.Forms.Button();
             this.DGVisibilidades = new System.Windows.Forms.DataGridView();
-            this.Pub_Visible_Cod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Pub_Visible_Descripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Pub_Visible_Precio = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Pub_Visible_Porcentaje = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Editar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.GbEdicion = new System.Windows.Forms.GroupBox();
             this.CbEstado = new System.Windows.Forms.ComboBox();
             this.LbEstado = new System.Windows.Forms.Label();
@@ -51,6 +45,12 @@
             this.LbCodigo = new System.Windows.Forms.Label();
             this.TbDesc = new System.Windows.Forms.TextBox();
             this.TbCodigo = new System.Windows.Forms.TextBox();
+            this.Pub_Visible_Cod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Pub_Visible_Descripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Pub_Visible_Precio = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Pub_Visible_Porcentaje = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Pub_Visible_Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Editar = new System.Windows.Forms.DataGridViewButtonColumn();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGVisibilidades)).BeginInit();
             this.GbEdicion.SuspendLayout();
@@ -88,55 +88,13 @@
             this.Pub_Visible_Descripcion,
             this.Pub_Visible_Precio,
             this.Pub_Visible_Porcentaje,
-            this.Estado,
+            this.Pub_Visible_Estado,
             this.Editar});
             this.DGVisibilidades.Location = new System.Drawing.Point(6, 19);
             this.DGVisibilidades.Name = "DGVisibilidades";
             this.DGVisibilidades.Size = new System.Drawing.Size(651, 150);
             this.DGVisibilidades.TabIndex = 0;
             this.DGVisibilidades.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGVisibilidades_CellContentClick);
-            // 
-            // Pub_Visible_Cod
-            // 
-            this.Pub_Visible_Cod.DataPropertyName = "Pub_Visible_Cod";
-            this.Pub_Visible_Cod.HeaderText = "Codigo";
-            this.Pub_Visible_Cod.Name = "Pub_Visible_Cod";
-            this.Pub_Visible_Cod.ReadOnly = true;
-            // 
-            // Pub_Visible_Descripcion
-            // 
-            this.Pub_Visible_Descripcion.DataPropertyName = "Pub_Visible_Descripcion";
-            this.Pub_Visible_Descripcion.HeaderText = "Descripcion";
-            this.Pub_Visible_Descripcion.Name = "Pub_Visible_Descripcion";
-            this.Pub_Visible_Descripcion.ReadOnly = true;
-            // 
-            // Pub_Visible_Precio
-            // 
-            this.Pub_Visible_Precio.DataPropertyName = "Pub_Visible_Precio";
-            this.Pub_Visible_Precio.HeaderText = "Precio";
-            this.Pub_Visible_Precio.Name = "Pub_Visible_Precio";
-            this.Pub_Visible_Precio.ReadOnly = true;
-            // 
-            // Pub_Visible_Porcentaje
-            // 
-            this.Pub_Visible_Porcentaje.DataPropertyName = "Pub_Visible_Porcentaje";
-            this.Pub_Visible_Porcentaje.HeaderText = "Porcentaje";
-            this.Pub_Visible_Porcentaje.Name = "Pub_Visible_Porcentaje";
-            this.Pub_Visible_Porcentaje.ReadOnly = true;
-            // 
-            // Estado
-            // 
-            this.Estado.DataPropertyName = "Pub_Visible_Estado";
-            this.Estado.HeaderText = "Estado";
-            this.Estado.Name = "Estado";
-            // 
-            // Editar
-            // 
-            this.Editar.HeaderText = "Editar";
-            this.Editar.Name = "Editar";
-            this.Editar.Text = "Editar";
-            this.Editar.ToolTipText = "Permite editar un item de visibilidad";
-            this.Editar.UseColumnTextForButtonValue = true;
             // 
             // GbEdicion
             // 
@@ -276,6 +234,48 @@
             this.TbCodigo.Size = new System.Drawing.Size(87, 20);
             this.TbCodigo.TabIndex = 0;
             // 
+            // Pub_Visible_Cod
+            // 
+            this.Pub_Visible_Cod.DataPropertyName = "Pub_Visible_Cod";
+            this.Pub_Visible_Cod.HeaderText = "Codigo";
+            this.Pub_Visible_Cod.Name = "Pub_Visible_Cod";
+            this.Pub_Visible_Cod.ReadOnly = true;
+            // 
+            // Pub_Visible_Descripcion
+            // 
+            this.Pub_Visible_Descripcion.DataPropertyName = "Pub_Visible_Descripcion";
+            this.Pub_Visible_Descripcion.HeaderText = "Descripcion";
+            this.Pub_Visible_Descripcion.Name = "Pub_Visible_Descripcion";
+            this.Pub_Visible_Descripcion.ReadOnly = true;
+            // 
+            // Pub_Visible_Precio
+            // 
+            this.Pub_Visible_Precio.DataPropertyName = "Pub_Visible_Precio";
+            this.Pub_Visible_Precio.HeaderText = "Precio";
+            this.Pub_Visible_Precio.Name = "Pub_Visible_Precio";
+            this.Pub_Visible_Precio.ReadOnly = true;
+            // 
+            // Pub_Visible_Porcentaje
+            // 
+            this.Pub_Visible_Porcentaje.DataPropertyName = "Pub_Visible_Porcentaje";
+            this.Pub_Visible_Porcentaje.HeaderText = "Porcentaje";
+            this.Pub_Visible_Porcentaje.Name = "Pub_Visible_Porcentaje";
+            this.Pub_Visible_Porcentaje.ReadOnly = true;
+            // 
+            // Pub_Visible_Estado
+            // 
+            this.Pub_Visible_Estado.DataPropertyName = "Pub_Visible_Estado";
+            this.Pub_Visible_Estado.HeaderText = "Estado";
+            this.Pub_Visible_Estado.Name = "Pub_Visible_Estado";
+            // 
+            // Editar
+            // 
+            this.Editar.HeaderText = "Editar";
+            this.Editar.Name = "Editar";
+            this.Editar.Text = "Editar";
+            this.Editar.ToolTipText = "Permite editar un item de visibilidad";
+            this.Editar.UseColumnTextForButtonValue = true;
+            // 
             // Visibilidad_ABM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -310,14 +310,14 @@
         private System.Windows.Forms.Button BtnNuevo;
         private System.Windows.Forms.Button Btn_Cancelar;
         private System.Windows.Forms.Label LbError;
+        private System.Windows.Forms.ComboBox CbEstado;
+        private System.Windows.Forms.Label LbEstado;
         private System.Windows.Forms.DataGridViewTextBoxColumn Pub_Visible_Cod;
         private System.Windows.Forms.DataGridViewTextBoxColumn Pub_Visible_Descripcion;
         private System.Windows.Forms.DataGridViewTextBoxColumn Pub_Visible_Precio;
         private System.Windows.Forms.DataGridViewTextBoxColumn Pub_Visible_Porcentaje;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Estado;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Pub_Visible_Estado;
         private System.Windows.Forms.DataGridViewButtonColumn Editar;
-        private System.Windows.Forms.ComboBox CbEstado;
-        private System.Windows.Forms.Label LbEstado;
 
     }
 }

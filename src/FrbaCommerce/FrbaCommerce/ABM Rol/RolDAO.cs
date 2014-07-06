@@ -94,18 +94,25 @@ namespace FrbaCommerce.ABM_Rol
         public void borrar(int id)
         {
 
-            SqlCommand command = new SqlCommand("UPDATE C_R.Roles SET Rol_Estado = 'INACTIVO'"
+            SqlCommand commandUpdate = new SqlCommand("UPDATE C_R.Roles SET Rol_Estado = 'INACTIVO'"
             + "WHERE Rol_Id = @Rol_Id", Conexion);
 
-            command.CommandType = CommandType.Text;
-            command.Parameters.Add("@Rol_Id", SqlDbType.Int);
-            command.Parameters["@Rol_Id"].Value = id;
+            commandUpdate.CommandType = CommandType.Text;
+            commandUpdate.Parameters.Add("@Rol_Id", SqlDbType.Int);
+            commandUpdate.Parameters["@Rol_Id"].Value = id;
+
+            SqlCommand commandDelete = new SqlCommand("DELETE C_R.RL_Usuarios_Roles WHERE Rol_Id = @Rol_Id"
+            , Conexion);
+
+            commandDelete.CommandType = CommandType.Text;
+            commandDelete.Parameters.Add("@Rol_Id", SqlDbType.Int);
+            commandDelete.Parameters["@Rol_Id"].Value = id;
 
             try
             {
                 Conexion.Open();
-                command.ExecuteNonQuery();
-
+                commandUpdate.ExecuteNonQuery();
+                commandDelete.ExecuteNonQuery();
             }
             catch (Exception ex)
             {

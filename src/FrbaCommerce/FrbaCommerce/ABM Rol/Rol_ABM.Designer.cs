@@ -34,7 +34,8 @@
             this.btBorrar = new System.Windows.Forms.Button();
             this.btCrear = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.cbEstado = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lbFuncionalidades = new System.Windows.Forms.ListBox();
             this.tbDesc = new System.Windows.Forms.TextBox();
             this.tbCodigo = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -42,12 +43,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btNuevo = new System.Windows.Forms.Button();
             this.btLimpiar = new System.Windows.Forms.Button();
-            this.lbFuncionalidades = new System.Windows.Forms.ListBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Descripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Editar = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Descripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tbEstado = new System.Windows.Forms.TextBox();
+            this.btActivar = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -83,7 +84,7 @@
             // btActualizar
             // 
             this.btActualizar.Enabled = false;
-            this.btActualizar.Location = new System.Drawing.Point(419, 96);
+            this.btActualizar.Location = new System.Drawing.Point(419, 115);
             this.btActualizar.Name = "btActualizar";
             this.btActualizar.Size = new System.Drawing.Size(75, 23);
             this.btActualizar.TabIndex = 2;
@@ -94,7 +95,7 @@
             // btBorrar
             // 
             this.btBorrar.Enabled = false;
-            this.btBorrar.Location = new System.Drawing.Point(419, 60);
+            this.btBorrar.Location = new System.Drawing.Point(419, 86);
             this.btBorrar.Name = "btBorrar";
             this.btBorrar.Size = new System.Drawing.Size(75, 23);
             this.btBorrar.TabIndex = 1;
@@ -114,10 +115,11 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btActivar);
+            this.groupBox3.Controls.Add(this.tbEstado);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.lbFuncionalidades);
             this.groupBox3.Controls.Add(this.btActualizar);
-            this.groupBox3.Controls.Add(this.cbEstado);
             this.groupBox3.Controls.Add(this.btBorrar);
             this.groupBox3.Controls.Add(this.tbDesc);
             this.groupBox3.Controls.Add(this.btCrear);
@@ -132,16 +134,23 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Rol";
             // 
-            // cbEstado
+            // label4
             // 
-            this.cbEstado.FormattingEnabled = true;
-            this.cbEstado.Items.AddRange(new object[] {
-            "ACTIVO",
-            "INACTIVO"});
-            this.cbEstado.Location = new System.Drawing.Point(121, 96);
-            this.cbEstado.Name = "cbEstado";
-            this.cbEstado.Size = new System.Drawing.Size(121, 21);
-            this.cbEstado.TabIndex = 5;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(31, 153);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(84, 13);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "Funcionalidades";
+            // 
+            // lbFuncionalidades
+            // 
+            this.lbFuncionalidades.FormattingEnabled = true;
+            this.lbFuncionalidades.Location = new System.Drawing.Point(121, 139);
+            this.lbFuncionalidades.Name = "lbFuncionalidades";
+            this.lbFuncionalidades.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.lbFuncionalidades.Size = new System.Drawing.Size(263, 95);
+            this.lbFuncionalidades.TabIndex = 6;
             // 
             // tbDesc
             // 
@@ -204,37 +213,11 @@
             this.btLimpiar.UseVisualStyleBackColor = true;
             this.btLimpiar.Click += new System.EventHandler(this.btLimpiar_Click);
             // 
-            // lbFuncionalidades
+            // Editar
             // 
-            this.lbFuncionalidades.FormattingEnabled = true;
-            this.lbFuncionalidades.Location = new System.Drawing.Point(121, 139);
-            this.lbFuncionalidades.Name = "lbFuncionalidades";
-            this.lbFuncionalidades.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.lbFuncionalidades.Size = new System.Drawing.Size(263, 95);
-            this.lbFuncionalidades.TabIndex = 6;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(31, 153);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(84, 13);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "Funcionalidades";
-            // 
-            // Codigo
-            // 
-            this.Codigo.DataPropertyName = "Rol_Id";
-            this.Codigo.HeaderText = "Codigo";
-            this.Codigo.Name = "Codigo";
-            this.Codigo.ReadOnly = true;
-            // 
-            // Descripcion
-            // 
-            this.Descripcion.DataPropertyName = "Rol_Descripcion";
-            this.Descripcion.HeaderText = "Descripcion";
-            this.Descripcion.Name = "Descripcion";
-            this.Descripcion.ReadOnly = true;
+            this.Editar.HeaderText = "Editar";
+            this.Editar.Name = "Editar";
+            this.Editar.ReadOnly = true;
             // 
             // Estado
             // 
@@ -243,11 +226,37 @@
             this.Estado.Name = "Estado";
             this.Estado.ReadOnly = true;
             // 
-            // Editar
+            // Descripcion
             // 
-            this.Editar.HeaderText = "Editar";
-            this.Editar.Name = "Editar";
-            this.Editar.ReadOnly = true;
+            this.Descripcion.DataPropertyName = "Rol_Descripcion";
+            this.Descripcion.HeaderText = "Descripcion";
+            this.Descripcion.Name = "Descripcion";
+            this.Descripcion.ReadOnly = true;
+            // 
+            // Codigo
+            // 
+            this.Codigo.DataPropertyName = "Rol_Id";
+            this.Codigo.HeaderText = "Codigo";
+            this.Codigo.Name = "Codigo";
+            this.Codigo.ReadOnly = true;
+            // 
+            // tbEstado
+            // 
+            this.tbEstado.Enabled = false;
+            this.tbEstado.Location = new System.Drawing.Point(121, 93);
+            this.tbEstado.Name = "tbEstado";
+            this.tbEstado.Size = new System.Drawing.Size(100, 20);
+            this.tbEstado.TabIndex = 8;
+            // 
+            // btActivar
+            // 
+            this.btActivar.Location = new System.Drawing.Point(419, 55);
+            this.btActivar.Name = "btActivar";
+            this.btActivar.Size = new System.Drawing.Size(75, 23);
+            this.btActivar.TabIndex = 9;
+            this.btActivar.Text = "Activar";
+            this.btActivar.UseVisualStyleBackColor = true;
+            this.btActivar.Click += new System.EventHandler(this.btActivar_Click);
             // 
             // Rol_ABM
             // 
@@ -281,7 +290,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbCodigo;
         private System.Windows.Forms.TextBox tbDesc;
-        private System.Windows.Forms.ComboBox cbEstado;
         private System.Windows.Forms.Button btNuevo;
         private System.Windows.Forms.Button btLimpiar;
         private System.Windows.Forms.Label label4;
@@ -290,5 +298,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Descripcion;
         private System.Windows.Forms.DataGridViewTextBoxColumn Estado;
         private System.Windows.Forms.DataGridViewButtonColumn Editar;
+        private System.Windows.Forms.TextBox tbEstado;
+        private System.Windows.Forms.Button btActivar;
     }
 }

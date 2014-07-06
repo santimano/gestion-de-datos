@@ -27,19 +27,19 @@ namespace FrbaCommerce.ABM_Rol
             btCrear.Enabled = false;
             btActualizar.Enabled = false;
             btBorrar.Enabled = false;
+            btActivar.Enabled = false;
             tbCodigo.Text = null;
             tbDesc.Text = null;
-            cbEstado.SelectedItem = null;
+            tbEstado.Text = null;
             tbCodigo.Enabled = false;
             tbDesc.Enabled = false;
-            cbEstado.Enabled = false;
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             tbCodigo.Text = dataGridView1.Rows[e.RowIndex].Cells["Codigo"].Value.ToString();
             tbDesc.Text = dataGridView1.Rows[e.RowIndex].Cells["Descripcion"].Value.ToString();
-            cbEstado.SelectedItem = dataGridView1.Rows[e.RowIndex].Cells["Estado"].Value.ToString();
+            tbEstado.Text = dataGridView1.Rows[e.RowIndex].Cells["Estado"].Value.ToString();
             List<string> fun = dao.Funcionalidades((int)dataGridView1.Rows[e.RowIndex].Cells["Codigo"].Value);
             lbFuncionalidades.SelectedItems.Clear();
             foreach (string f in fun)
@@ -47,14 +47,14 @@ namespace FrbaCommerce.ABM_Rol
                 lbFuncionalidades.SelectedItems.Add(f);   
             }
             btActualizar.Enabled = true;
-            btBorrar.Enabled = true;
+            btBorrar.Enabled = tbEstado.Text == "ACTIVO";
+            btActivar.Enabled = tbEstado.Text == "INACTIVO";
             tbDesc.Enabled = true;
-            cbEstado.Enabled = true;
         }
 
         private void btCrear_Click(object sender, EventArgs e)
         {
-            dao.guardar(-1, tbDesc.Text, cbEstado.Text, lbFuncionalidades.SelectedItems);
+            dao.guardar(-1, tbDesc.Text, tbEstado.Text, lbFuncionalidades.SelectedItems);
             MessageBox.Show("Creado");
             actualizar();
         }
@@ -77,7 +77,6 @@ namespace FrbaCommerce.ABM_Rol
         {
             actualizar();
             tbDesc.Enabled = true;
-            cbEstado.Enabled = true;
             btCrear.Enabled = true;
         }
 
@@ -88,7 +87,14 @@ namespace FrbaCommerce.ABM_Rol
 
         private void btActualizar_Click(object sender, EventArgs e)
         {
-            dao.guardar(int.Parse(tbCodigo.Text), tbDesc.Text, cbEstado.Text, lbFuncionalidades.SelectedItems);
+            dao.guardar(int.Parse(tbCodigo.Text), tbDesc.Text, tbEstado.Text, lbFuncionalidades.SelectedItems);
+            MessageBox.Show("Actualizado");
+            actualizar();
+        }
+
+        private void btActivar_Click(object sender, EventArgs e)
+        {
+            dao.guardar(int.Parse(tbCodigo.Text), tbDesc.Text, "ACTIVO", lbFuncionalidades.SelectedItems);
             MessageBox.Show("Actualizado");
             actualizar();
         }

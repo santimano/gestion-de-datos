@@ -181,10 +181,10 @@ namespace FrbaCommerce.Abm_Cliente
             command.Parameters["@Cli_Mail"].Value = mail;
             command.Parameters["@Cli_Dir_Calle"].Value = calle;
             command.Parameters["@Cli_Dir_Nro"].Value = Convert.ToInt32(nro);
-            command.Parameters["@Cli_Dir_Piso"].Value = Convert.ToInt32(piso);
+            command.Parameters["@Cli_Dir_Piso"].Value = (piso.Length > 0) ? Convert.ToInt32(piso) : (object)DBNull.Value;
             command.Parameters["@Cli_Dir_CodPostal"].Value = cod_postal;
-            command.Parameters["@Cli_Dir_Depto"].Value = depto;
-            command.Parameters["@Cli_Dir_Localidad"].Value = localidad;
+            command.Parameters["@Cli_Dir_Depto"].Value = (depto.Length > 0) ? depto : (object)DBNull.Value;
+            command.Parameters["@Cli_Dir_Localidad"].Value = (localidad.Length > 0) ? localidad : (object)DBNull.Value;
             command.Parameters["@Cli_Telefono"].Value = telefono;
             command.Parameters["@User_Estado"].Value = estado;
             command.Parameters["@User_Nombre"].Value = (usuario != null) ? usuario : (object)DBNull.Value;

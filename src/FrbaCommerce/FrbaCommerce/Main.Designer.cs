@@ -60,6 +60,7 @@
             this.empPregRec = new System.Windows.Forms.ToolStripMenuItem();
             this.empFacturar = new System.Windows.Forms.ToolStripMenuItem();
             this.adminFacturar = new System.Windows.Forms.ToolStripMenuItem();
+            this.buscarPublicacionesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -125,34 +126,35 @@
             // abmRoles
             // 
             this.abmRoles.Name = "abmRoles";
-            this.abmRoles.Size = new System.Drawing.Size(152, 22);
+            this.abmRoles.Size = new System.Drawing.Size(128, 22);
             this.abmRoles.Text = "Roles";
             this.abmRoles.Click += new System.EventHandler(this.rolesToolStripMenuItem_Click);
             // 
             // abmClientes
             // 
             this.abmClientes.Name = "abmClientes";
-            this.abmClientes.Size = new System.Drawing.Size(152, 22);
+            this.abmClientes.Size = new System.Drawing.Size(128, 22);
             this.abmClientes.Text = "Clientes";
             this.abmClientes.Click += new System.EventHandler(this.clientesToolStripMenuItem_Click);
             // 
             // abmEmpresas
             // 
             this.abmEmpresas.Name = "abmEmpresas";
-            this.abmEmpresas.Size = new System.Drawing.Size(152, 22);
+            this.abmEmpresas.Size = new System.Drawing.Size(128, 22);
             this.abmEmpresas.Text = "Empresas";
             this.abmEmpresas.Click += new System.EventHandler(this.empresasToolStripMenuItem_Click);
             // 
             // abmVisibilidad
             // 
             this.abmVisibilidad.Name = "abmVisibilidad";
-            this.abmVisibilidad.Size = new System.Drawing.Size(152, 22);
+            this.abmVisibilidad.Size = new System.Drawing.Size(128, 22);
             this.abmVisibilidad.Text = "Visibilidad";
             this.abmVisibilidad.Click += new System.EventHandler(this.visibilidadToolStripMenuItem_Click);
             // 
             // clienteToolStripMenuItem
             // 
             this.clienteToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.buscarPublicacionesToolStripMenuItem,
             this.publicacionToolStripMenuItem,
             this.historialToolStripMenuItem,
             this.califVen,
@@ -175,14 +177,14 @@
             // nuevaPubCli
             // 
             this.nuevaPubCli.Name = "nuevaPubCli";
-            this.nuevaPubCli.Size = new System.Drawing.Size(152, 22);
+            this.nuevaPubCli.Size = new System.Drawing.Size(108, 22);
             this.nuevaPubCli.Text = "Nueva";
             this.nuevaPubCli.Click += new System.EventHandler(this.nuevaToolStripMenuItem_Click);
             // 
             // editarPubCli
             // 
             this.editarPubCli.Name = "editarPubCli";
-            this.editarPubCli.Size = new System.Drawing.Size(152, 22);
+            this.editarPubCli.Size = new System.Drawing.Size(108, 22);
             this.editarPubCli.Text = "Editar";
             this.editarPubCli.Click += new System.EventHandler(this.editarToolStripMenuItem_Click);
             // 
@@ -199,21 +201,21 @@
             // ofertasCli
             // 
             this.ofertasCli.Name = "ofertasCli";
-            this.ofertasCli.Size = new System.Drawing.Size(152, 22);
+            this.ofertasCli.Size = new System.Drawing.Size(147, 22);
             this.ofertasCli.Text = "Ofertas";
             this.ofertasCli.Click += new System.EventHandler(this.ofertasToolStripMenuItem_Click);
             // 
             // comprasCli
             // 
             this.comprasCli.Name = "comprasCli";
-            this.comprasCli.Size = new System.Drawing.Size(152, 22);
+            this.comprasCli.Size = new System.Drawing.Size(147, 22);
             this.comprasCli.Text = "Compras";
             this.comprasCli.Click += new System.EventHandler(this.comprasToolStripMenuItem_Click);
             // 
             // califCli
             // 
             this.califCli.Name = "califCli";
-            this.califCli.Size = new System.Drawing.Size(152, 22);
+            this.califCli.Size = new System.Drawing.Size(147, 22);
             this.califCli.Text = "Calificaciones";
             this.califCli.Click += new System.EventHandler(this.calificacionesToolStripMenuItem1_Click);
             // 
@@ -236,14 +238,14 @@
             // cliPregRec
             // 
             this.cliPregRec.Name = "cliPregRec";
-            this.cliPregRec.Size = new System.Drawing.Size(152, 22);
+            this.cliPregRec.Size = new System.Drawing.Size(124, 22);
             this.cliPregRec.Text = "Recibidas";
             this.cliPregRec.Click += new System.EventHandler(this.recibidasToolStripMenuItem_Click);
             // 
             // cliPregHechas
             // 
             this.cliPregHechas.Name = "cliPregHechas";
-            this.cliPregHechas.Size = new System.Drawing.Size(152, 22);
+            this.cliPregHechas.Size = new System.Drawing.Size(124, 22);
             this.cliPregHechas.Text = "Hechas";
             this.cliPregHechas.Click += new System.EventHandler(this.hechasToolStripMenuItem_Click);
             // 
@@ -278,14 +280,14 @@
             // nuevaPubEmp
             // 
             this.nuevaPubEmp.Name = "nuevaPubEmp";
-            this.nuevaPubEmp.Size = new System.Drawing.Size(152, 22);
+            this.nuevaPubEmp.Size = new System.Drawing.Size(108, 22);
             this.nuevaPubEmp.Text = "Nueva";
             this.nuevaPubEmp.Click += new System.EventHandler(this.nuevaToolStripMenuItem1_Click);
             // 
             // editarPubEmp
             // 
             this.editarPubEmp.Name = "editarPubEmp";
-            this.editarPubEmp.Size = new System.Drawing.Size(152, 22);
+            this.editarPubEmp.Size = new System.Drawing.Size(108, 22);
             this.editarPubEmp.Text = "Editar";
             this.editarPubEmp.Click += new System.EventHandler(this.editarToolStripMenuItem1_Click);
             // 
@@ -300,7 +302,7 @@
             // califEmp
             // 
             this.califEmp.Name = "califEmp";
-            this.califEmp.Size = new System.Drawing.Size(152, 22);
+            this.califEmp.Size = new System.Drawing.Size(147, 22);
             this.califEmp.Text = "Calificaciones";
             this.califEmp.Click += new System.EventHandler(this.calificacionesToolStripMenuItem_Click);
             // 
@@ -325,6 +327,13 @@
             this.adminFacturar.Text = "Facturar";
             this.adminFacturar.Visible = false;
             this.adminFacturar.Click += new System.EventHandler(this.facturarToolStripMenuItem_Click);
+            // 
+            // buscarPublicacionesToolStripMenuItem
+            // 
+            this.buscarPublicacionesToolStripMenuItem.Name = "buscarPublicacionesToolStripMenuItem";
+            this.buscarPublicacionesToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.buscarPublicacionesToolStripMenuItem.Text = "Buscar Publicaciones";
+            this.buscarPublicacionesToolStripMenuItem.Click += new System.EventHandler(this.buscarPublicacionesToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -376,6 +385,7 @@
         private System.Windows.Forms.ToolStripMenuItem publicacionToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem nuevaPubEmp;
         private System.Windows.Forms.ToolStripMenuItem editarPubEmp;
+        private System.Windows.Forms.ToolStripMenuItem buscarPublicacionesToolStripMenuItem;
     }
 }
 

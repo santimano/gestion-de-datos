@@ -119,6 +119,12 @@
     <Compile Include="Calificar Vendedor\CalificarVendedorDialog.Designer.cs">
       <DependentUpon>CalificarVendedorDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Comprar-Ofertar\Comprar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Comprar-Ofertar\Comprar.Designer.cs">
+      <DependentUpon>Comprar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Comprar-Ofertar\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -262,6 +268,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Calificar Vendedor\CalificarVendedorDialog.resx">
       <DependentUpon>CalificarVendedorDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Comprar-Ofertar\Comprar.resx">
+      <DependentUpon>Comprar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editar Publicacion\EditarPublicacion.resx">
       <DependentUpon>EditarPublicacion.cs</DependentUpon>

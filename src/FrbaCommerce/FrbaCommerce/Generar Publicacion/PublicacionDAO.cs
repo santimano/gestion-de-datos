@@ -211,5 +211,50 @@ namespace FrbaCommerce.Generar_Publicacion
             }
             return cantidad;
         }
+
+        public DataSet Publicaciones_Grilla(string Descripcion, ListBox.SelectedObjectCollection Rubros)
+        {
+            String query = "SELECT P.* FROM C_R.Publicaciones P, C_R.Publicaciones_Visibilidad V, C_R.Publicaciones_Estados E"
+            + " WHERE P.Pub_Visible_Cod = V.Pub_Visible_Cod "
+            + " AND P.Pub_Estado_Id = E.Pub_Estado_Id "
+            //+ " AND E.Pub_Estado_Desc = 'Activa' "
+            //+ " AND P.Pub_Fecha_Venc > @Fecha "
+            + " AND P.Pub_User_Id != @Usuario "
+            + " AND (@Descripcion IS NULL OR P.Pub_Descripcion LIKE '%'+@Descripcion+'%') "
+            + " AND (NOT EXISTS (SELECT 1 FROM @Rubros) "
+            + " OR EXISTS (SELECT Pub_Codigo, Pub_Descripcion FROM C_R.RL_Publicaciones_Rubros RL, C_R.Publicaciones_Rubro R, @Rubros Rub "
+                            + " WHERE R.Pub_RubroId = RL.Pub_RubroId "
+                            + " AND R.Pub_Descripcion = Rub.Rubro "
+                            + " AND RL.Pub_Codigo = P.Pub_Codigo)) "
+            + " ORDER BY V.Pub_Visible_Precio DESC ";
+
+            SqlCommand command = new SqlCommand(query, Conexion);
+            command.CommandType = CommandType.Text;
+            command.Parameters.Add("@Rubros", SqlDbType.Structured);
+            command.Parameters["@Rubros"].Value = CrearRubrosTable(Rubros);
+            command.Parameters["@Rubros"].TypeName = "C_R.RubrosTableType";
+            command.Parameters.AddWithValue("@Descripcion",Descripcion);
+            command.Parameters.AddWithValue("@Usuario", Main.Usuario);
+            command.Parameters.AddWithValue("@Fecha", Main.FechaSistema);
+
+            DataSet Ds = new DataSet();
+            try
+            {
+                Conexion.Open();
+                SqlDataAdapter sDa = new SqlDataAdapter(command);
+                sDa.Fill(Ds);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+            return Ds;
+
+        }
     }
 }

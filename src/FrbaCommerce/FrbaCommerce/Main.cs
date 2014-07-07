@@ -222,5 +222,13 @@ namespace FrbaCommerce
             editarToolStripMenuItem_Click(sender, e);
         }
 
+        private void buscarPublicacionesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            FrbaCommerce.Comprar_Ofertar.Comprar form = new FrbaCommerce.Comprar_Ofertar.Comprar();
+            form.ShowDialog();
+            this.Show();
+        }
+
     }
 }

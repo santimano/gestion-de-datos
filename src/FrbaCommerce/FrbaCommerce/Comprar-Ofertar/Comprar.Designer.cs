@@ -48,6 +48,8 @@
             this.Precio = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Vencimiento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Pub_User_Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Tipo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Preguntas = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Comprar_Item = new System.Windows.Forms.DataGridViewButtonColumn();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -134,6 +136,8 @@
             this.Precio,
             this.Vencimiento,
             this.Pub_User_Id,
+            this.Tipo,
+            this.Preguntas,
             this.Comprar_Item});
             this.dataGridView1.Location = new System.Drawing.Point(7, 20);
             this.dataGridView1.Name = "dataGridView1";
@@ -248,6 +252,21 @@
             this.Pub_User_Id.ReadOnly = true;
             this.Pub_User_Id.Visible = false;
             // 
+            // Tipo
+            // 
+            this.Tipo.DataPropertyName = "Tipo";
+            this.Tipo.HeaderText = "Tipo";
+            this.Tipo.Name = "Tipo";
+            this.Tipo.ReadOnly = true;
+            // 
+            // Preguntas
+            // 
+            this.Preguntas.DataPropertyName = "Pub_Preguntas";
+            this.Preguntas.HeaderText = "Preguntas";
+            this.Preguntas.Name = "Preguntas";
+            this.Preguntas.ReadOnly = true;
+            this.Preguntas.Visible = false;
+            // 
             // Comprar_Item
             // 
             this.Comprar_Item.HeaderText = "Comprar_Item";
@@ -299,6 +318,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Precio;
         private System.Windows.Forms.DataGridViewTextBoxColumn Vencimiento;
         private System.Windows.Forms.DataGridViewTextBoxColumn Pub_User_Id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Tipo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Preguntas;
         private System.Windows.Forms.DataGridViewButtonColumn Comprar_Item;
     }
 }

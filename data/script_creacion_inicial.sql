@@ -39,6 +39,10 @@ if exists(select * from sys.objects where name ='SP_FACTURAR' and type = 'P')
 	drop procedure [C_R].[SP_FACTURAR]
 go
 
+if exists(select * from sys.objects where name ='SP_COMPRAR' and type = 'P')
+	drop procedure [C_R].[SP_COMPRAR]
+go
+
 if exists(select * from sys.objects where name='Contador_Visibilidad_VW' and type ='v')
 	drop view [C_R].[Contador_Visibilidad_VW]
 go
@@ -290,7 +294,8 @@ CREATE TABLE [C_R].[Publicaciones]
 	[Pub_Visible_Cod]    numeric(18)  NOT NULL ,
 	[Pub_Tipo_Id]        int  NOT NULL ,
 	[Pub_Estado_Id]      int  NOT NULL ,
-	[Pub_User_Id]        int  NULL 
+	[Pub_User_Id]        int  NULL,
+	[Pub_Preguntas]      bit  NOT NULL DEFAULT 1 
 	CONSTRAINT [PK_Publicaciones] PRIMARY KEY  CLUSTERED ([Pub_Codigo] ASC)
 )
 go
@@ -1560,3 +1565,31 @@ BEGIN
 	
 END
 GO
+
+CREATE PROCEDURE C_R.SP_Comprar
+(
+@Pub_Codigo numeric(18,0),
+@Fecha datetime,
+@Monto numeric(18,2),
+@Cantidad numeric(18,0),
+@Usuario int,
+@Tipo varchar(255)
+)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+	IF @Tipo = 'Subasta'
+	BEGIN
+		INSERT INTO C_R.Ofertas(Ofe_Fecha, Ofe_User_Id, Ope_Monto, Pub_Codigo)
+		VALUES (@Fecha, @Usuario, @Monto, @Pub_Codigo)
+	END
+	ELSE
+	BEGIN
+		INSERT INTO C_R.Ventas(Pub_Codigo, Ven_Cantidad, Ven_Fecha, Ven_Monto, Ven_User_Id)
+		VALUES(@Pub_Codigo, @Cantidad, @Fecha, @Monto, @Usuario)
+		
+		UPDATE C_R.Publicaciones SET Pub_Stock = Pub_Stock - @Cantidad WHERE Pub_Codigo = @Pub_Codigo
+	END
+	
+END

@@ -66,11 +66,13 @@ namespace FrbaCommerce.Comprar_Ofertar
                 registroFinal = tamanioPagina * paginaActual;
             }
             registroInicial = nroRegistro;
-
-            for (i = registroInicial; i < registroFinal; i++)
+            if (dtSource.Rows.Count > 0)
             {
-                dtTemp.ImportRow(dtSource.Rows[i]);
-                nroRegistro += 1;
+                for (i = registroInicial; i < registroFinal; i++)
+                {
+                    dtTemp.ImportRow(dtSource.Rows[i]);
+                    nroRegistro += 1;
+                }
             }
             dataGridView1.DataSource = dtTemp;
             CargarPaginaActual();
@@ -143,7 +145,19 @@ namespace FrbaCommerce.Comprar_Ofertar
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
+            this.Hide();
+            decimal Id = (decimal)dataGridView1.Rows[e.RowIndex].Cells["Pub_Codigo"].Value;
+            string Descripcion = dataGridView1.Rows[e.RowIndex].Cells["Descripcion"].Value.ToString();
+            string Stock = dataGridView1.Rows[e.RowIndex].Cells["Stock"].Value.ToString();
+            string Precio = dataGridView1.Rows[e.RowIndex].Cells["Precio"].Value.ToString();
+            string Vencimiento = dataGridView1.Rows[e.RowIndex].Cells["Vencimiento"].Value.ToString();
+            int Vendedor = (int)dataGridView1.Rows[e.RowIndex].Cells["Pub_User_Id"].Value;
+            string Tipo = dataGridView1.Rows[e.RowIndex].Cells["Tipo"].Value.ToString();
+            bool Preguntas = (bool)dataGridView1.Rows[e.RowIndex].Cells["Preguntas"].Value;
+            ComprarItem form = new ComprarItem(Id, Descripcion, Precio, Stock, Vencimiento, Vendedor, Tipo, Preguntas);
+            form.ShowDialog();
+            CargarPagina();
+            this.Show();
         }
 
     }

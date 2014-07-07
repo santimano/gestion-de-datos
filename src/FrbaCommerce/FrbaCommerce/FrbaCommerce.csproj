@@ -93,12 +93,6 @@
     <Compile Include="ABM Rol\Rol_ABM.Designer.cs">
       <DependentUpon>Rol_ABM.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm Rubro\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Abm Rubro\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Abm Rubro\RubroDAO.cs" />
     <Compile Include="Abm Visibilidad\VisibilidadDAO.cs" />
     <Compile Include="Abm Visibilidad\Visibilidad_ABM.cs">
@@ -119,18 +113,27 @@
     <Compile Include="Calificar Vendedor\CalificarVendedorDialog.Designer.cs">
       <DependentUpon>CalificarVendedorDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Comprar-Ofertar\CompraDAO.cs" />
     <Compile Include="Comprar-Ofertar\Comprar.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Comprar-Ofertar\Comprar.Designer.cs">
       <DependentUpon>Comprar.cs</DependentUpon>
     </Compile>
-    <Compile Include="Comprar-Ofertar\Form1.cs">
+    <Compile Include="Comprar-Ofertar\ComprarItem.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Comprar-Ofertar\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Comprar-Ofertar\ComprarItem.Designer.cs">
+      <DependentUpon>ComprarItem.cs</DependentUpon>
     </Compile>
+    <Compile Include="Comprar-Ofertar\DatosVendedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Comprar-Ofertar\DatosVendedor.Designer.cs">
+      <DependentUpon>DatosVendedor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Comprar-Ofertar\Oferta.cs" />
+    <Compile Include="Comprar-Ofertar\Vendedor.cs" />
     <Compile Include="Editar Publicacion\EditarPublicacion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -271,6 +274,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Comprar-Ofertar\Comprar.resx">
       <DependentUpon>Comprar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Comprar-Ofertar\ComprarItem.resx">
+      <DependentUpon>ComprarItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Comprar-Ofertar\DatosVendedor.resx">
+      <DependentUpon>DatosVendedor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editar Publicacion\EditarPublicacion.resx">
       <DependentUpon>EditarPublicacion.cs</DependentUpon>

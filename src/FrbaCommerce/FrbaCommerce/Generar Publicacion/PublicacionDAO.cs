@@ -214,9 +214,11 @@ namespace FrbaCommerce.Generar_Publicacion
 
         public DataSet Publicaciones_Grilla(string Descripcion, ListBox.SelectedObjectCollection Rubros)
         {
-            String query = "SELECT P.* FROM C_R.Publicaciones P, C_R.Publicaciones_Visibilidad V, C_R.Publicaciones_Estados E"
+            String query = "SELECT P.*, T.Pub_Descripcion Tipo FROM C_R.Publicaciones P"
+            + " , C_R.Publicaciones_Visibilidad V, C_R.Publicaciones_Estados E, C_R.Publicaciones_Tipo T "
             + " WHERE P.Pub_Visible_Cod = V.Pub_Visible_Cod "
             + " AND P.Pub_Estado_Id = E.Pub_Estado_Id "
+            + " AND T.Pub_Tipo = P.Pub_Tipo_Id "
             //+ " AND E.Pub_Estado_Desc = 'Activa' "
             //+ " AND P.Pub_Fecha_Venc > @Fecha "
             + " AND P.Pub_User_Id != @Usuario "

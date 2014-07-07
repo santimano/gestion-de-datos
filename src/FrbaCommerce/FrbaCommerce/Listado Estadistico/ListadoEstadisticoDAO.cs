@@ -19,11 +19,6 @@ namespace FrbaCommerce.Listado_Estadistico
 
         public DataSet GenerarReporte(string anio, string trimestre, string reporte)
         {
-            //Vendedores con mayor cantidad de productos no vendidos
-            //Vendedores con mayor facturacion
-            //Vendedores con mayores calificaciones
-            //Clientes con mayor cantidad de publicaciones sin calificar
-
             string fecha_inicio = "";
             string fecha_fin = "";
             string query = "";
@@ -31,22 +26,25 @@ namespace FrbaCommerce.Listado_Estadistico
             switch (trimestre)
             {
                 case "1":
-                    fecha_inicio = "01/01/" + anio;
-                    fecha_fin = "31/03/" + anio;
+                    fecha_inicio = "01/01/";
+                    fecha_fin = "31/03/";
                     break;
                 case "2":
-                    fecha_inicio = "01/04/" + anio;
-                    fecha_fin = "30/06/" + anio;
+                    fecha_inicio = "01/04/";
+                    fecha_fin = "30/06/";
                     break;
                 case "3":
-                    fecha_inicio = "01/07/" + anio;
-                    fecha_fin = "30/09/" + anio;
+                    fecha_inicio = "01/07/";
+                    fecha_fin = "30/09/";
                     break;
                 case "4":
-                    fecha_inicio = "01/10/" + anio;
-                    fecha_fin = "31/12/" + anio;
+                    fecha_inicio = "01/10/";
+                    fecha_fin = "31/12/";
                     break;
             }
+
+            fecha_inicio += anio;
+            fecha_fin += anio;
 
             switch (reporte.ToLower())
             {
@@ -60,7 +58,7 @@ namespace FrbaCommerce.Listado_Estadistico
                         + "INNER JOIN C_R.Publicaciones P ON V.Pub_Codigo = P.Pub_Codigo "
                         + "WHERE V.Ven_Fecha BETWEEN @fecha_inicio AND @fecha_fin "
                         + "GROUP BY P.Pub_User_Id "
-                        + "ORDER BY Facturacion DESC) FACT "
+                        + "ORDER BY Facturacion DESC) AS FACT "
                         + "INNER JOIN C_R.Usuarios U ON FACT.Usuario = U.User_Id";
                     break;
                 case "vendedores con mayores calificaciones":
@@ -82,7 +80,7 @@ namespace FrbaCommerce.Listado_Estadistico
                         + "WHERE NOT EXISTS (SELECT 1 FROM C_R.Calificaciones C WHERE C.Ven_Codigo = V.Ven_Codigo) "
                         + "AND V.Ven_Fecha BETWEEN @fecha_inicio AND @fecha_fin "
                         + "GROUP BY P.Pub_User_Id "
-                        + "ORDER BY Ventas_Sin_Calificar DESC) VTAS "
+                        + "ORDER BY Ventas_Sin_Calificar DESC) AS VTAS "
                         + "INNER JOIN C_R.Usuarios U ON U.User_Id = VTAS.Usuario";
                     break;
             }

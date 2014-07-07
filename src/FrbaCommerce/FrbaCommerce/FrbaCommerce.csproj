@@ -196,6 +196,13 @@
     <Compile Include="Historial Cliente\Ofertas.Designer.cs">
       <DependentUpon>Ofertas.cs</DependentUpon>
     </Compile>
+    <Compile Include="Listado Estadistico\ListadoEstadistico.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoEstadistico.Designer.cs">
+      <DependentUpon>ListadoEstadistico.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoEstadisticoDAO.cs" />
     <Compile Include="Login\Encripcion.cs" />
     <Compile Include="Login\LoginDAO.cs" />
     <Compile Include="Login\LoginNuevoPass.cs">
@@ -228,12 +235,6 @@
     </Compile>
     <Compile Include="Generar Publicacion\GenPublicacion.Designer.cs">
       <DependentUpon>GenPublicacion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Listado Estadistico\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Listado Estadistico\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
@@ -310,6 +311,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\Ofertas.resx">
       <DependentUpon>Ofertas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Listado Estadistico\ListadoEstadistico.resx">
+      <DependentUpon>ListadoEstadistico.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

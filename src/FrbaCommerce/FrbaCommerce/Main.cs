@@ -48,6 +48,7 @@ namespace FrbaCommerce
             this.clienteToolStripMenuItem.Visible = Rol != null && Rol.Name.Equals("Cliente");
             this.empresaToolStripMenuItem.Visible = Rol != null && Rol.Name.Equals("Empresa");
             this.adminFacturar.Visible = Rol != null && Rol.Name.Equals("Administrativo");
+            this.estadisticasToolStripMenuItem.Visible = Rol != null && Rol.Name.Equals("Administrativo");
             actualizarSubMenus();
         }
 
@@ -226,6 +227,14 @@ namespace FrbaCommerce
         {
             this.Hide();
             FrbaCommerce.Comprar_Ofertar.Comprar form = new FrbaCommerce.Comprar_Ofertar.Comprar();
+            form.ShowDialog();
+            this.Show();
+        }
+
+        private void estadisticasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Listado_Estadistico.ListadoEstadistico form = new FrbaCommerce.Listado_Estadistico.ListadoEstadistico();
             form.ShowDialog();
             this.Show();
         }

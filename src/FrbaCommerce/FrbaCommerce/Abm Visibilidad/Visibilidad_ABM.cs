@@ -59,6 +59,7 @@ namespace FrbaCommerce.Abm_Visibilidad
             TbPrecio.Text = "";
             TbDuracion.Text = "";
             CbEstado.SelectedIndex = -1;
+            LbError.Text = "";
         }
 
         private void Btn_Cancelar_Click(object sender, EventArgs e)

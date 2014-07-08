@@ -647,6 +647,7 @@ INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Empresa Historial Calificaci
 INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Empresa Preguntas Recibidas');
 INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Empresa Facturar Publicaciones');
 INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Admin Facturar Publicaciones');
+INSERT INTO C_R.Sis_Funciones(Sis_Fun_Des) VALUES ('Admin Estadisticas');
 
 INSERT INTO C_R.RL_Roles_Funciones(Rol_Id, Sis_Fun_Id, Estado)
 SELECT CASE
@@ -1376,7 +1377,7 @@ CREATE PROCEDURE C_R.SP_Publicacion_SAVE(@Codigo int, @Descripcion nvarchar(255)
 			, @Stock numeric(18), @Fecha datetime
 			, @Fecha_Venc datetime, @Precio numeric(18,2)
 			, @Visibilidad nvarchar(255), @Rubros C_R.RubrosTableType READONLY
-			, @Tipo nvarchar(255), @Estado nvarchar(255), @Usuario int
+			, @Tipo nvarchar(255), @Estado nvarchar(255), @Usuario int, @Preguntas bit
 			)
 AS
 BEGIN
@@ -1392,13 +1393,14 @@ BEGIN
 				   ,Pub_Tipo_Id
 				   ,Pub_Estado_Id
 				   ,Pub_Fecha_Venc
-				   ,Pub_User_Id)
+				   ,Pub_User_Id
+				   ,Pub_Preguntas)
 			SELECT @Descripcion, @Stock, @Fecha, @Precio
 				,(SELECT Pub_Visible_Cod FROM C_R.Publicaciones_Visibilidad where Pub_Visible_Descripcion = @Visibilidad)
 				,(SELECT Pub_Tipo FROM C_R.Publicaciones_Tipo where Pub_Descripcion = @Tipo)
 				,(SELECT Pub_Estado_Id FROM C_R.Publicaciones_Estados where Pub_Estado_Desc = @Estado)
 				,(SELECT DATEADD(DAY, Pub_Visible_Duracion,@Fecha) FROM C_R.Publicaciones_Visibilidad where Pub_Visible_Descripcion = @Visibilidad)
-				, @Usuario
+				, @Usuario, @Preguntas
 				
 			DECLARE @Pub_Codigo numeric(18,0)	
 			
@@ -1419,6 +1421,7 @@ BEGIN
 				   ,Pub_Tipo_Id = (SELECT Pub_Tipo FROM C_R.Publicaciones_Tipo where Pub_Descripcion = @Tipo)
 				   ,Pub_Estado_Id = (SELECT Pub_Estado_Id FROM C_R.Publicaciones_Estados where Pub_Estado_Desc = @Estado)
 				   ,Pub_User_Id = @Usuario
+				   ,Pub_Preguntas = @Preguntas
 			WHERE Pub_Codigo = @Codigo
 			
 			DELETE C_R.RL_Publicaciones_Rubros WHERE Pub_Codigo = @Codigo

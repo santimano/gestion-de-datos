@@ -19,7 +19,7 @@ namespace FrbaCommerce.Generar_Publicacion
 
         public void Persist(int Codigo, string Descripcion, int Stock, DateTime Fecha
                 , DateTime FechaVenc, decimal Precio, string Visibilidad, ListBox.SelectedObjectCollection Rubros
-                , string Tipo, string Estado, int Usuario
+                , string Tipo, string Estado, int Usuario, bool Preguntas
             )
         {
             String query = "C_R.SP_Publicacion_SAVE";
@@ -36,6 +36,7 @@ namespace FrbaCommerce.Generar_Publicacion
             command.Parameters.Add("@Tipo", SqlDbType.NVarChar, 255);
             command.Parameters.Add("@Estado", SqlDbType.NVarChar, 255);
             command.Parameters.Add("@Usuario", SqlDbType.Int);
+            command.Parameters.Add("@Preguntas", SqlDbType.Bit);
 
             command.Parameters["@Codigo"].Value = Codigo;
             command.Parameters["@Descripcion"].Value = Descripcion;
@@ -47,6 +48,7 @@ namespace FrbaCommerce.Generar_Publicacion
             command.Parameters["@Tipo"].Value = Tipo;
             command.Parameters["@Estado"].Value = Estado;
             command.Parameters["@Usuario"].Value = Usuario;
+            command.Parameters["@Preguntas"].Value = Preguntas;
 
             command.Parameters.AddWithValue("@Rubros", CrearRubrosTable(Rubros));
 
@@ -70,7 +72,7 @@ namespace FrbaCommerce.Generar_Publicacion
             Publicacion pub = new Publicacion();
             string query = "SELECT P.Pub_Descripcion, P.Pub_Stock, P.Pub_Fecha_Venc, P.Pub_Fecha "
                 + ", P.Pub_Precio, V.Pub_Visible_Descripcion "
-                + ", T.Pub_Descripcion as Tipo, E.Pub_Estado_Desc "
+                + ", T.Pub_Descripcion as Tipo, E.Pub_Estado_Desc, P.Pub_Preguntas "
                 + "FROM C_R.Publicaciones P, C_R.Publicaciones_Estados E "
                 + ", C_R.Publicaciones_Visibilidad V "
                 + ", C_R.Publicaciones_Tipo T "
@@ -105,6 +107,7 @@ namespace FrbaCommerce.Generar_Publicacion
                                 pub.Visibilidad = reader.GetString(5);
                                 pub.Tipo = reader.GetString(6);
                                 pub.Estado = reader.GetString(7);
+                                pub.Preguntas = reader.GetBoolean(8);
                                 pub.Rubros = new List<string>();
                             }
                         }
@@ -219,9 +222,10 @@ namespace FrbaCommerce.Generar_Publicacion
             + " WHERE P.Pub_Visible_Cod = V.Pub_Visible_Cod "
             + " AND P.Pub_Estado_Id = E.Pub_Estado_Id "
             + " AND T.Pub_Tipo = P.Pub_Tipo_Id "
-            //+ " AND E.Pub_Estado_Desc = 'Activa' "
-            //+ " AND P.Pub_Fecha_Venc > @Fecha "
+            + " AND E.Pub_Estado_Desc = 'Activa' "
+            + " AND P.Pub_Fecha_Venc > @Fecha "
             + " AND P.Pub_User_Id != @Usuario "
+            + " AND P.Pub_Stock > 0 "
             + " AND (@Descripcion IS NULL OR P.Pub_Descripcion LIKE '%'+@Descripcion+'%') "
             + " AND (NOT EXISTS (SELECT 1 FROM @Rubros) "
             + " OR EXISTS (SELECT Pub_Codigo, Pub_Descripcion FROM C_R.RL_Publicaciones_Rubros RL, C_R.Publicaciones_Rubro R, @Rubros Rub "

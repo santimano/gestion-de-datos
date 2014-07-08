@@ -22,7 +22,7 @@ namespace FrbaCommerce.Abm_Visibilidad
             List<String> visibilidades = new List<String>();
 
             String query = "SELECT Pub_Visible_Descripcion "
-             + "FROM C_R.Publicaciones_Visibilidad ";
+             + "FROM C_R.Publicaciones_Visibilidad WHERE Pub_Visible_Estado = 'ACTIVO'";
 
             SqlCommand command = new SqlCommand(query, Conexion);
             command.CommandType = CommandType.Text;

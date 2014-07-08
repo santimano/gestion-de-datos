@@ -16,5 +16,6 @@ namespace FrbaCommerce.Generar_Publicacion
         public string Visibilidad { get; set; }
         public string Tipo { get; set; }
         public string Estado { get; set; }
+        public bool Preguntas { get; set; }
     }
 }

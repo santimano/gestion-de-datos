@@ -31,17 +31,23 @@
             this.comboBoxAnio = new System.Windows.Forms.ComboBox();
             this.labelAnio = new System.Windows.Forms.Label();
             this.groupBoxDatos = new System.Windows.Forms.GroupBox();
-            this.labelTrimestre = new System.Windows.Forms.Label();
-            this.comboBoxTrimestre = new System.Windows.Forms.ComboBox();
-            this.labelReporte = new System.Windows.Forms.Label();
             this.comboBoxReporte = new System.Windows.Forms.ComboBox();
+            this.labelReporte = new System.Windows.Forms.Label();
+            this.comboBoxTrimestre = new System.Windows.Forms.ComboBox();
+            this.labelTrimestre = new System.Windows.Forms.Label();
             this.buttonBuscar = new System.Windows.Forms.Button();
             this.buttonLimpiar = new System.Windows.Forms.Button();
             this.groupBoxResultados = new System.Windows.Forms.GroupBox();
             this.dataGridViewResultados = new System.Windows.Forms.DataGridView();
+            this.gbFiltros = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tbMes = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.comboBoxVisibilidad = new System.Windows.Forms.ComboBox();
             this.groupBoxDatos.SuspendLayout();
             this.groupBoxResultados.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResultados)).BeginInit();
+            this.gbFiltros.SuspendLayout();
             this.SuspendLayout();
             // 
             // comboBoxAnio
@@ -87,14 +93,28 @@
             this.groupBoxDatos.TabStop = false;
             this.groupBoxDatos.Text = "Datos";
             // 
-            // labelTrimestre
+            // comboBoxReporte
             // 
-            this.labelTrimestre.AutoSize = true;
-            this.labelTrimestre.Location = new System.Drawing.Point(13, 59);
-            this.labelTrimestre.Name = "labelTrimestre";
-            this.labelTrimestre.Size = new System.Drawing.Size(50, 13);
-            this.labelTrimestre.TabIndex = 2;
-            this.labelTrimestre.Text = "Trimestre";
+            this.comboBoxReporte.FormattingEnabled = true;
+            this.comboBoxReporte.Items.AddRange(new object[] {
+            "Vendedores con mayor cantidad de productos no vendidos",
+            "Vendedores con mayor facturacion",
+            "Vendedores con mayores calificaciones",
+            "Clientes con mayor cantidad de publicaciones sin calificar"});
+            this.comboBoxReporte.Location = new System.Drawing.Point(90, 90);
+            this.comboBoxReporte.Name = "comboBoxReporte";
+            this.comboBoxReporte.Size = new System.Drawing.Size(380, 21);
+            this.comboBoxReporte.TabIndex = 5;
+            this.comboBoxReporte.SelectedIndexChanged += new System.EventHandler(this.comboBoxReporte_SelectedIndexChanged);
+            // 
+            // labelReporte
+            // 
+            this.labelReporte.AutoSize = true;
+            this.labelReporte.Location = new System.Drawing.Point(13, 93);
+            this.labelReporte.Name = "labelReporte";
+            this.labelReporte.Size = new System.Drawing.Size(45, 13);
+            this.labelReporte.TabIndex = 4;
+            this.labelReporte.Text = "Reporte";
             // 
             // comboBoxTrimestre
             // 
@@ -109,27 +129,14 @@
             this.comboBoxTrimestre.Size = new System.Drawing.Size(380, 21);
             this.comboBoxTrimestre.TabIndex = 3;
             // 
-            // labelReporte
+            // labelTrimestre
             // 
-            this.labelReporte.AutoSize = true;
-            this.labelReporte.Location = new System.Drawing.Point(13, 93);
-            this.labelReporte.Name = "labelReporte";
-            this.labelReporte.Size = new System.Drawing.Size(45, 13);
-            this.labelReporte.TabIndex = 4;
-            this.labelReporte.Text = "Reporte";
-            // 
-            // comboBoxReporte
-            // 
-            this.comboBoxReporte.FormattingEnabled = true;
-            this.comboBoxReporte.Items.AddRange(new object[] {
-            "Vendedores con mayor cantidad de productos no vendidos",
-            "Vendedores con mayor facturacion",
-            "Vendedores con mayores calificaciones",
-            "Clientes con mayor cantidad de publicaciones sin calificar"});
-            this.comboBoxReporte.Location = new System.Drawing.Point(90, 90);
-            this.comboBoxReporte.Name = "comboBoxReporte";
-            this.comboBoxReporte.Size = new System.Drawing.Size(380, 21);
-            this.comboBoxReporte.TabIndex = 5;
+            this.labelTrimestre.AutoSize = true;
+            this.labelTrimestre.Location = new System.Drawing.Point(13, 59);
+            this.labelTrimestre.Name = "labelTrimestre";
+            this.labelTrimestre.Size = new System.Drawing.Size(50, 13);
+            this.labelTrimestre.TabIndex = 2;
+            this.labelTrimestre.Text = "Trimestre";
             // 
             // buttonBuscar
             // 
@@ -173,11 +180,60 @@
             this.dataGridViewResultados.Size = new System.Drawing.Size(472, 195);
             this.dataGridViewResultados.TabIndex = 0;
             // 
+            // gbFiltros
+            // 
+            this.gbFiltros.Controls.Add(this.comboBoxVisibilidad);
+            this.gbFiltros.Controls.Add(this.label2);
+            this.gbFiltros.Controls.Add(this.tbMes);
+            this.gbFiltros.Controls.Add(this.label1);
+            this.gbFiltros.Location = new System.Drawing.Point(228, 151);
+            this.gbFiltros.Name = "gbFiltros";
+            this.gbFiltros.Size = new System.Drawing.Size(290, 44);
+            this.gbFiltros.TabIndex = 10;
+            this.gbFiltros.TabStop = false;
+            this.gbFiltros.Text = "Filtros";
+            this.gbFiltros.Visible = false;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(27, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Mes";
+            // 
+            // tbMes
+            // 
+            this.tbMes.Location = new System.Drawing.Point(40, 17);
+            this.tbMes.MaxLength = 2;
+            this.tbMes.Name = "tbMes";
+            this.tbMes.Size = new System.Drawing.Size(22, 20);
+            this.tbMes.TabIndex = 1;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(68, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Visibilidad";
+            // 
+            // comboBoxVisibilidad
+            // 
+            this.comboBoxVisibilidad.FormattingEnabled = true;
+            this.comboBoxVisibilidad.Location = new System.Drawing.Point(127, 17);
+            this.comboBoxVisibilidad.Name = "comboBoxVisibilidad";
+            this.comboBoxVisibilidad.Size = new System.Drawing.Size(157, 21);
+            this.comboBoxVisibilidad.TabIndex = 3;
+            // 
             // ListadoEstadistico
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(543, 464);
+            this.Controls.Add(this.gbFiltros);
             this.Controls.Add(this.groupBoxResultados);
             this.Controls.Add(this.buttonLimpiar);
             this.Controls.Add(this.buttonBuscar);
@@ -188,6 +244,8 @@
             this.groupBoxDatos.PerformLayout();
             this.groupBoxResultados.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResultados)).EndInit();
+            this.gbFiltros.ResumeLayout(false);
+            this.gbFiltros.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -205,5 +263,10 @@
         private System.Windows.Forms.Button buttonLimpiar;
         private System.Windows.Forms.GroupBox groupBoxResultados;
         private System.Windows.Forms.DataGridView dataGridViewResultados;
+        private System.Windows.Forms.GroupBox gbFiltros;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox tbMes;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox comboBoxVisibilidad;
     }
 }

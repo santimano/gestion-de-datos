@@ -42,7 +42,6 @@ namespace FrbaCommerce.Generar_Publicacion
             Publicacion pub = publicacionDao.FindById(codigo);
             cargarCampos(pub);
             cargarAcciones(pub.Estado);
-
         }
 
         private bool cargarPublicacion(string Estado)
@@ -108,7 +107,7 @@ namespace FrbaCommerce.Generar_Publicacion
             DateTime vencimiento = dtpInicio.Value.AddDays(duracion);
             publicacionDao.Persist(codigo, tbDescripcion.Text, int.Parse(tbStock.Text), dtpInicio.Value
                 , vencimiento, decimal.Parse(tbPrecio.Text), cbVisibilidad.Text
-                , lbRubros.SelectedItems, cbTipo.Text, Estado, Main.Usuario);
+                , lbRubros.SelectedItems, cbTipo.Text, Estado, Main.Usuario, cbPreguntas.Checked);
 
             return true;
         }
@@ -189,6 +188,8 @@ namespace FrbaCommerce.Generar_Publicacion
             cbVisibilidad.Enabled = false;
             cbTipo.Enabled = false;
             cbPreguntas.Enabled = false;
+            btActiva.Enabled = true;
+            btFinalizada.Enabled = true;
 
         }
         private void estadoFinalizada()
@@ -218,6 +219,8 @@ namespace FrbaCommerce.Generar_Publicacion
             cbTipo.Enabled = false;
             cbPreguntas.Enabled = false;
             tbStock.Enabled = cbTipo.Text != "Subasta";
+            btPausada.Enabled = cbTipo.Text != "Subasta";
+            btFinalizada.Enabled = cbTipo.Text != "Subasta";
         }
 
         private void cargarCampos(Publicacion pub)
@@ -235,6 +238,7 @@ namespace FrbaCommerce.Generar_Publicacion
             }
             cbVisibilidad.Text = pub.Visibilidad;
             cbTipo.Text = pub.Tipo;
+            cbPreguntas.Checked = pub.Preguntas;
         }
 
         private void cbVisibilidad_SelectedIndexChanged(object sender, EventArgs e)

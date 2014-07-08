@@ -47,8 +47,7 @@ namespace FrbaCommerce
             this.aBMToolStripMenuItem.Visible = Rol != null && Rol.Name.Equals("Administrativo");
             this.clienteToolStripMenuItem.Visible = Rol != null && Rol.Name.Equals("Cliente");
             this.empresaToolStripMenuItem.Visible = Rol != null && Rol.Name.Equals("Empresa");
-            this.adminFacturar.Visible = Rol != null && Rol.Name.Equals("Administrativo");
-            this.estadisticasToolStripMenuItem.Visible = Rol != null && Rol.Name.Equals("Administrativo");
+            this.adminMenu.Visible = Rol != null && Rol.Name.Equals("Administrativo");
             actualizarSubMenus();
         }
 
@@ -76,6 +75,7 @@ namespace FrbaCommerce
             this.empFacturar.Visible = Rol != null && Rol.Funciones.Contains("Empresa Facturar Publicaciones");
 
             this.adminFacturar.Visible = Rol != null && Rol.Funciones.Contains("Admin Facturar Publicaciones");
+            this.adminEstadisticas.Visible = Rol != null && Rol.Funciones.Contains("Admin Estadisticas");
 
         }
 

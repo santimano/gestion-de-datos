@@ -1499,11 +1499,13 @@ GO
 CREATE VIEW C_R.Ventas_No_Facturadas_VW AS
 SELECT 
 P.Pub_Descripcion Publicacion,
-MAX(V.Ven_Fecha) Fecha_Finalizacion, SUM(V.Ven_Cantidad) Vendidos, SUM(V.Ven_Monto * V.Ven_Cantidad) Total, 
+MAX(V.Ven_Fecha) Fecha_Finalizacion, SUM(V.Ven_Cantidad) Vendidos, 
+SUM(CASE T.Pub_Descripcion WHEN 'Subasta' THEN V.Ven_Monto ELSE V.Ven_Monto * V.Ven_Cantidad END) Total, 
 V.Ven_Monto Unitario, V.Pub_Codigo, P.Pub_User_Id Vendedor, P.Pub_Visible_Cod Visibilidad
-FROM C_R.Publicaciones P ,C_R.Ventas V LEFT JOIN C_R.Factura_Items F_I ON V.Pub_Codigo = F_I.Pub_Codigo
-where F_I.Item_Id IS NULL
+FROM C_R.Publicaciones P, C_R.Publicaciones_Tipo T ,C_R.Ventas V LEFT JOIN C_R.Factura_Items F_I ON V.Pub_Codigo = F_I.Pub_Codigo
+WHERE F_I.Item_Id IS NULL
 AND P.Pub_Codigo = V.Pub_Codigo
+AND T.Pub_Tipo = P.Pub_Tipo_Id
 GROUP BY V.Pub_Codigo, P.Pub_User_Id, P.Pub_Descripcion, V.Ven_Monto, P.Pub_Visible_Cod
 GO
 
@@ -1512,7 +1514,6 @@ SELECT P.Pub_User_Id, V.Pub_Visible_Cod, COUNT(P.Pub_Codigo) % 10 AS Facturadas 
 WHERE F.Pub_Codigo = P.Pub_Codigo AND P.Pub_Visible_Cod = V.Pub_Visible_Cod
 AND V.Pub_Visible_Porcentaje > 0
 GROUP BY P.Pub_User_Id, V.Pub_Visible_Cod
---order by P.Pub_User_Id, V.Pub_Visible_Cod
 GO
 
 CREATE TYPE C_R.PublicacionesTableType AS TABLE

@@ -151,5 +151,36 @@ namespace FrbaCommerce.Comprar_Ofertar
 
             return vendedor;
         }
+
+        public bool HabilitadoComprar()
+        {
+            bool habilitado = false;
+
+            String query = "SELECT CASE "
+             + " WHEN EXISTS (SELECT 1 FROM C_R.Inhabilitados_Compra_Oferta_VW WHERE Comprador = @Usuario) "
+             + " THEN CAST(0 as bit) "
+             + " ELSE CAST(1 as bit) "
+             + " END Habilitado ";
+
+            SqlCommand command = new SqlCommand(query, Conexion);
+            command.CommandType = CommandType.Text;
+            command.Parameters.AddWithValue("@Usuario", Main.Usuario);
+
+            try
+            {
+                Conexion.Open();
+                habilitado = (bool)command.ExecuteScalar();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(null, ex.Message, "Error");
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+
+            return habilitado;
+        }
     }
 }

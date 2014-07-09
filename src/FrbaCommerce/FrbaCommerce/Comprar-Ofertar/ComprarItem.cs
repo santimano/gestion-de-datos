@@ -29,6 +29,7 @@ namespace FrbaCommerce.Comprar_Ofertar
             tbVencimiento.Text = Vencimiento;
             this.Tipo = Tipo;
             gbPreguntas.Visible = Preguntas;
+            btComprar.Enabled = dao.HabilitadoComprar();
             if (Tipo == "Subasta")
             {
                 gbOfertas.Visible = true;
